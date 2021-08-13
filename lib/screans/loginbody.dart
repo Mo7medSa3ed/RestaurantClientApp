@@ -24,7 +24,6 @@ class _LoginBodyState extends State<LoginBody>
   Specials specials;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller =
         AnimationController(duration: Duration(seconds: 1), vsync: this);
@@ -34,7 +33,6 @@ class _LoginBodyState extends State<LoginBody>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
   }
@@ -61,7 +59,7 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(65),
               ),
-              custumtextfield(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your email !' : null,
                 hint: 'email',
@@ -72,7 +70,7 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-               custumtextfield(
+               CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your password !' : null,
                 hint: 'password',

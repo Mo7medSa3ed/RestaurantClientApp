@@ -23,8 +23,8 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   String address;
   String promo;
   bool isExist = false;
-  Position position = null;
-  List<Address> addresses = null;
+  Position position;
+  List<Address> addresses;
 
   getcurrantLocation() async {
     await Geolocator.isLocationServiceEnabled();
@@ -36,8 +36,6 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     setState(() {});
   }
-
-  
 
   @override
   void initState() {
@@ -51,7 +49,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     return Scaffold(
       key: scaffoldKey,
       body: SafeArea(
-        child:    Padding(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<AppData>(
               builder: (ctx, v, c) => Column(
@@ -276,9 +274,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     final res = await API.makeOrder(reqData);
 
     if (res.statusCode == 200 || res.statusCode == 201) {
-      app.cartList = [];
-      app.address = null;
-      app.notifyListeners();
+      app.reset();
       Navigator.of(context).pop();
 
       CoolAlert.show(
@@ -308,6 +304,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   }
 
   showSnackbar({msg, context, icon}) {
+    // ignore: deprecated_member_use
     scaffoldKey.currentState.showSnackBar(SnackBar(
       elevation: 2,
       content: Row(

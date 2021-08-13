@@ -8,7 +8,7 @@ import 'package:resturantapp/screans/details.dart';
 import 'package:connectivity/connectivity.dart';
 
 class AllDishScrean extends StatefulWidget {
-  String test;
+  final String test;
   AllDishScrean(this.test);
   @override
   _AllDishScreanState createState() => _AllDishScreanState();

@@ -33,25 +33,25 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
+          theme: ThemeData(fontFamily: 'Montserrat').copyWith(
             dialogBackgroundColor: Colors.white,
-            colorScheme: ColorScheme.light(primary: red),
+            colorScheme: ThemeData()
+                .colorScheme
+                .copyWith(secondary: Kprimary, primary: red),
             highlightColor: Colors.grey[400],
-            fontFamily: 'Montserrat',
             textTheme: TextTheme(
                 bodyText2: TextStyle(color: grey, fontWeight: FontWeight.w600)),
             primaryColor: Kprimary,
-            accentColor: Kprimary,
             hintColor: Colors.grey,
-            cursorColor: red,
+            textSelectionTheme: TextSelectionThemeData(cursorColor: red),
             scaffoldBackgroundColor: Colors.white.withOpacity(0.97),
             appBarTheme: AppBarTheme(
+              // ignore: deprecated_member_use
               brightness: Brightness.dark,
               iconTheme: IconThemeData(color: Kprimary.withOpacity(0.6)),
               elevation: 0,
               color: Colors.white.withOpacity(0.4),
             ),
-            primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: SplashScrean(),

@@ -18,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   AppData appData;
-  List<Widget> Pages = [
+  List<Widget> pages = [
     HomePage(),
     FavouriteScrean(),
     SearchScrean(),
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: Pages[index],
+      body: pages[index],
     );
   }
 }

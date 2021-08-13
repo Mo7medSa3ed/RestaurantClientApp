@@ -52,8 +52,6 @@ class _AllCategoryTableState extends State<AllCategoryTable> {
   ) {
     uds._sort<T>(getField, ascending);
     setState(() {
-      // [RestorableBool]'s value cannot be null, so -1 is used as a placeholder
-      // to represent `null` in [DataTable]s.
       if (columnIndex == null) {
         _sortColumnIndex = -1;
       } else {
@@ -160,15 +158,15 @@ class UDS extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
-    final Categorys = categoryList[index];
+    final categorys = categoryList[index];
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Text(Categorys.name)),
-        DataCell(Center(child: Text(Categorys.numOfDishes.toString()))),
-        DataCell(Text(Categorys.updatedAt == null
+        DataCell(Text(categorys.name)),
+        DataCell(Center(child: Text(categorys.numOfDishes.toString()))),
+        DataCell(Text(categorys.updatedAt == null
             ? ''
-            : Categorys.updatedAt.substring(0, 10))),
+            : categorys.updatedAt.substring(0, 10))),
         DataCell(Center(
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -180,13 +178,13 @@ class UDS extends DataTableSource {
                   color: black,
                 ),
                 onPressed: () => AllCategoriesForAdminScrean()
-                    .showdialogForAdd(context, val: Categorys)),
+                    .showdialogForAdd(context, val: categorys)),
             IconButton(
                 icon: Icon(
                   Icons.delete_forever,
                   color: red,
                 ),
-                onPressed: () => delete(Categorys))
+                onPressed: () => delete(categorys))
           ],
         )))
       ],
@@ -194,27 +192,24 @@ class UDS extends DataTableSource {
   }
 
   @override
-  // TODO: implement isRowCountApproximate
   bool get isRowCountApproximate => false;
 
   @override
-  // TODO: implement rowCount
   int get rowCount => categoryList.length;
 
   @override
-  // TODO: implement selectedRowCount
   int get selectedRowCount => _selectedCount;
 
-  void _sort<T>(Comparable<T> Function(Categorys d) getField, bool ascending) {
-    categoryList.sort((a, b) {
-      final aValue = getField(a);
-      final bValue = getField(b);
-      return ascending
-          ? Comparable.compare(aValue, bValue)
-          : Comparable.compare(bValue, aValue);
-    });
-    notifyListeners();
-  }
+  // void _sort<T>(Comparable<T> Function(Categorys d) getField, bool ascending) {
+  //   categoryList.sort((a, b) {
+  //     final aValue = getField(a);
+  //     final bValue = getField(b);
+  //     return ascending
+  //         ? Comparable.compare(aValue, bValue)
+  //         : Comparable.compare(bValue, aValue);
+  //   });
+  //   notifyListeners();
+  // }
 
   filter(value) {
     if (value == "-1") {

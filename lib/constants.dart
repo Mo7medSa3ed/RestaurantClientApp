@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final Kprimary = Color.fromRGBO(0, 8, 51, 1);
+const Kprimary = Color.fromRGBO(0, 8, 51, 1);
 final white = Colors.white;
 final black = Colors.black;
 final grey = Colors.grey;

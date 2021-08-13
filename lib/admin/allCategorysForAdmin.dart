@@ -10,6 +10,7 @@ import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
+// ignore: must_be_immutable
 class AllCategoriesForAdminScrean extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   String name;
@@ -103,22 +104,29 @@ class AllCategoriesForAdminScrean extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: RaisedButton(
-                              padding: EdgeInsets.all(12),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(red),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.all(12))),
                               onPressed: () => Navigator.of(context).pop(),
                               child: Text(
                                 'Cancel',
                                 style: TextStyle(color: white),
                               ),
-                              color: red,
                             ),
                           ),
                           SizedBox(
                             width: 10,
                           ),
                           Expanded(
-                            child: RaisedButton(
-                              padding: EdgeInsets.all(12),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Kprimary),
+                                  padding: MaterialStateProperty.all(
+                                      EdgeInsets.all(12))),
                               onPressed: () async {
                                 if (val == null) {
                                   if (formKey.currentState.validate()) {
@@ -140,7 +148,7 @@ class AllCategoriesForAdminScrean extends StatelessWidget {
                                       app = Provider.of<AppData>(context,
                                           listen: false);
 
-                                      app.addtoCAtegory(d);
+                                      app.addtoCategory(d);
                                       Navigator.of(context).pop();
 
                                       CoolAlert.show(
@@ -213,7 +221,6 @@ class AllCategoriesForAdminScrean extends StatelessWidget {
                                 val == null ? 'Add' : 'Update',
                                 style: TextStyle(color: white),
                               ),
-                              color: Kprimary,
                             ),
                           ),
                         ],

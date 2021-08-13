@@ -10,11 +10,10 @@ import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/size_config.dart';
-import 'dart:io';
 import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart';
 
 class UpdateDish extends StatefulWidget {
-  Dish dish;
+  final Dish dish;
   UpdateDish(this.dish);
 
   @override
@@ -23,7 +22,7 @@ class UpdateDish extends StatefulWidget {
 
 class _UpdateDishState extends State<UpdateDish> {
   bool shadow = false;
-  File image;
+  PickedFile image;
   AppData app;
   TextEditingController controller = TextEditingController(text: '');
   String name;
@@ -35,7 +34,8 @@ class _UpdateDishState extends State<UpdateDish> {
   final sKey = GlobalKey<ScaffoldState>();
 
   Future getImage(source, id) async {
-    await ImagePicker.pickImage(source: source).then((value) async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    await ImagePicker.platform.pickImage(source: source).then((value) async {
       if (value != null) {
         await API.updateImageForDish(value, id);
         setState(() {
@@ -134,7 +134,7 @@ class _UpdateDishState extends State<UpdateDish> {
                           SizedBox(
                             height: getProportionateScreenHeight(30),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish name !!'
                                 : null,
@@ -148,7 +148,7 @@ class _UpdateDishState extends State<UpdateDish> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 0,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish description !!'
@@ -163,7 +163,7 @@ class _UpdateDishState extends State<UpdateDish> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish price !!'
@@ -179,7 +179,7 @@ class _UpdateDishState extends State<UpdateDish> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter number of pieces !!'
@@ -300,14 +300,16 @@ class _UpdateDishState extends State<UpdateDish> {
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(12),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(red),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(12))),
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         'cancel',
                         style: TextStyle(color: white),
                       ),
-                      color: red,
                     ),
                   )
                 ],
@@ -324,7 +326,7 @@ class _UpdateDishState extends State<UpdateDish> {
         text: "loading please wait....",
         barrierDismissible: false,
       );
-      var cat = null;
+      var cat;
       if (selectedCategory == null) {
         cat = app.categoryList
             .firstWhere((e) =>

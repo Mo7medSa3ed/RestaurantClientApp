@@ -217,27 +217,24 @@ class UDS extends DataTableSource {
   }
 
   @override
-  // TODO: implement isRowCountApproximate
   bool get isRowCountApproximate => false;
 
   @override
-  // TODO: implement rowCount
   int get rowCount => dishList.length;
 
   @override
-  // TODO: implement selectedRowCount
   int get selectedRowCount => _selectedCount;
 
-  void _sort<T>(Comparable<T> Function(Dish d) getField, bool ascending) {
-    dishList.sort((a, b) {
-      final aValue = getField(a);
-      final bValue = getField(b);
-      return ascending
-          ? Comparable.compare(aValue, bValue)
-          : Comparable.compare(bValue, aValue);
-    });
-    notifyListeners();
-  }
+  // void _sort<T>(Comparable<T> Function(Dish d) getField, bool ascending) {
+  //   dishList.sort((a, b) {
+  //     final aValue = getField(a);
+  //     final bValue = getField(b);
+  //     return ascending
+  //         ? Comparable.compare(aValue, bValue)
+  //         : Comparable.compare(bValue, aValue);
+  //   });
+  //   notifyListeners();
+  // }
 
   filter(value) {
     if (value == "-1") {

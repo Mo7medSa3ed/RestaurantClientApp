@@ -14,17 +14,17 @@ import 'package:resturantapp/screans/details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-class custumtextfield extends StatefulWidget {
-  String hint;
-  IconData icon;
-  bool obsecure;
-  Function onchanged;
-  Function onsaved;
-  Function validator;
-  String value;
-  int v;
+class CustumTextField extends StatefulWidget {
+  final String hint;
+  final IconData icon;
+  final bool obsecure;
+  final Function onchanged;
+  final Function onsaved;
+  final Function validator;
+  final String value;
+  final int v;
 
-  custumtextfield(
+  CustumTextField(
       {this.hint,
       this.icon,
       this.obsecure,
@@ -35,10 +35,10 @@ class custumtextfield extends StatefulWidget {
       this.value});
 
   @override
-  _custumtextfieldState createState() => _custumtextfieldState();
+  _CustumTextFieldState createState() => _CustumTextFieldState();
 }
 
-class _custumtextfieldState extends State<custumtextfield> {
+class _CustumTextFieldState extends State<CustumTextField> {
   bool shadow = false;
 
   @override
@@ -97,10 +97,12 @@ class _custumtextfieldState extends State<custumtextfield> {
 }
 
 custumraisedButton(text, pressed) {
-  return RaisedButton(
+  return ElevatedButton(
     onPressed: pressed,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-    color: red,
+    style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
+        padding: MaterialStateProperty.all(EdgeInsets.all(12))),
     child: Container(
       width: double.infinity,
       alignment: Alignment.center,
@@ -115,22 +117,20 @@ custumraisedButton(text, pressed) {
 
 buildFlatbutton({text, onpressed, id, context}) {
   AppData appdata = Provider.of<AppData>(context, listen: true);
-  print(appdata.cartList.length);
+  bool disable = appdata.cartList.map((e) => e.id).toList().contains(id);
   return Container(
       width: double.infinity,
-      child: FlatButton(
-        padding: EdgeInsets.all(20),
-        disabledColor: grey,
-        onPressed: appdata.cartList.map((e) => e.id).toList().contains(id)
-            ? null
-            : onpressed,
+      child: TextButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(disable ? grey : red),
+            padding: MaterialStateProperty.all(EdgeInsets.all(20))),
+        onPressed: disable ? null : onpressed,
         child: Text(
           appdata.cartList.map((e) => e.id).toList().contains(id)
               ? 'Added To Cart !!'
               : text,
           style: TextStyle(color: greyw, fontWeight: FontWeight.w700),
         ),
-        color: red,
       ));
 }
 
@@ -181,6 +181,7 @@ Widget buildCardForCart(context, {Dish d, bool t = false}) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RatingBar.builder(
+                  onRatingUpdate: (v) {},
                   itemSize: 14,
                   initialRating: d.rating.toDouble(),
                   minRating: 1,
@@ -246,7 +247,7 @@ Widget buildCardForCart(context, {Dish d, bool t = false}) {
                   SizedBox(
                     width: 15,
                   ),
-                  Text('${amount}'),
+                  Text('$amount'),
                   SizedBox(
                     width: 15,
                   ),
@@ -283,8 +284,7 @@ Widget buildCardForCart(context, {Dish d, bool t = false}) {
                       onTap: t
                           ? null
                           : () {
-                              appdata.cartList.remove(d);
-                              appdata.notifyListeners();
+                              appdata.removeFromCart(d);
                               CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.success,
@@ -395,6 +395,7 @@ buildCardForDishes(
         height: 2,
       ),
       RatingBar.builder(
+        onRatingUpdate: (v) {},
         itemSize: 16,
         initialRating: d.rating.toDouble(),
         minRating: 1,
@@ -497,6 +498,7 @@ cCardForDishes(width, double c, context, m, height) {
         height: 10,
       ),
       RatingBar.builder(
+        onRatingUpdate: (v) {},
         itemSize: 16,
         initialRating: 5,
         minRating: 1,
@@ -513,16 +515,14 @@ cCardForDishes(width, double c, context, m, height) {
   );
 }
 
-bool addtoFav(context, dishid) {
+Future<bool> addtoFav(context, dishid) async {
   AppData appdata = Provider.of<AppData>(context, listen: false);
   API.addanddelteFav(appdata.loginUser.id, dishid);
   if (appdata.loginUser.fav.contains(dishid)) {
-    appdata.loginUser.fav.remove(dishid);
-    appdata.notifyListeners();
+    appdata.removeFromFavWithId(dishid);
     return false;
   } else {
-    appdata.loginUser.fav.add(dishid);
-    appdata.notifyListeners();
+    appdata.addToFav(dishid);
     return true;
   }
   //if (res.statusCode == 200 || res.statusCode == 201) {
@@ -570,6 +570,7 @@ buildListTile(Dish d, context) {
                     Row(
                       children: [
                         RatingBar.builder(
+                          onRatingUpdate: (v) {},
                           itemSize: 14,
                           initialRating: d.rating.toDouble(),
                           minRating: 1,

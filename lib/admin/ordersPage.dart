@@ -21,8 +21,7 @@ class _HomeState extends State<OrdersPage> {
   AppData appData;
 
   Future<List<Address>> getcurrantLocation(o) async {
-    var position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     final coordinates = new Coordinates(o[1], o[0]);
     List<Address> addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
@@ -148,8 +147,8 @@ class _HomeState extends State<OrdersPage> {
 
   Widget body(indx, list) {
     SizeConfig().init(context);
-    final hei = MediaQuery.of(context).size.height;
-    final wid = MediaQuery.of(context).size.width;
+    // final hei = MediaQuery.of(context).size.height;
+    // final wid = MediaQuery.of(context).size.width;
     int index = indx;
 
     return ListView.builder(
@@ -219,15 +218,18 @@ class _HomeState extends State<OrdersPage> {
                   ],
                 ),
               ),
-              trailing: RaisedButton(
+              trailing: ElevatedButton(
                 onPressed: text == 'Delivered' || text == 'Canceled'
                     ? () {}
                     : () async => cancelOrder(o['_id']),
-                color: red,
-                textColor: greyw,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                child: Text('$text'),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(red),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)))),
+                child: Text(
+                  '$text',
+                  style: TextStyle(color: greyw),
+                ),
               ),
             ),
             SizedBox(

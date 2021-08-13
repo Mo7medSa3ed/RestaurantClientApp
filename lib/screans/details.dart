@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 
 class DetailsScrean extends StatefulWidget {
-  String id;
+  final String id;
   DetailsScrean(this.id);
   @override
   _DetailsScreanState createState() => _DetailsScreanState();
@@ -199,7 +200,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
                       onSaved: (String s) => msg = s,
                       validator: (String s) =>
                           s.isEmpty ? 'Please enter your message!!' : null,
-                      maxLengthEnforced: true,
+                      maxLengthEnforcement:MaxLengthEnforcement.enforced,
                       maxLength: 300,
                       maxLines: 3,
                       decoration: InputDecoration(
@@ -439,6 +440,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
                 Row(
                   children: [
                     RatingBar.builder(
+                      onRatingUpdate: (v){},
                       itemSize: 14,
                       initialRating: e.rate.toDouble(),
                       minRating: 1,

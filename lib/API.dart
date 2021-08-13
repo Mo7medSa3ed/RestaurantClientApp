@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/review.dart';
@@ -94,7 +95,7 @@ class API {
     return res;
   }
 
-  static updateImageForDish(File image, String id) async {
+  static updateImageForDish(PickedFile image, String id) async {
     String name = image.path.split('/').last;
     FormData form = FormData.fromMap(
         {'img': await MultipartFile.fromFile(image.path, filename: name)});
@@ -256,7 +257,4 @@ class API {
     final parsed = json.decode(body);
     return parsed;
   }
-
-
-  
 }

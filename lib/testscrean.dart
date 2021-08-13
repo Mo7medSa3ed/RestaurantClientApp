@@ -14,15 +14,14 @@ class _TestScreanState extends State<TestScrean> {
   }
 
   io() {
-   
     IO.Socket socket = IO.io('http://127.0.0.1:9092/chat?token=abc123',
         IO.OptionBuilder().setTransports(['polling', 'websocket']).build());
-  
+
     socket.connect();
     print(socket.connected);
     /*  socket.onError((data) => print(data));
     socket.onConnectError((data) => print(data)); */
-   // socket.on("connect", (data) => print("Mohamed Saeed Add dish"));
+    // socket.on("connect", (data) => print("Mohamed Saeed Add dish"));
   }
 
   @override
@@ -32,9 +31,11 @@ class _TestScreanState extends State<TestScrean> {
         width: double.infinity,
         height: double.infinity,
         alignment: Alignment.center,
-        child: RaisedButton(
-          onPressed: () {io();},
-          
+        child: ElevatedButton(
+          child: Container(),
+          onPressed: () {
+            io();
+          },
         ),
       ),
     );

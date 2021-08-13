@@ -9,6 +9,7 @@ import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
+// ignore: must_be_immutable
 class AllDishesForAdminScrean extends StatelessWidget {
   AppData app;
 

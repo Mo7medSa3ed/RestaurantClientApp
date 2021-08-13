@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
@@ -103,7 +104,7 @@ class DetailsLoading extends StatelessWidget {
                             left: 12, right: 12, top: 12, bottom: 0),
                         child: TextField(
                           enabled: true,
-                          maxLengthEnforced: true,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
                           maxLength: 300,
                           maxLines: 3,
                           decoration: InputDecoration(
@@ -163,8 +164,8 @@ class DetailsLoading extends StatelessWidget {
                   ),
                 ),
               ),
-              FlatButton(onPressed: null, child: null)
-             // buildFlatbutton(text: "ADD TO CART", context: context)
+              TextButton(onPressed: null, child: null)
+              // buildFlatbutton(text: "ADD TO CART", context: context)
             ],
           ),
         ));

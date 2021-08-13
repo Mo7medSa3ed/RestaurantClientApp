@@ -26,7 +26,6 @@ class _SignupBodyState extends State<SignupBody>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller =
         AnimationController(duration: Duration(seconds: 1), vsync: this);
@@ -36,7 +35,6 @@ class _SignupBodyState extends State<SignupBody>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _controller.dispose();
   }
@@ -63,7 +61,7 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(65),
               ),
-              custumtextfield(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your name !' : null,
                 hint: 'username',
@@ -74,7 +72,7 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-              custumtextfield(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your email !' : null,
                 hint: 'email',
@@ -85,7 +83,7 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-              custumtextfield(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your password !' : null,
                 hint: 'password',

@@ -19,7 +19,7 @@ class AddDishScrean extends StatefulWidget {
 
 class _AddDishScreanState extends State<AddDishScrean> {
   bool shadow = false;
-  File image;
+  PickedFile image;
   AppData app;
   TextEditingController controller = TextEditingController(text: '');
   String name;
@@ -31,7 +31,8 @@ class _AddDishScreanState extends State<AddDishScrean> {
   final sKey = GlobalKey<ScaffoldState>();
 
   Future getImage(source, id) async {
-    await ImagePicker.pickImage(source: source).then((value) async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    await ImagePicker.platform.pickImage(source: source).then((value) async {
       if (value != null) {
         setState(() {
           image = value;
@@ -96,7 +97,8 @@ class _AddDishScreanState extends State<AddDishScrean> {
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(16),
                                   bottomRight: Radius.circular(16)),
-                              child: Image.file(image, fit: BoxFit.cover)))
+                              child: Image.file(File(image.path),
+                                  fit: BoxFit.cover)))
                       : Container(
                           width: double.infinity,
                           height: double.infinity,
@@ -140,7 +142,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
                           SizedBox(
                             height: getProportionateScreenHeight(30),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish name !!'
                                 : null,
@@ -154,7 +156,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 0,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish description !!'
@@ -169,7 +171,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish price !!'
@@ -185,7 +187,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
-                          custumtextfield(
+                          CustumTextField(
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter number of pieces !!'
@@ -339,14 +341,16 @@ class _AddDishScreanState extends State<AddDishScrean> {
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(12),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(red),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(12))),
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         'cancel',
                         style: TextStyle(color: white),
                       ),
-                      color: red,
                     ),
                   )
                 ],
@@ -390,8 +394,8 @@ class _AddDishScreanState extends State<AddDishScrean> {
       if (res.statusCode == 200 || res.statusCode == 201) {
         final newDish = Dish.fromJson(res.data);
         newDish.category = selectedCategory;
-        app.dishesList.add(newDish);
-        app.notifyListeners();
+        app.addDish(newDish);
+
         reset();
         Navigator.of(context).pop();
         FocusScope.of(context).requestFocus(FocusNode());

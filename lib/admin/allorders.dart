@@ -18,7 +18,6 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
   var list;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     app = Provider.of<AppData>(context, listen: false);
   }
@@ -99,7 +98,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                                               .toLowerCase()
                                               .trim() ==
                                           'onway'
-                                  ? FlatButton(
+                                  ? TextButton(
                                       onPressed: () => Navigator.of(context)
                                           .push(MaterialPageRoute(
                                               builder: (_) => OrderTimeLine(
@@ -111,34 +110,40 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                                                     dislocation: list[i]
                                                         ['distLocation'],
                                                   ))),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(red),
+                                          padding: MaterialStateProperty.all(
+                                              EdgeInsets.all(12))),
                                       child: Text(
                                         'Track Your Order',
                                         style: TextStyle(
                                             color: white,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      color: red,
                                     )
                                   : list[i]['state']
                                               .toString()
                                               .toLowerCase()
                                               .trim() !=
                                           "cancel"
-                                      ? FlatButton(
+                                      ? TextButton(
                                           onPressed: () async =>
                                               await cancelOrder(
                                                   list[i]['_id'], i),
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10),
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      red),
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      EdgeInsets.all(12))),
                                           child: Text(
                                             'Cancel Order',
                                             style: TextStyle(
                                                 color: white,
                                                 fontWeight: FontWeight.w500),
                                           ),
-                                          color: red,
                                         )
                                       : Container(),
                             ],

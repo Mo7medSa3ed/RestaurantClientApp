@@ -25,7 +25,7 @@ class _AllUsersTableState extends State<AllUsersTable> {
   void initState() {
     super.initState();
     userList = widget.userlist;
-    uds = UDS(context: context, UserList: userList, filterUserList: userList);
+    uds = UDS(context: context, userList: userList, filterUserList: userList);
   }
 
   void _sort<T>(
@@ -140,15 +140,15 @@ class _AllUsersTableState extends State<AllUsersTable> {
 }
 
 class UDS extends DataTableSource {
-  List<User> UserList;
+  List<User> userList;
   List<User> filterUserList;
   BuildContext context;
   int _selectedCount = 0;
-  UDS({this.UserList, this.context, this.filterUserList});
+  UDS({this.userList, this.context, this.filterUserList});
 
   @override
   DataRow getRow(int index) {
-    final user = UserList[index];
+    final user = userList[index];
     return DataRow.byIndex(
       index: index,
       cells: [
@@ -163,37 +163,34 @@ class UDS extends DataTableSource {
   }
 
   @override
-  // TODO: implement isRowCountApproximate
   bool get isRowCountApproximate => false;
 
   @override
-  // TODO: implement rowCount
-  int get rowCount => UserList.length;
+  int get rowCount => userList.length;
 
   @override
-  // TODO: implement selectedRowCount
   int get selectedRowCount => _selectedCount;
 
-  void _sort<T>(Comparable<T> Function(User d) getField, bool ascending) {
-    UserList.sort((a, b) {
-      final aValue = getField(a);
-      final bValue = getField(b);
-      return ascending
-          ? Comparable.compare(aValue, bValue)
-          : Comparable.compare(bValue, aValue);
-    });
-    notifyListeners();
-  }
+  // void _sort<T>(Comparable<T> Function(User d) getField, bool ascending) {
+  //   userList.sort((a, b) {
+  //     final aValue = getField(a);
+  //     final bValue = getField(b);
+  //     return ascending
+  //         ? Comparable.compare(aValue, bValue)
+  //         : Comparable.compare(bValue, aValue);
+  //   });
+  //   notifyListeners();
+  // }
 
   filter(value) {
     if (value == "-1") {
-      UserList = filterUserList;
+      userList = filterUserList;
       notifyListeners();
       return false;
     }
     final l =
-        UserList.where((element) => element.name.contains(value)).toList();
-    UserList = l;
+        userList.where((element) => element.name.contains(value)).toList();
+    userList = l;
     notifyListeners();
     return true;
   }

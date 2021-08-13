@@ -42,6 +42,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   Future getImage(source, id) async {
+    // ignore: deprecated_member_use
     await ImagePicker.pickImage(source: source).then((value) async {
       if (value != null) {
         await API.updateImage(value, id);
@@ -115,7 +116,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(
                           height: getProportionateScreenHeight(30),
                         ),
-                        custumtextfield(
+                        CustumTextField(
                           validator: (String v) =>
                               v.isEmpty ? 'Please enter your name !!' : null,
                           hint: 'Full Name',
@@ -128,7 +129,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(
                           height: getProportionateScreenHeight(16),
                         ),
-                        custumtextfield(
+                        CustumTextField(
                           validator: (String v) =>
                               v.isEmpty ? 'Please enter your email !!' : null,
                           hint: 'Email',
@@ -141,7 +142,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(
                           height: getProportionateScreenHeight(16),
                         ),
-                        custumtextfield(
+                        CustumTextField(
                           /*  validator: (String v) =>
                               v.isEmpty ? 'Please enter your phone !!' : null, */
                           hint: 'Phone',
@@ -154,7 +155,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(
                           height: getProportionateScreenHeight(16),
                         ),
-                        custumtextfield(
+                        CustumTextField(
                           /*  validator: (String v) =>
                               v.isEmpty ? 'Please enter your address !!' : null, */
                           hint: 'Address',
@@ -167,7 +168,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         SizedBox(
                           height: getProportionateScreenHeight(16),
                         ),
-                        custumtextfield(
+                        CustumTextField(
                           /* validator: (String v) =>
                               v.isEmpty ? 'Please enter your location !!' : null, */
                           hint: 'Location',
@@ -326,14 +327,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(12),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(red),
+                          padding:
+                              MaterialStateProperty.all(EdgeInsets.all(12))),
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         'cancel',
                         style: TextStyle(color: white),
                       ),
-                      color: red,
                     ),
                   )
                 ],

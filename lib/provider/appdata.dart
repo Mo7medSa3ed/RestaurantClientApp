@@ -43,6 +43,11 @@ class AppData extends ChangeNotifier {
     loadeddishesList.add(d);
     notifyListeners();
   }
+  
+  addDish(Dish d) {
+    dishesList.add(d);
+    notifyListeners();
+  }
 
   changeAmount(Dish dish, amount) {
     cartList[cartList.indexOf(dish)].amount = amount;
@@ -53,8 +58,13 @@ class AppData extends ChangeNotifier {
     cartList.add(d);
     notifyListeners();
   }
+  
+  removeFromCart(Dish d) {
+    cartList.remove(d);
+    notifyListeners();
+  }
 
-  addtoCAtegory(c) {
+  addtoCategory(c) {
     categoryList.add(c);
     notifyListeners();
   }
@@ -79,6 +89,21 @@ class AppData extends ChangeNotifier {
 
   removeFromFav(index) {
     loginUser.fav.removeAt(index);
+    notifyListeners();
+  }
+  removeFromFavWithId(id) {
+    loginUser.fav.remove(id);
+    notifyListeners();
+  }
+  
+  addToFav(id) {
+    loginUser.fav.add(id);
+    notifyListeners();
+  }
+
+  reset(){
+    cartList=[];
+    address=null;
     notifyListeners();
   }
 }

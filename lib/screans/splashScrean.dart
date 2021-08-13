@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
@@ -9,7 +8,6 @@ import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/home.dart';
 import 'package:resturantapp/screans/loginScrean.dart';
 import 'package:resturantapp/screans/pageview.dart';
-import 'package:resturantapp/testscrean.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 
