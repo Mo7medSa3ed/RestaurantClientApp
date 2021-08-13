@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
+import 'package:resturantapp/screans/home.dart';
 import 'package:resturantapp/screans/splashScrean.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -33,15 +34,19 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(fontFamily: 'Montserrat').copyWith(
+          theme: ThemeData(
+                  fontFamily: 'Montserrat',
+                  // ignore: deprecated_member_use
+                  accentColor: Kprimary,
+                  primaryColor: Kprimary)
+              .copyWith(
             dialogBackgroundColor: Colors.white,
-            colorScheme: ThemeData()
-                .colorScheme
-                .copyWith(secondary: Kprimary, primary: red),
-            highlightColor: Colors.grey[400],
-            textTheme: TextTheme(
-                bodyText2: TextStyle(color: grey, fontWeight: FontWeight.w600)),
+            colorScheme: ThemeData().colorScheme.copyWith(
+                  secondary: Kprimary,
+                  primary: red,
+                ),
             primaryColor: Kprimary,
+            highlightColor: Colors.grey[400],
             hintColor: Colors.grey,
             textSelectionTheme: TextSelectionThemeData(cursorColor: red),
             scaffoldBackgroundColor: Colors.white.withOpacity(0.97),

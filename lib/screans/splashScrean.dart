@@ -46,7 +46,7 @@ class _SplashScreanState extends State<SplashScrean> {
     if (prfs.getString('user') != null) {
       User user = await getUserFromPrfs();
       User u = await API.getOneUser(user.id);
-      print(u.history);
+      
       if (u != null || u.updatedAt == user.updatedAt) {
         appData.initLoginUser(u);
         Navigator.of(context)

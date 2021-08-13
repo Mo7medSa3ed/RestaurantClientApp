@@ -39,7 +39,6 @@ class _DetailsScreanState extends State<DetailsScrean> {
   bool networktest = true;
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
     if (connectivityResult == ConnectivityResult.none) {
       networktest = false;
     } else {

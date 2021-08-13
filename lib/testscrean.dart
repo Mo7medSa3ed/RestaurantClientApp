@@ -18,7 +18,6 @@ class _TestScreanState extends State<TestScrean> {
         IO.OptionBuilder().setTransports(['polling', 'websocket']).build());
 
     socket.connect();
-    print(socket.connected);
     /*  socket.onError((data) => print(data));
     socket.onConnectError((data) => print(data)); */
     // socket.on("connect", (data) => print("Mohamed Saeed Add dish"));

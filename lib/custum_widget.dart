@@ -66,6 +66,7 @@ class _CustumTextFieldState extends State<CustumTextField> {
           });
         },
         child: TextFormField(
+          // style: TextStyle(color: Kprimary),
           validator: widget.validator,
           onChanged: widget.onchanged,
           onSaved: widget.onsaved,
@@ -85,7 +86,7 @@ class _CustumTextFieldState extends State<CustumTextField> {
               widget.v == 1 ? [FilteringTextInputFormatter.digitsOnly] : null,
           keyboardType: widget.hint.toLowerCase() == 'email'
               ? TextInputType.emailAddress
-              : widget.hint == 'Phone'
+              : widget.hint.toLowerCase() == 'phone'
                   ? TextInputType.phone
                   : widget.v == 1
                       ? TextInputType.number
@@ -102,11 +103,10 @@ custumraisedButton(text, pressed) {
     style: ButtonStyle(
         shape: MaterialStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))),
-        padding: MaterialStateProperty.all(EdgeInsets.all(12))),
+        padding: MaterialStateProperty.all(EdgeInsets.all(14))),
     child: Container(
       width: double.infinity,
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(vertical: 18),
       child: Text(
         text,
         style: TextStyle(color: greyw, fontSize: 18),
@@ -460,13 +460,14 @@ saveUsertoAppdata(user, context) {
 
 showSnackbarWidget({msg, context, icon}) {
   CoolAlert.show(
-      context: context,
-      type: CoolAlertType.loading,
-      animType: CoolAlertAnimType.slideInUp,
-      title: 'Error',
-      text: "some thing went error !!",
-      barrierDismissible: false,
-      showCancelBtn: true);
+    context: context,
+    type: CoolAlertType.error,
+    animType: CoolAlertAnimType.scale,
+    confirmBtnColor: red,
+    title: 'Error',
+    text: "some thing went error !!",
+    barrierDismissible: false,
+  );
 }
 
 cCardForDishes(width, double c, context, m, height) {

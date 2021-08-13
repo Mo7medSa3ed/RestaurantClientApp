@@ -11,21 +11,9 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity: FlutterActivity() {
 
-    private val channel ="mohamedsaeed"
 
-    @Override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine){
-        GeneratedPluginRegistrant.registerWith(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger,channel).setMethodCallHandler { call, result ->
-            if (call.method == "playMusic"){
-                Intent(this,MyService::class.java).also {intent ->
-                startService(intent)
-                }
 
-            }else{
-                result.notImplemented()
-            }
-        }
-    }
+  
 
 
 }

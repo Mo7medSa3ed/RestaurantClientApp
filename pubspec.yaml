@@ -40,7 +40,7 @@ dependencies:
   image_picker: 
   shimmer: 
   timeline_tile: 
-  cool_alert: 
+  cool_alert: ^1.1.0
   geolocator:
   geocoder:
   google_maps_flutter:

@@ -23,7 +23,6 @@ class AllUsersForAdminScrean extends StatelessWidget {
         child: FutureBuilder<List<User>>(
             future: API.getAllUser(),
             builder: (c, s) {
-              print(s.data);
               if (s.hasData) {
                 return AllUsersTable(
                   userlist: s.data,

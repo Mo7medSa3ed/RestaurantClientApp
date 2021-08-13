@@ -88,7 +88,6 @@ class API {
   }
 
   static Future<http.Response> deleteDish(String dishId) async {
-    print(dishId);
     final res = await http.delete(
       '$_BaseUrl/dishes/$dishId',
     );
@@ -137,8 +136,6 @@ class API {
 
   static Future<http.Response> updateReview(
       Review review, String dishId, String reviewid) async {
-    print(dishId);
-    print(reviewid);
     final res = await http.patch(
         '$_BaseUrl/reviews/1?dishId=$dishId&reviewId=$reviewid',
         encoding: Encoding.getByName("utf-8"),
@@ -182,7 +179,6 @@ class API {
     );
     final body = utf8.decode(res.bodyBytes);
     final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    print(parsed);
     return parsed.map<Categorys>((dish) => Categorys.fromJson(dish)).toList();
   }
 
@@ -233,7 +229,6 @@ class API {
     String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=AIzaSyBMD6TqYt-Y0dc4grEFzBmCkHOqsKncgAo";
     http.Response response = await http.get(url);
-    print(response);
     Map values = jsonDecode(response.body);
     return values.toString(); //;
   }
