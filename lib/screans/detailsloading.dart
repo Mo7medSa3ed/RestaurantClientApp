@@ -19,6 +19,8 @@ class DetailsLoading extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ListView(
+              physics: BouncingScrollPhysics(),
+
                     children: [
                       SizedBox(
                         height: 10,

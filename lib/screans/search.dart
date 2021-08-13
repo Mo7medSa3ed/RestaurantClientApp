@@ -85,7 +85,8 @@ class _SearchScreanState extends State<SearchScrean> {
                 ),
               ),
               ListView.builder(
-                physics: ClampingScrollPhysics(),
+                             physics: BouncingScrollPhysics(),
+
                 itemCount: dishList.length,
                 shrinkWrap: true,
                 itemBuilder: (ctx, i) => buildListTile(dishList[i], ctx),

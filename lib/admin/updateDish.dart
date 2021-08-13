@@ -73,6 +73,8 @@ class _UpdateDishState extends State<UpdateDish> {
       children: [
         Expanded(
             child: ListView(
+              physics: BouncingScrollPhysics(),
+
           children: [
             Container(
               width: height > width ? width : height * 0.45,

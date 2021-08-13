@@ -70,7 +70,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         child: Column(
           children: [
             Expanded(
-              child: ListView(children: [
+              child: ListView(physics: BouncingScrollPhysics(), children: [
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 25, right: 25, bottom: 20, top: 20),
@@ -95,7 +95,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               borderRadius: BorderRadius.circular(200),
                               image: DecorationImage(
                                   image: NetworkImage(v.loginUser.avatar == null
-                                      ?img
+                                      ? img
                                       : v.loginUser.avatar
                                           .replaceAll('http', 'https')),
                                   fit: BoxFit.fill)),
@@ -328,7 +328,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: ElevatedButton(
-                        style: ButtonStyle(
+                      style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(red),
                           padding:
                               MaterialStateProperty.all(EdgeInsets.all(12))),

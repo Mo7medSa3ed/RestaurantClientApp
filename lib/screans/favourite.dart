@@ -47,6 +47,8 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ListView(
+              physics: BouncingScrollPhysics(),
+
                   primary: true,
                   children: [
                     Text(
@@ -115,13 +117,12 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
                             ),
                           )
                         : Container(
-                            color: white,
                             width: double.infinity,
                             height: (MediaQuery.of(context).size.height) -
                                 (MediaQuery.of(context).size.height * 0.4),
                             alignment: Alignment.center,
                             child: Image.asset(
-                              "assets/images/fav.jpg",
+                              "assets/images/fav.png",
                               fit: BoxFit.cover,
                             ))
                   ],

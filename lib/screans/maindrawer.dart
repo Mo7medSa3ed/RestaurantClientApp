@@ -11,6 +11,8 @@ class MainDrawer extends StatelessWidget {
     return Drawer(
       child: SafeArea(
         child: ListView(
+              physics: BouncingScrollPhysics(),
+
           children: [
             DrawerHeader(
                 margin: EdgeInsets.all(0),

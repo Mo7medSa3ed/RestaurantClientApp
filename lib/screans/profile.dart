@@ -58,9 +58,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   ),
                                 )
                               : CircleAvatar(
-                                  backgroundImage: NetworkImage(img
-                                 /*  v.loginUser.avatar
-                                      .replaceAll('http', 'https') */,
+                                  backgroundImage: NetworkImage(
+                                  v.loginUser.avatar ?? img
+                                  /*  v.loginUser.avatar
+                                      .replaceAll('http', 'https') */
+                                  ,
                                 )),
                         ),
                         SizedBox(

@@ -7,7 +7,6 @@ import 'package:resturantapp/admin/allorders.dart';
 import 'package:resturantapp/screans/cart.dart';
 import 'package:resturantapp/screans/favourite.dart';
 import 'package:resturantapp/screans/homepage.dart';
-import 'package:resturantapp/screans/maindrawer.dart';
 import 'package:resturantapp/screans/profile.dart';
 import 'package:resturantapp/screans/search.dart';
 
@@ -18,6 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   AppData appData;
+  // Animation animation;
+  // AnimationController controller;
   List<Widget> pages = [
     HomePage(),
     FavouriteScrean(),
@@ -30,6 +31,11 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    // controller = AnimationController(
+    //   duration: const Duration(milliseconds: 2000),
+    //   vsync: this,
+    // );
+    //  Tween(begin: 0, end: MediaQuery.of(context).size.width*0.6,).animate(controller);
     getData();
   }
 
@@ -39,18 +45,16 @@ class _HomeState extends State<Home> {
     await API
         .getAllCategories()
         .then((value) => appData.initCategoryList(value));
-    // get all category
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MainDrawer(),
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: index,
           elevation: 0,
-          backgroundColor:Colors.white.withOpacity(0.97),
+          backgroundColor: Colors.white.withOpacity(0.97),
           unselectedItemColor: Kprimary,
           selectedItemColor: red,
           onTap: (i) {
@@ -67,7 +71,7 @@ class _HomeState extends State<Home> {
             BottomNavigationBarItem(icon: Icon(Icons.person), label: '')
           ]),
       appBar: AppBar(
-        backgroundColor: index==0?white:null,
+        backgroundColor: index == 0 ? white : null,
         /*  automaticallyImplyLeading: false, */
         /* leading: IconButton(
           icon: Icon(
@@ -76,6 +80,11 @@ class _HomeState extends State<Home> {
           ),
           onPressed: () {},
         ) */
+        // leadingWidth: MediaQuery.of(context).size.width * 0.9,
+        // leading: Container(
+        //     child: Image.asset(
+        //   "assets/images/del.png",
+        // )),
         actions: [
           IconButton(
             icon: Icon(

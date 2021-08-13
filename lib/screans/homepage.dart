@@ -65,7 +65,10 @@ class _HomeState extends State<HomePage> {
           onRefresh: () async => await getData(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ListView(children: [
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              
+              children: [
               buildRow('Dishes', '0'),
               SizedBox(
                 height: getProportionateScreenHeight(10),
@@ -77,6 +80,7 @@ class _HomeState extends State<HomePage> {
                       child: Container(
                         height: hei > wid ? hei * 0.35 : hei * 0.48,
                         child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemCount: dishes.length,
@@ -144,32 +148,30 @@ class _HomeState extends State<HomePage> {
                       curve: Curves.easeIn,
                       child: Container(
                         height: hei > wid ? hei * 0.34 : hei * 0.48,
-                        child: Expanded(
-                          child: ListView.builder(
-                            physics: ClampingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: popular.length,
-                            itemBuilder: (_, i) => GestureDetector(
-                                onTap: () => Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (_) => DetailsScrean(
-                                              popular[i].id,
-                                            ))),
-                                child: buildCardForDishes(
-                                    hei > wid
-                                        ? wid * 0.5 - 26
-                                        : wid * 0.45 - 26,
-                                    10.0,
-                                    context,
-                                    popular[i].img,
-                                    20.0,
-                                    hei > wid ? hei * 0.24 : hei * 0.32,
-                                    popular[i],
-                                    value.loginUser.fav.contains(popular[i].id),
-                                    (b) async => await addtoFav(
-                                        context, popular[i].id))),
-                          ),
+                        child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: popular.length,
+                          itemBuilder: (_, i) => GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (_) => DetailsScrean(
+                                            popular[i].id,
+                                          ))),
+                              child: buildCardForDishes(
+                                  hei > wid
+                                      ? wid * 0.5 - 26
+                                      : wid * 0.45 - 26,
+                                  10.0,
+                                  context,
+                                  popular[i].img,
+                                  20.0,
+                                  hei > wid ? hei * 0.24 : hei * 0.32,
+                                  popular[i],
+                                  value.loginUser.fav.contains(popular[i].id),
+                                  (b) async => await addtoFav(
+                                      context, popular[i].id))),
                         ),
                       ),
                     )
@@ -188,6 +190,8 @@ class _HomeState extends State<HomePage> {
       child: Container(
         height: getProportionateScreenHeight(270),
         child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemCount: l.length,
@@ -221,7 +225,8 @@ class _HomeState extends State<HomePage> {
         child: Container(
           height: getProportionateScreenHeight(270),
           child: ListView.builder(
-            physics: ClampingScrollPhysics(),
+                         physics: BouncingScrollPhysics(),
+
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemCount: l.length,

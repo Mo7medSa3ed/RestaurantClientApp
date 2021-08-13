@@ -152,6 +152,8 @@ class _HomeState extends State<OrdersPage> {
     int index = indx;
 
     return ListView.builder(
+              physics: BouncingScrollPhysics(),
+
       itemCount: list.length,
       itemBuilder: (c, i) => index == 0
           ? GestureDetector(

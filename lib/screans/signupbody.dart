@@ -20,7 +20,7 @@ class _SignupBodyState extends State<SignupBody>
   bool login = true;
   AnimationController _controller;
   Specials specials;
-  String email, password, username, phone;
+  String email, password, username;
   bool remember = false;
   final formKey = GlobalKey<FormState>();
 
@@ -72,17 +72,7 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-              CustumTextField(
-                validator: (String v) =>
-                    v.isEmpty ? 'please enter your phone !' : null,
-                hint: 'phone',
-                icon: Icons.call,
-                obsecure: false,
-                onchanged: (v) => v.toString().isNotEmpty ? phone = v : null,
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(28),
-              ),
+            
               CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your email !' : null,
@@ -154,7 +144,7 @@ class _SignupBodyState extends State<SignupBody>
     if (formKey.currentState.validate()) {
       showDialogWidget(context);
       User u =
-          User(email: email, password: password, name: username, phone: phone);
+          User(email: email, password: password, name: username,);
       final res = await API.signupUser(u);
       print(res.body);
       if (res.statusCode == 200 || res.statusCode == 201) {

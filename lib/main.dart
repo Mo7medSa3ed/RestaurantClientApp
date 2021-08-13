@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
-import 'package:resturantapp/screans/home.dart';
 import 'package:resturantapp/screans/splashScrean.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 

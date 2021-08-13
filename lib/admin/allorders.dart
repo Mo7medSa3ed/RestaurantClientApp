@@ -46,6 +46,8 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                         .where((e) => e['user']['_id'] == app.loginUser.id)
                         .toList();
                     return ListView.builder(
+              physics: BouncingScrollPhysics(),
+
                       itemCount: list.length,
                       itemBuilder: (_, i) => Padding(
                         padding: const EdgeInsets.symmetric(

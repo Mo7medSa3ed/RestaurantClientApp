@@ -95,6 +95,8 @@ class _DetailsScreanState extends State<DetailsScrean> {
               horizontal: 16.0,
             ),
             child: ListView(
+              physics: BouncingScrollPhysics(),
+
               children: [
                 SizedBox(
                   height: 16,

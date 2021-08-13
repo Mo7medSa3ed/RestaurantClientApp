@@ -91,7 +91,7 @@ class User {
         'phone': phone,
         'gender': gender,
         'address': address,
-        // 'location': location,
+        'location': location,
         'dob': dob,
         'email': email
       };

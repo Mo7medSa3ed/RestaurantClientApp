@@ -69,6 +69,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
       children: [
         Expanded(
             child: ListView(
+              physics: BouncingScrollPhysics(),
           children: [
             Container(
               width: height > width ? width : height * 0.45,
