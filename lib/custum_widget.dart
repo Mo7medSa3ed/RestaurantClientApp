@@ -362,7 +362,7 @@ buildCardForDishes(
                       likeBuilder: (bool isLiked) {
                         return Padding(
                           padding:
-                              const EdgeInsets.only(left: 1, right: 0, top: 2),
+                              const EdgeInsets.only(left: 2, right: 0, top: 2.5),
                           child: Icon(
                             isLiked ? Icons.favorite : Icons.favorite_border,
                             color: isLiked ? red : grey,

@@ -57,43 +57,43 @@ class _AllDishScreanState extends State<AllDishScrean> {
     return Scaffold(
       body: SafeArea(
         child: networktest
-            ? SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 16),
-                        child: Row(
-                          children: [
-                            Text(
-                              widget.test == '0'
-                                  ? 'All Dishes'
-                                  : widget.test == '1'
-                                      ? 'All Popular Items'
-                                      : 'All Dishes In ${widget.test}',
-                              style: TextStyle(
-                                  color: Kprimary,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1),
-                              textAlign: TextAlign.start,
-                            ),
-                            Spacer(),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.filter_alt_sharp,
-                                  size: 30,
-                                  color: Kprimary.withOpacity(0.5),
-                                ),
-                                onPressed: () => _showBottomSheet(context))
-                          ],
-                        )),
-                    GridView.builder(
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            widget.test == '0'
+                                ? 'All Dishes'
+                                : widget.test == '1'
+                                    ? 'All Popular Items'
+                                    : 'All Dishes In ${widget.test}',
+                            style: TextStyle(
+                                color: Kprimary,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1),
+                            textAlign: TextAlign.start,
+                          ),
+                          Spacer(),
+                          IconButton(
+                              icon: Icon(
+                                Icons.filter_alt_sharp,
+                                size: 30,
+                                color: Kprimary.withOpacity(0.5),
+                              ),
+                              onPressed: () => _showBottomSheet(context))
+                        ],
+                      )),
+                  Expanded(
+                    child: GridView.builder(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8),
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,7 +101,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
                                 ? (height / width).round()
                                 : (width / height).round() + 1,
                             crossAxisSpacing: 16,
-                            childAspectRatio: height > width ? 0.95 : 1,
+                          //  childAspectRatio: height > width ? 0.95 : 1,
                             mainAxisSpacing: 8),
                         itemCount: datalist.length,
                         itemBuilder: (c, i) {
@@ -126,9 +126,9 @@ class _AllDishScreanState extends State<AllDishScrean> {
                                   (b) async =>
                                       await addtoFav(context, datalist[i].id),
                                   test: true));
-                        })
-                  ],
-                ),
+                        }),
+                  )
+                ],
               )
             : noNetworkwidget(),
       ),

@@ -63,12 +63,12 @@ class _HomeState extends State<Home> {
             });
           },
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.store), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+            BottomNavigationBarItem(icon: Icon(Icons.store),title: Container()),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite) ,title: Container()  ),
+            BottomNavigationBarItem(icon: Icon(Icons.search),title: Container()),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: '')
+                icon: Icon(Icons.shopping_basket),title: Container()),
+            BottomNavigationBarItem(icon: Icon(Icons.person),title: Container())
           ]),
       appBar: AppBar(
         backgroundColor: index == 0 ? white : null,

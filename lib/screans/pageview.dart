@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:resturantapp/screans/loginScrean.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageViewScrean extends StatefulWidget {
   @override
@@ -36,8 +37,12 @@ class _PageViewScreanState extends State<PageViewScrean> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => LoginScrean())),
+                    onTap: () async {
+                      final prfs = await SharedPreferences.getInstance();
+                      prfs.setBool('first', false);
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => LoginScrean()));
+                    },
                     child: Text(
                       'SKIP',
                       style: TextStyle(
@@ -48,14 +53,15 @@ class _PageViewScreanState extends State<PageViewScrean> {
                   ),
                   buildCircle(),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (index < 2 && index > -1) {
                         setState(() {
-                          print("sdas");
                           index++;
                           controller.jumpToPage(index);
                         });
                       } else {
+                        final prfs = await SharedPreferences.getInstance();
+                        prfs.setBool('first', true);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) => LoginScrean()));
                       }

@@ -65,11 +65,8 @@ class _HomeState extends State<HomePage> {
           onRefresh: () async => await getData(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              
-              children: [
-              buildRow('Dishes', '0'),
+            child: ListView(physics: BouncingScrollPhysics(), children: [
+              buildRow('Dishes', '0', show: dishes.length > 6),
               SizedBox(
                 height: getProportionateScreenHeight(10),
               ),
@@ -80,7 +77,7 @@ class _HomeState extends State<HomePage> {
                       child: Container(
                         height: hei > wid ? hei * 0.35 : hei * 0.48,
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
+                            physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemCount: dishes.length,
@@ -124,6 +121,7 @@ class _HomeState extends State<HomePage> {
                         child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: value.categoryList
+                                .where((e) => e.numOfDishes > 0)
                                 .map((e) => GestureDetector(
                                       onTap: () => Navigator.of(context).push(
                                           MaterialPageRoute(
@@ -138,7 +136,7 @@ class _HomeState extends State<HomePage> {
               SizedBox(
                 height: getProportionateScreenHeight(15),
               ),
-              buildRow('Our Popular Item', '1'),
+              buildRow('Our Popular Item', '1', show: popular.length > 6),
               SizedBox(
                 height: getProportionateScreenHeight(15),
               ),
@@ -154,15 +152,13 @@ class _HomeState extends State<HomePage> {
                           shrinkWrap: true,
                           itemCount: popular.length,
                           itemBuilder: (_, i) => GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .push(MaterialPageRoute(
+                              onTap: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) => DetailsScrean(
                                             popular[i].id,
                                           ))),
                               child: buildCardForDishes(
-                                  hei > wid
-                                      ? wid * 0.5 - 26
-                                      : wid * 0.45 - 26,
+                                  hei > wid ? wid * 0.5 - 26 : wid * 0.45 - 26,
                                   10.0,
                                   context,
                                   popular[i].img,
@@ -170,8 +166,8 @@ class _HomeState extends State<HomePage> {
                                   hei > wid ? hei * 0.24 : hei * 0.32,
                                   popular[i],
                                   value.loginUser.fav.contains(popular[i].id),
-                                  (b) async => await addtoFav(
-                                      context, popular[i].id))),
+                                  (b) async =>
+                                      await addtoFav(context, popular[i].id))),
                         ),
                       ),
                     )
@@ -190,8 +186,7 @@ class _HomeState extends State<HomePage> {
       child: Container(
         height: getProportionateScreenHeight(270),
         child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-
+          physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemCount: l.length,
@@ -225,8 +220,7 @@ class _HomeState extends State<HomePage> {
         child: Container(
           height: getProportionateScreenHeight(270),
           child: ListView.builder(
-                         physics: BouncingScrollPhysics(),
-
+            physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemCount: l.length,
@@ -240,7 +234,7 @@ class _HomeState extends State<HomePage> {
         ));
   }
 
-  Widget buildRow(text, test) {
+  Widget buildRow(text, test, {show = true}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,15 +244,17 @@ class _HomeState extends State<HomePage> {
           style: TextStyle(
               color: Kprimary, fontSize: 24, fontWeight: FontWeight.w800),
         ),
-        GestureDetector(
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => AllDishScrean(test))),
-          child: Text(
-            'View All',
-            style: TextStyle(
-                color: red, fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ),
+        show
+            ? GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => AllDishScrean(test))),
+                child: Text(
+                  'View All',
+                  style: TextStyle(
+                      color: red, fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              )
+            : Container(),
       ],
     );
   }

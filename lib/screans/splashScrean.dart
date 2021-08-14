@@ -56,8 +56,15 @@ class _SplashScreanState extends State<SplashScrean> {
             .pushReplacement(MaterialPageRoute(builder: (_) => LoginScrean()));
       }
     } else {
+      if (prfs.getBool('first') != null) {
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) =>  LoginScrean() ));
+      }else{
+
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (_) =>  PageViewScrean() ));
+      }
     }
   }
 
