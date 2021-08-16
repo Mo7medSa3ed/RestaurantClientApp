@@ -38,7 +38,7 @@ class _SearchScreanState extends State<SearchScrean> {
   @override
   Widget build(BuildContext context) {
     return networktest
-        ? appData.dishesList.length > 0
+        ? appData.favDishes.length > 0
             ? Column(
                 children: [
                   Card(
@@ -50,7 +50,7 @@ class _SearchScreanState extends State<SearchScrean> {
                       controller: controller,
                       onChanged: (String v) {
                         if (v.isNotEmpty) {
-                          dishList = appData.dishesList
+                          dishList = appData.favDishes
                               .where((e) => e.name
                                   .toLowerCase()
                                   .trim()

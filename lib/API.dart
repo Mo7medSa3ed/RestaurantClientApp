@@ -247,14 +247,13 @@ class API {
     return values.toString(); //;
   }
 
-  static Future<dynamic> getAllOrders() async {
+  static Future<dynamic> getAllOrders({page}) async {
     final res = await http.get(
-      '$_BaseUrl/orders/',
+      '$_BaseUrl/orders/query?page=$page',
     );
     final body = utf8.decode(res.bodyBytes);
     final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    parsed.sort((a, b) =>
-        b['updatedAt'].toString().compareTo(a['updatedAt'].toString()));
+    
     return parsed;
   }
 

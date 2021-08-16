@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primart_elevatedButtom.dart';
@@ -33,7 +32,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   bool isExist = false;
   Position position;
   List<Address> addresses;
-  Order order;
+  Order detailsOrder;
 
   getcurrantLocation() async {
     await Geolocator.isLocationServiceEnabled();
@@ -69,8 +68,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
               future: API.getOneOrder(widget.id),
               builder: (ctx, v) {
                 if (v.hasData) {
-                  order = Order.fromJson(v.data);
-                  app.initOrder(order);
+                  detailsOrder = Order.fromJson(v.data);
+                  app.initOrder(detailsOrder);
 
                   return Consumer<AppData>(
                     builder: (ctx, app, c) => Column(
@@ -130,7 +129,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                                 ],
                               ),
                               Text(
-                                app.order.user.name,
+                                app.detailsOrder.user.name,
                                 style: TextStyle(
                                     color: Kprimary.withOpacity(0.85),
                                     fontSize: 20,
@@ -144,7 +143,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                               Text(
                                 addresses != null
                                     ? addresses.first.addressLine
-                                    : app.order.address ?? '',
+                                    : app.detailsOrder.address ?? '',
                                 style: TextStyle(
                                     color: Kprimary.withOpacity(0.35),
                                     fontSize: 12,
@@ -169,12 +168,12 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                                 height: 20,
                               ),
                               Column(
-                                children: app.order.items
+                                children: app.detailsOrder.items
                                     .map((e) => PrimaryCartCard(
                                           e.dish,
                                           details: true,
                                           amount: e.amount,
-                                          test: app.order.state.toLowerCase() ==
+                                          test: app.detailsOrder.state.toLowerCase() ==
                                                   'deliverd'
                                               ? false
                                               : true,
@@ -210,7 +209,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            app.order.state.toLowerCase() == 'deliverd'
+            app.detailsOrder.state.toLowerCase() == 'deliverd'
                 ? Column(
                     children: [
                       Form(
@@ -286,7 +285,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                   ],
                 ),
                 Spacer(),
-                app.order.state.toLowerCase() == 'deliverd'
+                app.detailsOrder.state.toLowerCase() == 'deliverd'
                     ? Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: PrimaryElevatedButton(
@@ -307,10 +306,10 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
     formKey2.currentState.save();
     showDialogWidget(context);
     final reqData = {
-      "userId": app.order.user.id,
+      "userId": app.detailsOrder.user.id,
       "state": "placed",
       "distLocation": [position.longitude, position.latitude],
-      "items": app.order.items
+      "items": app.detailsOrder.items
           .map((e) => {"dishId": e.dish.id, "amount": e.amount})
           .toList()
     };
@@ -340,7 +339,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
 
   String calctotal() {
     double sum = 0.0;
-    app.order.items.forEach((e) {
+    app.detailsOrder.items.forEach((e) {
       print(e.amount);
       sum += (e.dish.price * e.amount);
     });

@@ -6,7 +6,6 @@ import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/size_config.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 
 class FavouriteScrean extends StatefulWidget {
@@ -37,7 +36,7 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
             builder: (ctx, v, c) {
               List<Dish> favList = [];
               v.loginUser.fav.forEach((e) {
-                final f = v.dishesList.firstWhere((element) => element.id == e,
+                final f = v.favDishes.firstWhere((element) => element.id == e,
                     orElse: () => null);
                 if (f != null) {
                   favList.add(f);

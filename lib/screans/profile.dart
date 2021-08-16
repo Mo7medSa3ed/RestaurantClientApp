@@ -8,7 +8,6 @@ import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/maindrawer.dart';
 import 'package:resturantapp/screans/updateProfile.dart';
 
 class Profile extends StatefulWidget {
@@ -266,7 +265,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  onTap: () => go(UpdateProfile(), context),
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => UpdateProfile())),
                   title: Text("Edit Profile",
                       style: TextStyle(
                           color: Kprimary,

@@ -3,32 +3,26 @@ import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/home.dart';
 import 'package:resturantapp/models/order.dart';
 import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/models/categorys.dart';
 
 class AppData extends ChangeNotifier {
   User loginUser;
-  List<Dish> dishesList = [];
-  //List<Dish> loadeddishesList = [];
-  List<Categorys> categoryList = [];
+  List<Dish> favDishes = [];
+  List<Dish> topDishes = [];
+  List<Dish> popularDishes = [];
   List<dynamic> ordersList = [];
-  List<User> usersList = [];
+  List<dynamic> dishesByCategory = [];
   List<Dish> cartList = [];
   HomeModel homeModel = HomeModel();
   String address;
-  Order order;
+  Order detailsOrder;
 
   initLoginUser(User user) {
     loginUser = user;
     notifyListeners();
   }
 
-  initUserList(user) {
-    usersList = user;
-    notifyListeners();
-  }
-
-  initOrder(order) {
-    this.order = order;
+  initOrder(detailsOrder) {
+    this.detailsOrder = detailsOrder;
     notifyListeners();
   }
 
@@ -38,27 +32,51 @@ class AppData extends ChangeNotifier {
   }
 
   initDishesList(List<Dish> list) {
-    dishesList = list;
+    favDishes = list;
     notifyListeners();
   }
 
   initOrderList(List<dynamic> list) {
-    ordersList = list;
+    ordersList.addAll(list);
     notifyListeners();
   }
 
-  initCategoryList(List<Categorys> list) {
-    categoryList = list;
+  clearAllOrderList() {
+    ordersList.clear();
     notifyListeners();
   }
 
-  // addToloaded(Dish d) {
-  //   loadeddishesList.add(d);
-  //   notifyListeners();
-  // }
+  initTopDishesList(List<Dish> list) {
+    topDishes.addAll(list);
+    notifyListeners();
+  }
+
+  clearTopDishesList() {
+    topDishes.clear();
+    notifyListeners();
+  }
+  initDishesByCategory (List<Dish> list) {
+    dishesByCategory.addAll(list);
+    notifyListeners();
+  }
+
+  clearDishesByCategory() {
+    dishesByCategory.clear();
+    notifyListeners();
+  }
+
+  initpopularDishesList(List<Dish> list) {
+    popularDishes.addAll(list);
+    notifyListeners();
+  }
+
+  clearpopularDishesList() {
+    popularDishes.clear();
+    notifyListeners();
+  }
 
   addDish(Dish d) {
-    dishesList.add(d);
+    favDishes.add(d);
     notifyListeners();
   }
 
@@ -68,12 +86,12 @@ class AppData extends ChangeNotifier {
   }
 
   changeAmountForDetails(amount, id) {
-    order.items.firstWhere((e) => e.dish.id == id).amount = amount;
+    detailsOrder.items.firstWhere((e) => e.dish.id == id).amount = amount;
     notifyListeners();
   }
 
   deleteItemForDetails(id) {
-    order.items.removeWhere((e) => e.dish.id == id);
+    detailsOrder.items.removeWhere((e) => e.dish.id == id);
     notifyListeners();
   }
 
@@ -84,29 +102,6 @@ class AppData extends ChangeNotifier {
 
   removeFromCart(Dish d) {
     cartList.remove(d);
-    notifyListeners();
-  }
-
-  addtoCategory(c) {
-    categoryList.add(c);
-    notifyListeners();
-  }
-
-  updateCategory(Categorys c) {
-    final r = categoryList.indexWhere((e) => e.id == c.id);
-    categoryList[r] = c;
-    notifyListeners();
-  }
-
-  updateDish(Dish d) {
-    final r = dishesList.indexWhere((e) => e.id == d.id);
-    dishesList[r] = d;
-    notifyListeners();
-  }
-
-  updateOrder(dynamic o) {
-    final r = ordersList.indexWhere((e) => e['_id'] == o['_id']);
-    ordersList[r] = o;
     notifyListeners();
   }
 

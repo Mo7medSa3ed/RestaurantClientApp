@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/admin/allorders.dart';
+import 'package:resturantapp/screans/allorders.dart';
 import 'package:resturantapp/screans/cart.dart';
 import 'package:resturantapp/screans/favourite.dart';
 import 'package:resturantapp/screans/homepage.dart';

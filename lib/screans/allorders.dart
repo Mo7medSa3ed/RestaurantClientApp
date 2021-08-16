@@ -15,11 +15,42 @@ class AllOrdersScrean extends StatefulWidget {
 
 class _AllOrdersScreanState extends State<AllOrdersScrean> {
   AppData app;
+  int page = 0;
+  bool isLast = false;
+  final scrollController = ScrollController();
   var list;
   @override
   void initState() {
     super.initState();
     app = Provider.of<AppData>(context, listen: false);
+    fetchDate(page);
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        fetchDate(false);
+      }
+    });
+  }
+
+  fetchDate(init) async {
+    if (init) {
+      page = 1;
+      isLast = false;
+      app.clearAllOrderList();
+      setState(() {});
+    } else {
+      page++;
+    }
+    if (isLast == false) {
+      await API.getAllOrders(page: page).then((value) {
+        if (value.length < 6) {
+          isLast = true;
+        }
+        app.initOrderList(value);
+      });
+
+      setState(() {});
+    }
   }
 
   @override
@@ -38,32 +69,26 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
               ),
             ),
             Expanded(
-              child: FutureBuilder(
-                future: API.getAllOrders(),
-                builder: (c, snap) {
-                  if (snap.hasData) {
-                    list = snap.data
-                        .where((e) => e['user']['_id'] == app.loginUser.id)
-                        .toList();
-
-                    return ListView.builder(
+                child: RefreshIndicator(
+              onRefresh: () => fetchDate(true),
+              child: Consumer<AppData>(
+                builder: (ctx, app, c) => app.ordersList.length > 0
+                    ? ListView.builder(
+                        controller: scrollController,
                         physics: BouncingScrollPhysics(),
-                        itemCount: list.length,
+                        itemCount: app.ordersList.length,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 6),
                         itemBuilder: (_, i) => PrimaryOrderCard(
                               list[i],
                               onPressed: () async =>
                                   await cancelOrder(list[i]['_id'], i),
-                            ));
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
+                            ))
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
               ),
-            ),
+            )),
           ],
         ),
       ),

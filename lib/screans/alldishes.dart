@@ -18,7 +18,6 @@ class AllDishScrean extends StatefulWidget {
 
 class _AllDishScreanState extends State<AllDishScrean> {
   AppData appData;
-  List<Dish> datalist = [];
   bool isOldest = false;
   bool isSmallestRate = false;
   bool isSmallestPrice = false;
@@ -27,6 +26,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
   bool isLargestPrice = false;
   bool networktest = true;
   int page = 0;
+  var list = [];
   bool isLast = false;
   final scrollController = ScrollController();
 
@@ -60,6 +60,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
     if (init) {
       page = 1;
       isLast = false;
+      appData.clearTopDishesList();
+      appData.clearpopularDishesList();
       setState(() {});
     } else {
       page++;
@@ -70,14 +72,14 @@ class _AllDishScreanState extends State<AllDishScrean> {
           if (value.length < 6) {
             isLast = true;
           }
-          datalist = value;
+          appData.initTopDishesList(value);
         });
       } else if (widget.test == '1') {
         await API.getAllDishes(top: false, page: page).then((value) {
           if (value.length < 6) {
             isLast = true;
           }
-          datalist = value;
+          appData.initpopularDishesList(value);
         });
       } else {
         // await API.getAllDishes().then((value) => appData.initDishesList(value));
@@ -131,42 +133,50 @@ class _AllDishScreanState extends State<AllDishScrean> {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () => fetchDate(true),
-                      child: datalist.length > 0
-                          ? GridView.builder(
-                              controller: scrollController,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8),
-                              physics: const BouncingScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: height > width
-                                          ? (height / width).round()
-                                          : (width / height).round() + 1,
-                                      mainAxisExtent: height > width
-                                          ? height * 0.35
-                                          : height * 0.5,
-                                      crossAxisSpacing: 16,
-                                      mainAxisSpacing: 8),
-                              itemCount: datalist.length,
-                              itemBuilder: (c, i) => PrimaryDishCard(
-                                    test: true,
-                                    dish: datalist[i],
-                                    width: height > width
-                                        ? width * 0.5 - 26
-                                        : width * 0.45 - 26,
-                                    height: height > width
-                                        ? height * 0.24
-                                        : height * 0.32,
-                                    isLiked: appData.loginUser.fav
-                                        .contains(datalist[i].id),
-                                    ontap: (b) async =>
-                                        await addtoFav(context, datalist[i].id),
-                                  ))
-                          : Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                      child: Consumer<AppData>(builder: (ctx, app, c) {
+                        list = widget.test == "0"
+                            ? app.topDishes
+                            : widget.test == "1"
+                                ? app.popularDishes
+                                : app.dishesByCategory;
+
+                        return list.length > 0
+                            ? GridView.builder(
+                                controller: scrollController,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8),
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: height > width
+                                            ? (height / width).round()
+                                            : (width / height).round() + 1,
+                                        mainAxisExtent: height > width
+                                            ? height * 0.35
+                                            : height * 0.5,
+                                        crossAxisSpacing: 16,
+                                        mainAxisSpacing: 8),
+                                itemCount: list.length,
+                                itemBuilder: (c, i) => PrimaryDishCard(
+                                      test: true,
+                                      dish: list[i],
+                                      width: height > width
+                                          ? width * 0.5 - 26
+                                          : width * 0.45 - 26,
+                                      height: height > width
+                                          ? height * 0.24
+                                          : height * 0.32,
+                                      isLiked: appData.loginUser.fav
+                                          .contains(list[i].id),
+                                      ontap: (b) async =>
+                                          await addtoFav(context, list[i].id),
+                                    ))
+                            : Center(
+                                child: CircularProgressIndicator(),
+                              );
+                      }),
                     ),
                   )
                 ],
@@ -202,17 +212,17 @@ class _AllDishScreanState extends State<AllDishScrean> {
                             islatest = !islatest;
                           });
                         }),
-                    SwitchListTile(
-                        title: Text(
-                          'Oldest',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        value: isOldest,
-                        onChanged: (v) {
-                          s(() {
-                            isOldest = !isOldest;
-                          });
-                        }),
+                    // SwitchListTile(
+                    //     title: Text(
+                    //       'Oldest',
+                    //       style: TextStyle(fontWeight: FontWeight.w600),
+                    //     ),
+                    //     value: isOldest,
+                    //     onChanged: (v) {
+                    //       s(() {
+                    //         isOldest = !isOldest;
+                    //       });
+                    //     }),
                     SwitchListTile(
                         title: Text(
                           'Largest Rate',
@@ -224,17 +234,17 @@ class _AllDishScreanState extends State<AllDishScrean> {
                             isLargestRate = !isLargestRate;
                           });
                         }),
-                    SwitchListTile(
-                        title: Text(
-                          'Smallest Rate',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        value: isSmallestRate,
-                        onChanged: (v) {
-                          s(() {
-                            isSmallestRate = !isSmallestRate;
-                          });
-                        }),
+                    // SwitchListTile(
+                    //     title: Text(
+                    //       'Smallest Rate',
+                    //       style: TextStyle(fontWeight: FontWeight.w600),
+                    //     ),
+                    //     value: isSmallestRate,
+                    //     onChanged: (v) {
+                    //       s(() {
+                    //         isSmallestRate = !isSmallestRate;
+                    //       });
+                    //     }),
                     SwitchListTile(
                         title: Text(
                           'Largest Price',
@@ -246,17 +256,17 @@ class _AllDishScreanState extends State<AllDishScrean> {
                             isLargestPrice = !isLargestPrice;
                           });
                         }),
-                    SwitchListTile(
-                        title: Text(
-                          'Smallest Price',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        value: isSmallestPrice,
-                        onChanged: (v) {
-                          s(() {
-                            isSmallestPrice = !isSmallestPrice;
-                          });
-                        }),
+                    // SwitchListTile(
+                    //     title: Text(
+                    //       'Smallest Price',
+                    //       style: TextStyle(fontWeight: FontWeight.w600),
+                    //     ),
+                    //     value: isSmallestPrice,
+                    //     onChanged: (v) {
+                    //       s(() {
+                    //         isSmallestPrice = !isSmallestPrice;
+                    //       });
+                    //     }),
                     PrimaryFlatButton(
                         text: 'OK',
                         onPressed: () {
@@ -265,23 +275,19 @@ class _AllDishScreanState extends State<AllDishScrean> {
                               (isLargestPrice && isSmallestPrice) &&
                               (isLargestRate && isSmallestRate))) {
                             if (isOldest) {
-                              datalist.sort(
+                              list.sort(
                                   (a, b) => a.updatedAt.compareTo(b.updatedAt));
-                            } else if (islatest) {
-                              datalist.sort(
+                            } else if (!isOldest) {
+                              list.sort(
                                   (a, b) => b.updatedAt.compareTo(a.updatedAt));
                             } else if (isLargestPrice) {
-                              datalist
-                                  .sort((a, b) => b.price.compareTo(a.price));
-                            } else if (isSmallestPrice) {
-                              datalist
-                                  .sort((a, b) => a.price.compareTo(b.price));
+                              list.sort((a, b) => b.price.compareTo(a.price));
+                            } else if (!isLargestPrice) {
+                              list.sort((a, b) => a.price.compareTo(b.price));
                             } else if (isLargestRate) {
-                              datalist
-                                  .sort((a, b) => b.rating.compareTo(a.rating));
-                            } else if (isSmallestRate) {
-                              datalist
-                                  .sort((a, b) => a.rating.compareTo(b.rating));
+                              list.sort((a, b) => b.rating.compareTo(a.rating));
+                            } else if (!isLargestRate) {
+                              list.sort((a, b) => a.rating.compareTo(b.rating));
                             }
                           }
 
