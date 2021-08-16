@@ -23,8 +23,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isExist = false;
-  Position position ;
-  List<Address> addresses ;
+  Position position;
+  List<Address> addresses;
 
   getcurrantLocation(dish) async {
     final coordinates =
@@ -338,7 +338,10 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RatingBar.builder(
-                    onRatingUpdate: (v){},
+                    onRatingUpdate: null,
+                  updateOnDrag: false,
+        ignoreGestures: true,
+
                     itemSize: 14,
                     initialRating: d['dish']['rating'].toDouble(),
                     minRating: 1,

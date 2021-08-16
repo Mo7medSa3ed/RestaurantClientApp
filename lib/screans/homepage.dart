@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primary_category_card.dart';
+import 'package:resturantapp/components/primary_dish_card.dart';
+import 'package:resturantapp/components/primary_text_row.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/alldishes.dart';
-import 'package:resturantapp/screans/details.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:connectivity/connectivity.dart';
@@ -60,131 +60,114 @@ class _HomeState extends State<HomePage> {
       builder: (ctx, value, c) {
         final dishes = value.dishesList.where((e) => e.rating >= 5).toList();
         final popular = value.dishesList.where((e) => e.rating < 5).toList();
-
         return RefreshIndicator(
           onRefresh: () async => await getData(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ListView(physics: BouncingScrollPhysics(), children: [
-              buildRow('Dishes', '0', show: dishes.length > 6),
-              SizedBox(
-                height: getProportionateScreenHeight(10),
-              ),
-              value.dishesList.length > 0
-                  ? FadeIn(
-                      duration: Duration(milliseconds: 1000),
-                      curve: Curves.easeIn,
-                      child: Container(
-                        height: hei > wid ? hei * 0.35 : hei * 0.48,
-                        child: ListView.builder(
+          child: ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              physics: const BouncingScrollPhysics(),
+              children: [
+                TextRow('Dishes', test: '0', show: dishes.length > 6),
+                SizedBox(
+                  height: getProportionateScreenHeight(10),
+                ),
+                value.dishesList.length > 0
+                    ? FadeIn(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        child: Container(
+                          height: hei > wid ? hei * 0.35 : hei * 0.48,
+                          child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: dishes.length,
+                              itemBuilder: (_, i) => PrimaryDishCard(
+                                    dish: dishes[i],
+                                    width: hei > wid ? wid * 0.85 : wid * 0.47,
+                                    height: hei > wid ? hei * 0.24 : hei * 0.30,
+                                    isLiked: value.loginUser.fav
+                                        .contains(dishes[i].id),
+                                    ontap: (b) async =>
+                                        await addtoFav(context, dishes[i].id),
+                                  )),
+                        ),
+                      )
+                    : shimerForDishes(hei, wid),
+                Text(
+                  'Food Categories',
+                  style: TextStyle(
+                      color: Kprimary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800),
+                  textAlign: TextAlign.start,
+                ),
+                SizedBox(
+                  height: getProportionateScreenHeight(15),
+                ),
+                value.categoryList.length > 0
+                    ? FadeIn(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: value.categoryList
+                                  .where((e) => e.numOfDishes > 0)
+                                  .map(
+                                    (e) => PrimaryCategoryCard(e),
+                                  )
+                                  .toList()),
+                        ),
+                      )
+                    : shimerForcategory(hei, wid),
+                SizedBox(
+                  height: getProportionateScreenHeight(15),
+                ),
+                TextRow('Our Popular Item',
+                    test: '1', show: popular.length < 6),
+                SizedBox(
+                  height: getProportionateScreenHeight(15),
+                ),
+                value.dishesList.length > 0
+                    ? FadeIn(
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        child: Container(
+                          height: hei > wid ? hei * 0.36 : hei * 0.55,
+                          child: ListView.builder(
+                            itemExtent: wid / 2,
                             physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
-                            itemCount: dishes.length,
-                            itemBuilder: (_, i) => GestureDetector(
-                                  onTap: () => Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                          builder: (_) => DetailsScrean(
-                                                dishes[i].id,
-                                              ))),
-                                  child: buildCardForDishes(
-                                      hei > wid ? wid * 0.85 : wid * 0.47,
-                                      20.0,
-                                      context,
-                                      dishes[i].img,
-                                      20.0,
-                                      hei > wid ? hei * 0.24 : hei * 0.30,
-                                      dishes[i],
-                                      value.loginUser.fav
-                                          .contains(dishes[i].id),
-                                      (b) async => await addtoFav(
-                                          context, dishes[i].id)),
-                                )),
-                      ),
-                    )
-                  : shimerForDishes(),
-              Text(
-                'Food Categories',
-                style: TextStyle(
-                    color: Kprimary, fontSize: 24, fontWeight: FontWeight.w800),
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              value.categoryList.length > 0
-                  ? FadeIn(
-                      duration: Duration(milliseconds: 1000),
-                      curve: Curves.easeIn,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: value.categoryList
-                                .where((e) => e.numOfDishes > 0)
-                                .map((e) => GestureDetector(
-                                      onTap: () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  AllDishScrean(e.name))),
-                                      child: buildCardforCategory(c: e),
-                                    ))
-                                .toList()),
-                      ),
-                    )
-                  : shimerForcategory(),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              buildRow('Our Popular Item', '1', show: popular.length > 6),
-              SizedBox(
-                height: getProportionateScreenHeight(15),
-              ),
-              value.dishesList.length > 0
-                  ? FadeIn(
-                      duration: Duration(milliseconds: 1000),
-                      curve: Curves.easeIn,
-                      child: Container(
-                        height: hei > wid ? hei * 0.34 : hei * 0.48,
-                        child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: popular.length,
-                          itemBuilder: (_, i) => GestureDetector(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => DetailsScrean(
-                                            popular[i].id,
-                                          ))),
-                              child: buildCardForDishes(
+                            itemCount: popular.length,
+                            itemBuilder: (_, i) => PrimaryDishCard(
+                              dish: popular[i],
+                              width:
                                   hei > wid ? wid * 0.5 - 26 : wid * 0.45 - 26,
-                                  10.0,
-                                  context,
-                                  popular[i].img,
-                                  20.0,
-                                  hei > wid ? hei * 0.24 : hei * 0.32,
-                                  popular[i],
+                              height: hei > wid ? hei * 0.24 : hei * 0.32,
+                              isLiked:
                                   value.loginUser.fav.contains(popular[i].id),
-                                  (b) async =>
-                                      await addtoFav(context, popular[i].id))),
+                              ontap: (b) async =>
+                                  await addtoFav(context, popular[i].id),
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                  : shimerForPopular(),
-            ]),
-          ),
+                      )
+                    : shimerForPopular(hei, wid),
+              ]),
         );
       },
     );
   }
 
-  Widget shimerForDishes() {
+  Widget shimerForDishes(hei, wid) {
     return Shimmer.fromColors(
       baseColor: grey.withOpacity(0.3),
       highlightColor: grey.withOpacity(0.45),
       child: Container(
-        height: getProportionateScreenHeight(270),
+        height: hei > wid ? hei * 0.35 : hei * 0.48,
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
@@ -201,7 +184,7 @@ class _HomeState extends State<HomePage> {
     );
   }
 
-  Widget shimerForcategory() {
+  Widget shimerForcategory(hei, wid) {
     return Shimmer.fromColors(
         baseColor: grey.withOpacity(0.3),
         highlightColor: grey.withOpacity(0.45),
@@ -209,16 +192,16 @@ class _HomeState extends State<HomePage> {
           scrollDirection: Axis.horizontal,
           child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: l.map((e) => buildCardforCategory()).toList()),
+              children: l.map((e) => PrimaryCategoryCard(null)).toList()),
         ));
   }
 
-  Widget shimerForPopular() {
+  Widget shimerForPopular(hei, wid) {
     return Shimmer.fromColors(
         baseColor: grey.withOpacity(0.3),
         highlightColor: grey.withOpacity(0.45),
         child: Container(
-          height: getProportionateScreenHeight(270),
+          height: hei > wid ? hei * 0.36 : hei * 0.55,
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -232,80 +215,5 @@ class _HomeState extends State<HomePage> {
                 MediaQuery.of(context).size.height * 0.25),
           ),
         ));
-  }
-
-  Widget buildRow(text, test, {show = true}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-              color: Kprimary, fontSize: 24, fontWeight: FontWeight.w800),
-        ),
-        show
-            ? GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => AllDishScrean(test))),
-                child: Text(
-                  'View All',
-                  style: TextStyle(
-                      color: red, fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-              )
-            : Container(),
-      ],
-    );
-  }
-
-  Widget buildCardforCategory({Categorys c}) {
-    return Container(
-      child: Card(
-        shadowColor: Kprimary,
-        elevation: 2,
-        color: Colors.white.withOpacity(0.97),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.fastfood,
-                color: red.withOpacity(0.7),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    c != null ? c.name : "",
-                    style: TextStyle(
-                        color: Kprimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700),
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                  ),
-                  Text(
-                    c != null ? '${c.numOfDishes} items' : '0 items',
-                    style: TextStyle(
-                        color: Kprimary.withOpacity(0.3),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

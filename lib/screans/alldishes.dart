@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/components/primary_dish_card.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/details.dart';
 import 'package:connectivity/connectivity.dart';
 
 class AllDishScrean extends StatefulWidget {
@@ -24,6 +25,10 @@ class _AllDishScreanState extends State<AllDishScrean> {
   bool isLargestRate = false;
   bool isLargestPrice = false;
   bool networktest = true;
+  int page=1;
+  bool isLast=false;
+  final scrollController = ScrollController();
+
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult);
@@ -48,6 +53,24 @@ class _AllDishScreanState extends State<AllDishScrean> {
       datalist =
           appData.dishesList.where((e) => e.category == widget.test).toList();
     }
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        fetchDate();
+      }
+    });
+  }
+
+  fetchDate()async{
+    if (widget.test == '0') {
+      datalist = appData.dishesList;
+    } else if (widget.test == '1') {
+      datalist = appData.dishesList.where((e) => e.rating < 5).toList();
+    } else {
+      datalist =
+          appData.dishesList.where((e) => e.category == widget.test).toList();
+    }
   }
 
   @override
@@ -63,23 +86,26 @@ class _AllDishScreanState extends State<AllDishScrean> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 16),
+                          horizontal: 16.0, vertical: 8),
                       child: Row(
                         children: [
-                          Text(
-                            widget.test == '0'
-                                ? 'All Dishes'
-                                : widget.test == '1'
-                                    ? 'All Popular Items'
-                                    : 'All Dishes In ${widget.test}',
-                            style: TextStyle(
-                                color: Kprimary,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 1),
-                            textAlign: TextAlign.start,
+                          Expanded(
+                            child: Text(
+                              widget.test == '0'
+                                  ? 'All Dishes'
+                                  : widget.test == '1'
+                                      ? 'All Popular Items'
+                                      : 'All Dishes In ${widget.test}',
+                              style: TextStyle(
+                                  color: Kprimary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.5),
+                              softWrap: false,
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          Spacer(),
                           IconButton(
                               icon: Icon(
                                 Icons.filter_alt_sharp,
@@ -91,6 +117,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
                       )),
                   Expanded(
                     child: GridView.builder(
+                        controller: scrollController,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8),
                         physics: const BouncingScrollPhysics(),
@@ -100,33 +127,25 @@ class _AllDishScreanState extends State<AllDishScrean> {
                             crossAxisCount: height > width
                                 ? (height / width).round()
                                 : (width / height).round() + 1,
+                            mainAxisExtent:
+                                height > width ? height * 0.35 : height * 0.5,
                             crossAxisSpacing: 16,
-                          //  childAspectRatio: height > width ? 0.95 : 1,
                             mainAxisSpacing: 8),
                         itemCount: datalist.length,
-                        itemBuilder: (c, i) {
-                          return GestureDetector(
-                              onTap: () =>
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => DetailsScrean(
-                                            appData.loginUser.fav[i],
-                                          ))),
-                              child: buildCardForDishes(
-                                  width,
-                                  10.0,
-                                  context,
-                                  datalist[i].img,
-                                  0.0,
-                                  height > width
-                                      ? height * 0.20
-                                      : height * 0.35,
-                                  datalist[i],
-                                  appData.loginUser.fav
-                                      .contains(datalist[i].id),
-                                  (b) async =>
-                                      await addtoFav(context, datalist[i].id),
-                                  test: true));
-                        }),
+                        itemBuilder: (c, i) => PrimaryDishCard(
+                              test: true,
+                              dish: datalist[i],
+                              width: height > width
+                                  ? width * 0.5 - 26
+                                  : width * 0.45 - 26,
+                              height: height > width
+                                  ? height * 0.24
+                                  : height * 0.32,
+                              isLiked: appData.loginUser.fav
+                                  .contains(datalist[i].id),
+                              ontap: (b) async =>
+                                  await addtoFav(context, datalist[i].id),
+                            )),
                   )
                 ],
               )
@@ -137,6 +156,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
 
   _showBottomSheet(context) {
     return showModalBottomSheet(
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
@@ -215,10 +235,9 @@ class _AllDishScreanState extends State<AllDishScrean> {
                             isSmallestPrice = !isSmallestPrice;
                           });
                         }),
-                    buildFlatbutton(
+                    PrimaryFlatButton(
                         text: 'OK',
-                        context: c,
-                        onpressed: () {
+                        onPressed: () {
                           Navigator.pop(c);
                           if (!((islatest && isOldest) &&
                               (isLargestPrice && isSmallestPrice) &&

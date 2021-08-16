@@ -1,13 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/components/primary_cart_card.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
+import 'package:resturantapp/screans/maindrawer.dart';
 import 'package:resturantapp/screans/updateProfile.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Profile extends StatefulWidget {
   @override
@@ -17,7 +19,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   bool login = true;
   AnimationController _controller;
-
+  bool isArabic = false;
   @override
   void initState() {
     super.initState();
@@ -38,98 +40,94 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       builder: (ctx, v, c) => Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              physics: BouncingScrollPhysics(),
+              children: [
+                Row(
                   children: [
-                    Row(
+                    Container(
+                      width: 75,
+                      height: 70,
+                      child: v.loginUser.avatar != null
+                          ? CircleAvatar(
+                              backgroundColor: Kprimary.withOpacity(0.9),
+                              child: Icon(
+                                Icons.person,
+                                color: white,
+                                size: 30,
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(
+                              v.loginUser.avatar ?? img
+                              /*  v.loginUser.avatar
+                                  .replaceAll('http', 'https') */
+                              ,
+                            )),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: 75,
-                          height: 70,
-                          child: v.loginUser.avatar != null
-                              ? CircleAvatar(
-                                  backgroundColor: Kprimary.withOpacity(0.9),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: white,
-                                    size: 30,
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                  v.loginUser.avatar ?? img
-                                  /*  v.loginUser.avatar
-                                      .replaceAll('http', 'https') */
-                                  ,
-                                )),
+                        Text(
+                          v.loginUser.name,
+                          style: TextStyle(
+                              color: black.withOpacity(0.8),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
-                        SizedBox(
-                          width: 20,
+                        Text(
+                          v.loginUser.email,
+                          style: TextStyle(
+                              color: Kprimary.withOpacity(0.35),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              v.loginUser.name,
-                              style: TextStyle(
-                                  color: black.withOpacity(0.8),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                            Text(
-                              v.loginUser.email,
-                              style: TextStyle(
-                                  color: Kprimary.withOpacity(0.35),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(
-                              Icons.edit,
-                              size: 30,
-                              color: Kprimary.withOpacity(0.4),
-                            ),
-                            onPressed: () => Navigator.of(ctx).push(
-                                MaterialPageRoute(
-                                    builder: (_) => UpdateProfile())))
                       ],
                     ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    buildmovetabs(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    !login
-                        ? FadeTransition(
-                            opacity: Tween<double>(begin: 0.1, end: 1.0)
-                                .animate(_controller),
-                            child: buildListForHistory(v.loginUser.history))
-                        : FadeTransition(
-                            opacity: Tween<double>(begin: 0.1, end: 1.0)
-                                .animate(_controller),
-                            child: buildListForListTile(v.loginUser)),
+                    Spacer(),
+                    IconButton(
+                        icon: Icon(
+                          Icons.settings,
+                          size: 30,
+                          color: Kprimary.withOpacity(0.4),
+                        ),
+                        onPressed: () {
+                          _showModelSheet();
+                        })
                   ],
                 ),
-              ),
+                SizedBox(
+                  height: 40,
+                ),
+                buildmovetabs(),
+                SizedBox(
+                  height: 20,
+                ),
+                !login
+                    ? FadeTransition(
+                        opacity: Tween<double>(begin: 0.1, end: 1.0)
+                            .animate(_controller),
+                        child: buildListForHistory(v.loginUser.history))
+                    : FadeTransition(
+                        opacity: Tween<double>(begin: 0.1, end: 1.0)
+                            .animate(_controller),
+                        child: buildListForListTile(v.loginUser)),
+              ],
             ),
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            child: buildFlatbutton(
+            child: PrimaryFlatButton(
                 text: 'LOGOUT',
-                context: context,
-                onpressed: () async {
+                onPressed: () async {
                   /*      SharedPreferences prfs =
                       await SharedPreferences.getInstance();
                   prfs.clear();
@@ -189,7 +187,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   buildListForHistory(List<Dish> list) {
     return Column(
         children: list.length > 0
-            ? list.map((e) => buildCardForCart(context, d: e, t: true)).toList()
+            ? list.map((e) => PrimaryCartCard(e, test: true)).toList()
             : []);
   }
 
@@ -255,10 +253,44 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     );
   }
 
-  io() {
-    IO.Socket socket = IO.io('http://localhost:8082',
-        IO.OptionBuilder().setTransports(['websocket']).build());
-    socket.connect();
-    // socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
+  _showModelSheet() {
+    return showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return StatefulBuilder(
+            builder: (ctx, s) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  onTap: () => go(UpdateProfile(), context),
+                  title: Text("Edit Profile",
+                      style: TextStyle(
+                          color: Kprimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700)),
+                ),
+                ListTile(
+                  title: Text("Arabic",
+                      style: TextStyle(
+                          color: Kprimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700)),
+                  trailing: CupertinoSwitch(
+                      activeColor: Kprimary,
+                      value: isArabic,
+                      onChanged: (v) {
+                        s(() {
+                          isArabic = v;
+                        });
+                      }),
+                )
+              ],
+            ),
+          );
+        });
   }
 }

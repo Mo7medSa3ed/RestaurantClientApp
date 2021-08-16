@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/components/primary_cart_card.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/checkout.dart';
 import 'package:resturantapp/size_config.dart';
@@ -31,27 +32,25 @@ class CartScrean extends StatelessWidget {
                 SizedBox(
                   height: getProportionateScreenHeight(25),
                 ),
-                FadeIn(
-                  duration: Duration(milliseconds: 1000),
-                  curve: Curves.easeIn,
-                  child: Expanded(
+                Expanded(
+                  child: FadeIn(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeIn,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-
+                          physics: BouncingScrollPhysics(),
                           primary: true,
                           shrinkWrap: true,
                           itemCount: v.cartList.length,
                           itemBuilder: (c, i) =>
-                              buildCardForCart(c, d: v.cartList[i])),
+                              PrimaryCartCard(v.cartList[i])),
                     ),
                   ),
                 ),
-                buildFlatbutton(
+                PrimaryFlatButton(
                     text: "PROCEED TO CHECKOUT",
-                    context: context,
-                    onpressed: () => Navigator.of(context).push(
+                    onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => CheckoutScrean())))
               ],
             )

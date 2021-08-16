@@ -19,8 +19,7 @@ class DetailsLoading extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ListView(
-              physics: BouncingScrollPhysics(),
-
+                    physics: BouncingScrollPhysics(),
                     children: [
                       SizedBox(
                         height: 10,
@@ -127,6 +126,9 @@ class DetailsLoading extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             RatingBar.builder(
+                              onRatingUpdate: null,
+                              updateOnDrag: false,
+                              ignoreGestures: true,
                               itemSize: 24,
                               initialRating: 0,
                               minRating: 1,
@@ -139,9 +141,6 @@ class DetailsLoading extends StatelessWidget {
                                 Icons.star,
                                 color: Colors.amber[800],
                               ),
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
                             ),
                             /* Text(
                           '(25 review)',
@@ -207,6 +206,9 @@ class DetailsLoading extends StatelessWidget {
                 Row(
                   children: [
                     RatingBar.builder(
+                      onRatingUpdate: null,
+                      updateOnDrag: false,
+                      ignoreGestures: true,
                       itemSize: 14,
                       initialRating: 5,
                       minRating: 1,
@@ -218,9 +220,6 @@ class DetailsLoading extends StatelessWidget {
                         Icons.star,
                         color: Colors.amber[800],
                       ),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
                     ),
                     SizedBox(
                       width: 8,

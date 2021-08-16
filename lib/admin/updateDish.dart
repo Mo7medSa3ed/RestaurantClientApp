@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -73,8 +74,7 @@ class _UpdateDishState extends State<UpdateDish> {
       children: [
         Expanded(
             child: ListView(
-              physics: BouncingScrollPhysics(),
-
+          physics: BouncingScrollPhysics(),
           children: [
             Container(
               width: height > width ? width : height * 0.45,
@@ -250,10 +250,8 @@ class _UpdateDishState extends State<UpdateDish> {
                         ])))
           ],
         )),
-        buildFlatbutton(
-            text: 'UPDATE DISH',
-            context: context,
-            onpressed: () async => await addDish(context)),
+        PrimaryFlatButton(
+            text: 'UPDATE DISH', onPressed: () async => await addDish(context)),
       ],
     );
   }

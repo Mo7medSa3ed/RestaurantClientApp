@@ -8,6 +8,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primary_dish_card.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -76,7 +78,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
               child: dish != null
                   ? FadeIn(
                       child: body(),
-                      duration: Duration(milliseconds: 1000),
+                      duration: Duration(milliseconds: 500),
                       curve: Curves.easeIn,
                     )
                   : DetailsLoading())
@@ -96,21 +98,19 @@ class _DetailsScreanState extends State<DetailsScrean> {
             ),
             child: ListView(
               physics: BouncingScrollPhysics(),
-
               children: [
                 SizedBox(
                   height: 16,
                 ),
-                buildCardForDishes(
-                    wid,
-                    25.0,
-                    context,
-                    dish.img,
-                    0.0,
-                    hei > wid ? hei * 0.24 : hei * 0.4,
-                    dish,
-                    appdata.loginUser.fav.contains(dish.id),
-                    (b) async => await addtoFav(context, dish.id)),
+                PrimaryDishCard(
+                  radius: 25.0,
+                  rightMargin: 0.0,
+                  dish: dish,
+                  width: wid,
+                  height: hei > wid ? hei * 0.24 : hei * 0.4,
+                  isLiked: appdata.loginUser.fav.contains(dish.id),
+                  ontap: (b) async => await addtoFav(context, dish.id),
+                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -201,7 +201,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
                       onSaved: (String s) => msg = s,
                       validator: (String s) =>
                           s.isEmpty ? 'Please enter your message!!' : null,
-                      maxLengthEnforcement:MaxLengthEnforcement.enforced,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       maxLength: 300,
                       maxLines: 3,
                       decoration: InputDecoration(
@@ -269,11 +269,10 @@ class _DetailsScreanState extends State<DetailsScrean> {
             ),
           ),
         ),
-        buildFlatbutton(
+        PrimaryFlatButton(
             text: "ADD TO CART",
-            context: context,
             id: dish.id,
-            onpressed: () {
+            onPressed: () {
               appdata.addtoCart(dish);
             })
       ],
@@ -441,7 +440,9 @@ class _DetailsScreanState extends State<DetailsScrean> {
                 Row(
                   children: [
                     RatingBar.builder(
-                      onRatingUpdate: (v){},
+                      onRatingUpdate: null,
+                      updateOnDrag: false,
+                      ignoreGestures: true,
                       itemSize: 14,
                       initialRating: e.rate.toDouble(),
                       minRating: 1,

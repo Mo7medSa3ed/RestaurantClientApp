@@ -86,7 +86,7 @@ class _LoginScreanState extends State<LoginScrean> {
             child: Text(
               'Sign In',
               style: TextStyle(
-                  fontSize: 36, fontWeight: FontWeight.w900, color: Kprimary),
+                  fontSize: 32, fontWeight: FontWeight.w900, color: Kprimary),
               textAlign: TextAlign.start,
             ),
           ),
@@ -102,7 +102,7 @@ class _LoginScreanState extends State<LoginScrean> {
               child: Text(
                 ' Register',
                 style: TextStyle(
-                    fontSize: 36, fontWeight: FontWeight.w900, color: Kprimary),
+                    fontSize: 32, fontWeight: FontWeight.w900, color: Kprimary),
                 textAlign: TextAlign.end,
               ),
             ))

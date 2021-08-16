@@ -29,9 +29,9 @@ class _PageViewScreanState extends State<PageViewScrean> {
             itemBuilder: (c, i) => buildpvBody(i),
           ),
           Positioned(
-            bottom: 50,
-            right: 50,
-            left: 50,
+            bottom: 40,
+            right: 40,
+            left: 40,
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +85,7 @@ class _PageViewScreanState extends State<PageViewScrean> {
 
   Widget buildpvBody(int i) {
     return Container(
-      padding: EdgeInsets.all(50),
+      padding: EdgeInsets.all(40),
       width: double.infinity,
       height: double.infinity,
       child: Column(

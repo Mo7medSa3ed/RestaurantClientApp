@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/admin/allCategorysForAdmin.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -290,10 +291,9 @@ class _AddDishScreanState extends State<AddDishScrean> {
                         ])))
           ],
         )),
-        buildFlatbutton(
+        PrimaryFlatButton(
             text: 'ADD DISH',
-            context: context,
-            onpressed: () async => await addDish(context)),
+            onPressed: () async => await addDish(context)),
       ],
     );
   }

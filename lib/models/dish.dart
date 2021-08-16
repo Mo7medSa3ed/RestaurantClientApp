@@ -61,7 +61,7 @@ class Dish {
         price: json2['price'],
         category: json2['category'],
         rating: json2['rating'],
-        review: List<String>.from( json2['reviews'])  ,
+        review: List<String>.from(json2['reviews']),
         numOfPieces: json2['numOfPieces'],
       );
 

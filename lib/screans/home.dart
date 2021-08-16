@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
     FavouriteScrean(),
     SearchScrean(),
     CartScrean(),
+    AllOrdersScrean(),
     Profile(),
   ];
   int index = 0;
@@ -63,12 +64,35 @@ class _HomeState extends State<Home> {
             });
           },
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.store),title: Container()),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite) ,title: Container()  ),
-            BottomNavigationBarItem(icon: Icon(Icons.search),title: Container()),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket),title: Container()),
-            BottomNavigationBarItem(icon: Icon(Icons.person),title: Container())
+                icon: Icon(Icons.store),
+                // ignore: deprecated_member_use
+                title: Container()),
+            BottomNavigationBarItem(
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.favorite),
+                // ignore: deprecated_member_use
+                title: Container()),
+            BottomNavigationBarItem(
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.search),
+                // ignore: deprecated_member_use
+                title: Container()),
+            BottomNavigationBarItem(
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.shopping_basket),
+                // ignore: deprecated_member_use
+                title: Container()),
+            BottomNavigationBarItem(
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.list_alt),
+                // ignore: deprecated_member_use
+                title: Container()),
+            BottomNavigationBarItem(
+                // ignore: deprecated_member_use
+                icon: Icon(Icons.person),
+                // ignore: deprecated_member_use
+                title: Container())
           ]),
       appBar: AppBar(
         backgroundColor: index == 0 ? white : null,
@@ -86,14 +110,14 @@ class _HomeState extends State<Home> {
         //   "assets/images/del.png",
         // )),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.list_alt,
-              color: Kprimary.withOpacity(0.5),
-            ),
-            onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AllOrdersScrean())),
-          ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.search,
+          //     color: Kprimary.withOpacity(0.5),
+          //   ),
+          //   onPressed: () => Navigator.of(context)
+          //       .push(MaterialPageRoute(builder: (_) => SearchScrean())),
+          // ),
           IconButton(
             icon: Icon(
               Icons.notifications,

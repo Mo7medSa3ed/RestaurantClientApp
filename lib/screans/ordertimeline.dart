@@ -92,7 +92,7 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
                   onMapCreated: (GoogleMapController controller) {
                     setState(() {
                       markers.add(Marker(
-                          markerId: MarkerId('${Random().nextInt(1000)}'),
+                          markerId: MarkerId('${Random().nextInt(500)}'),
                           position: delivarylocation != null
                               ? LatLng(delivarylocation[1], delivarylocation[0])
                               : null,
@@ -100,7 +100,7 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
                               title: 'Crepe Thawra',
                               snippet: 'this is shop location')));
                       markers.add(Marker(
-                          markerId: MarkerId('${Random().nextInt(1000)}'),
+                          markerId: MarkerId('${Random().nextInt(500)}'),
                           position: dislocation != null
                               ? LatLng(dislocation[1], dislocation[0])
                               : null,

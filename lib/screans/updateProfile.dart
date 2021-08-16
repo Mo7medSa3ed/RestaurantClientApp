@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/user.dart';
@@ -273,10 +274,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
               ]),
             ),
-            buildFlatbutton(
+            PrimaryFlatButton(
                 text: 'UPDATE PROFILE',
-                context: context,
-                onpressed: () async => await updateProfile(ctx, v.loginUser)),
+                onPressed: () async => await updateProfile(ctx, v.loginUser)),
           ],
         ),
       ),

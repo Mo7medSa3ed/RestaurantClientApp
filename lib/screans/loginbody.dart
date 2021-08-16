@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primart_elevatedButtom.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/user.dart';
@@ -104,7 +105,7 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(40),
               ),
-              custumraisedButton('LOGIN', () async => await loginButton()),
+              PrimaryElevatedButton(text:'LOGIN',onpressed:  () async => await loginButton()),
               SizedBox(
                 height: getProportionateScreenHeight(23),
               ),

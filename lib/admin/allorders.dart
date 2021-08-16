@@ -4,9 +4,9 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primary_order_Card.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/ordertimeline.dart';
 
 class AllOrdersScrean extends StatefulWidget {
   @override
@@ -45,114 +45,17 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                     list = snap.data
                         .where((e) => e['user']['_id'] == app.loginUser.id)
                         .toList();
-                    return ListView.builder(
-              physics: BouncingScrollPhysics(),
 
-                      itemCount: list.length,
-                      itemBuilder: (_, i) => Padding(
+                    return ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: list.length,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 6),
-                        child: Card(
-                          elevation: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              ListTile(
-                                  title: Text(
-                                    'OrderId: ${list[i]['_id']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15,
-                                        color: Kprimary),
-                                  ),
-                                  subtitle: Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Date: ${list[i]['updatedAt'].toString().substring(0, 10)}\t\t\tTime: ${list[i]['updatedAt'].toString().substring(11, 19)}',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 13,
-                                          color: Kprimary.withOpacity(0.6)),
-                                    ),
-                                  ),
-                                  trailing: Text(
-                                    '${list[i]['state'].toString().toUpperCase()}',
-                                    style: TextStyle(
-                                        color: Kprimary,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  leading: Padding(
-                                      padding: EdgeInsets.only(top: 8),
-                                      child: Text(
-                                        '\$ ${list[i]['sum']}',
-                                        style: TextStyle(
-                                            color: Kprimary,
-                                            fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.center,
-                                      ))),
-                              list[i]['state']
-                                              .toString()
-                                              .toLowerCase()
-                                              .trim() ==
-                                          'confirmed' ||
-                                      list[i]['state']
-                                              .toString()
-                                              .toLowerCase()
-                                              .trim() ==
-                                          'onway'
-                                  ? TextButton(
-                                      onPressed: () => Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (_) => OrderTimeLine(
-                                                    id: list[i]['_id'],
-                                                    state: list[i]['state'],
-                                                    delivarylocation: snap
-                                                            .data[i]
-                                                        ['deliveryLocation'],
-                                                    dislocation: list[i]
-                                                        ['distLocation'],
-                                                  ))),
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all(red),
-                                          padding: MaterialStateProperty.all(
-                                              EdgeInsets.all(12))),
-                                      child: Text(
-                                        'Track Your Order',
-                                        style: TextStyle(
-                                            color: white,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    )
-                                  : list[i]['state']
-                                              .toString()
-                                              .toLowerCase()
-                                              .trim() !=
-                                          "cancel"
-                                      ? TextButton(
-                                          onPressed: () async =>
-                                              await cancelOrder(
-                                                  list[i]['_id'], i),
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      red),
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      EdgeInsets.all(12))),
-                                          child: Text(
-                                            'Cancel Order',
-                                            style: TextStyle(
-                                                color: white,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        )
-                                      : Container(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                        itemBuilder: (_, i) => PrimaryOrderCard(
+                              list[i],
+                              onPressed: () async =>
+                                  await cancelOrder(list[i]['_id'], i),
+                            ));
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/components/primary_dish_card.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/details.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
@@ -47,8 +47,7 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ListView(
-              physics: BouncingScrollPhysics(),
-
+                  physics: BouncingScrollPhysics(),
                   primary: true,
                   children: [
                     Text(
@@ -79,42 +78,54 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
                     ),
                     favList.length > 0
                         ? FadeIn(
-                            duration: Duration(milliseconds: 1000),
+                            duration: Duration(milliseconds: 500),
                             curve: Curves.easeIn,
-                            child: Expanded(
-                              child: GridView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 16,
-                                          childAspectRatio: 2 / 3,
-                                          mainAxisSpacing: 8),
-                                  itemCount: favList.length,
-                                  itemBuilder: (c, i) {
-                                    return GestureDetector(
-                                        onTap: () => Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (_) => DetailsScrean(
-                                                      v.loginUser.fav[i],
-                                                    ))),
-                                        child: buildCardForDishes(
-                                          wid,
-                                          10.0,
-                                          context,
-                                          favList[i].img,
-                                          0.0,
-                                          hei > wid ? hei * 0.18 : hei * 0.4,
-                                          favList[i],
-                                          v.loginUser.fav
-                                              .contains(favList[i].id),
-                                          (b) async => await addtoFav(
-                                              context, favList[i].id),
-                                        ));
-                                  }),
-                            ),
+                            child: GridView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 16,
+                                        mainAxisExtent:
+                                            hei > wid ? hei * 0.36 : hei * 0.55,
+                                        mainAxisSpacing: 8),
+                                itemCount: favList.length,
+                                itemBuilder: (c, i) => PrimaryDishCard(
+                                      radius: 10.0,
+                                      rightMargin: 0.0,
+                                      dish: favList[i],
+                                      width: hei > wid
+                                          ? wid * 0.5 - 26
+                                          : wid * 0.45 - 26,
+                                      height:
+                                          hei > wid ? hei * 0.24 : hei * 0.32,
+                                      isLiked: v.loginUser.fav
+                                          .contains(favList[i].id),
+                                      ontap: (b) async => await addtoFav(
+                                          context, favList[i].id),
+                                    )
+
+                                // return GestureDetector(
+                                //     onTap: () => Navigator.of(context)
+                                //         .push(MaterialPageRoute(
+                                //             builder: (_) => DetailsScrean(
+                                //                   v.loginUser.fav[i],
+                                //                 ))),
+                                //     child: buildCardForDishes(
+                                //       wid,
+                                //       10.0,
+                                //       context,
+                                //       favList[i].img,
+                                //       0.0,
+                                //       hei > wid ? hei * 0.18 : hei * 0.4,
+                                //       favList[i],
+                                //       v.loginUser.fav.contains(favList[i].id),
+                                //       (b) async => await addtoFav(
+                                //           context, favList[i].id),
+                                //     ));
+                                ),
                           )
                         : Container(
                             width: double.infinity,

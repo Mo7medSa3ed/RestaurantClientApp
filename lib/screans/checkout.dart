@@ -3,6 +3,8 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primart_elevatedButtom.dart';
+import 'package:resturantapp/components/primary_cart_card.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/provider/appdata.dart';
@@ -25,7 +27,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   bool isExist = false;
   Position position;
   List<Address> addresses;
-
+  
   getcurrantLocation() async {
     await Geolocator.isLocationServiceEnabled();
     await Geolocator.requestPermission();
@@ -48,212 +50,208 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      // bottomSheet: bootomSheet(),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Consumer<AppData>(
-              builder: (ctx, v, c) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Consumer<AppData>(
+            builder: (ctx, v, c) => Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        physics: BouncingScrollPhysics(),
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'CheckOut',
-                                    style: TextStyle(
-                                        color: Kprimary,
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: 1),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.close,
-                                      color: red,
-                                      size: 35,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'SHIPPING ADDRESS',
-                                    style: TextStyle(
-                                        color: Kprimary.withOpacity(0.35),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: 1),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: Kprimary.withOpacity(0.35),
-                                      size: 30,
-                                    ),
-                                    onPressed: () => getcurrantLocation(),
-                                  )
-                                ],
-                              ),
                               Text(
-                                app.loginUser.name,
+                                'CheckOut',
                                 style: TextStyle(
-                                    color: Kprimary.withOpacity(0.85),
-                                    fontSize: 22,
+                                    color: Kprimary,
+                                    fontSize: 34,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 1),
                                 textAlign: TextAlign.start,
                               ),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  color: red,
+                                  size: 35,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Text(
-                                addresses != null
-                                    ? addresses.first.addressLine
-                                    : "No address determined",
+                                'SHIPPING ADDRESS',
                                 style: TextStyle(
                                     color: Kprimary.withOpacity(0.35),
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 1),
-                                softWrap: true,
-                                textAlign: TextAlign.start,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'ITEMS',
-                                style: TextStyle(
-                                    color: Kprimary.withOpacity(0.35),
-                                    fontSize: 12,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 1),
                                 textAlign: TextAlign.start,
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(
-                                children: app.cartList
-                                    .map((e) => buildCardForCart(ctx, d: e))
-                                    .toList(),
-                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Kprimary.withOpacity(0.35),
+                                  size: 30,
+                                ),
+                                onPressed: () => getcurrantLocation(),
+                              )
                             ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            color: grey.withOpacity(0.95),
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                          )
-                        ]),
-                      ),
-                      Column(
-                        children: [
-                          Form(
-                            key: formKey2,
-                            child: TextFormField(
-                              onSaved: (String v) =>
-                                  v.isNotEmpty ? promo = v : null,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.all(20),
-                                  border: InputBorder.none,
-                                  fillColor: greyw,
-                                  prefixIcon: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 16.0, left: 12.0, bottom: 2),
-                                    child: Icon(
-                                      Icons.local_offer_rounded,
-                                      size: 35,
-                                      color: red,
-                                    ),
-                                  ),
-                                  hintText: 'Add Promo Code',
-                                  hintStyle: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Kprimary.withOpacity(0.35)),
-                                  filled: true),
-                            ),
+                          Text(
+                            app.loginUser.name,
+                            style: TextStyle(
+                                color: Kprimary.withOpacity(0.85),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1),
+                            textAlign: TextAlign.start,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            addresses != null
+                                ? addresses.first.addressLine
+                                : "No address determined",
+                            style: TextStyle(
+                                color: Kprimary.withOpacity(0.35),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1),
+                            softWrap: true,
+                            textAlign: TextAlign.start,
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'TOTAL',
-                                    style: TextStyle(
-                                        color: Kprimary.withOpacity(0.20),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 1),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '\$ ${calctotal()} ',
-                                    style: TextStyle(
-                                        color: red,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 1),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    'Delivary charge included',
-                                    style: TextStyle(
-                                        color: Kprimary.withOpacity(0.35),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 1),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
-                              ),
-                              Spacer(),
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  child: custumraisedButton("PLACE ORDER",
-                                      () async => await makeOrder()))
-                            ],
+                          Text(
+                            'ITEMS',
+                            style: TextStyle(
+                                color: Kprimary.withOpacity(0.35),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1),
+                            textAlign: TextAlign.start,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            children: app.cartList
+                                .map((e) => PrimaryCartCard(e))
+                                .toList(),
                           ),
                         ],
-                      )
-                    ],
-                  )),
-        ),
+                      ),
+                    ),
+                    bootomSheet()
+                  ],
+                )),
       ),
     );
+  }
+
+  Widget bootomSheet() {
+    return Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(color: white, boxShadow: [
+          BoxShadow(
+            color: grey[350].withOpacity(0.95),
+            spreadRadius: 0.5,
+            blurRadius: 20,
+          )
+        ]),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Form(
+              key: formKey2,
+              child: TextFormField(
+                onSaved: (String v) => v.isNotEmpty ? promo = v : null,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(20),
+                    border: InputBorder.none,
+                    fillColor: greyw,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(
+                          right: 16.0, left: 12.0, bottom: 2),
+                      child: Icon(
+                        Icons.local_offer_rounded,
+                        size: 35,
+                        color: red,
+                      ),
+                    ),
+                    hintText: 'Add Promo Code',
+                    hintStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Kprimary.withOpacity(0.35)),
+                    filled: true),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'TOTAL',
+                      style: TextStyle(
+                          color: Kprimary.withOpacity(0.20),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '\$ ${calctotal()} ',
+                      style: TextStyle(
+                          color: red,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Delivary charge included',
+                      style: TextStyle(
+                          color: Kprimary.withOpacity(0.35),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: PrimaryElevatedButton(
+                        text: "PLACE ORDER",
+                        onpressed: () async => await makeOrder()))
+              ],
+            ),
+          ],
+        ));
   }
 
   makeOrder() async {

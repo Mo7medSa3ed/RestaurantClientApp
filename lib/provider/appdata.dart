@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:resturantapp/models/dish.dart';
+import 'package:resturantapp/models/order.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/models/categorys.dart';
 
@@ -10,17 +11,22 @@ class AppData extends ChangeNotifier {
   List<Categorys> categoryList = [];
   List<dynamic> ordersList = [];
   List<User> usersList = [];
-
   List<Dish> cartList = [];
   String address;
+  Order order;
 
   initLoginUser(User user) {
     loginUser = user;
     notifyListeners();
   }
 
-  initUserList( user) {
+  initUserList(user) {
     usersList = user;
+    notifyListeners();
+  }
+
+  initOrder(order) {
+    this.order = order;
     notifyListeners();
   }
 
@@ -43,7 +49,7 @@ class AppData extends ChangeNotifier {
     loadeddishesList.add(d);
     notifyListeners();
   }
-  
+
   addDish(Dish d) {
     dishesList.add(d);
     notifyListeners();
@@ -54,11 +60,21 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  changeAmountForDetails(amount, id) {
+    order.items.firstWhere((e) => e.dish.id == id).amount = amount;
+    notifyListeners();
+  }
+
+  deleteItemForDetails(id) {
+    order.items.removeWhere((e) => e.dish.id == id);
+    notifyListeners();
+  }
+
   addtoCart(Dish d) {
     cartList.add(d);
     notifyListeners();
   }
-  
+
   removeFromCart(Dish d) {
     cartList.remove(d);
     notifyListeners();
@@ -91,19 +107,20 @@ class AppData extends ChangeNotifier {
     loginUser.fav.removeAt(index);
     notifyListeners();
   }
+
   removeFromFavWithId(id) {
     loginUser.fav.remove(id);
     notifyListeners();
   }
-  
+
   addToFav(id) {
     loginUser.fav.add(id);
     notifyListeners();
   }
 
-  reset(){
-    cartList=[];
-    address=null;
+  reset() {
+    cartList = [];
+    address = null;
     notifyListeners();
   }
 }

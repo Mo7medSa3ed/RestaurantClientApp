@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/components/primary_search_card.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -36,84 +37,85 @@ class _SearchScreanState extends State<SearchScrean> {
 
   @override
   Widget build(BuildContext context) {
-    return networktest?  appData.dishesList.length > 0
-        ? Column(
-            children: [
-              Card(
-                shadowColor: Kprimary,
-                elevation: 1,
-                margin: EdgeInsets.all(16),
-                child: TextField(
-                  maxLines: 1,
-                  controller: controller,
-                  onChanged: (String v) {
-                    if (v.isNotEmpty) {
-                      dishList = appData.dishesList
-                          .where((e) => e.name
-                              .toLowerCase()
-                              .trim()
-                              .contains(v.toLowerCase().trim()))
-                          .toList();
-                    } else {
-                      dishList = [];
-                    }
-                    setState(() {});
-                  },
-                  decoration: InputDecoration(
-                      hintText: 'Search here.....',
-                      suffixIcon: controller.text.toString().isNotEmpty
-                          ? Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: IconButton(
-                                  onPressed: () {
-                                    controller.clear();
-                                    dishList = [];
-                                    setState(() {});
-                                  },
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: Kprimary,
-                                  )),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(right: 22.0),
-                              child: Icon(Icons.search),
-                            ),
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 22, vertical: 16),
-                      border: InputBorder.none),
-                ),
-              ),
-              ListView.builder(
-                             physics: BouncingScrollPhysics(),
-
-                itemCount: dishList.length,
-                shrinkWrap: true,
-                itemBuilder: (ctx, i) => buildListTile(dishList[i], ctx),
-              )
-            ],
-          )
-        : Center(
-            child: Container(
-                height: MediaQuery.of(context).size.height * 0.65,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/List.png",
-                      fit: BoxFit.fill,
-                      height: 360,
-                      width: 360,
+    return networktest
+        ? appData.dishesList.length > 0
+            ? Column(
+                children: [
+                  Card(
+                    shadowColor: Kprimary,
+                    elevation: 1,
+                    margin: EdgeInsets.all(16),
+                    child: TextField(
+                      maxLines: 1,
+                      controller: controller,
+                      onChanged: (String v) {
+                        if (v.isNotEmpty) {
+                          dishList = appData.dishesList
+                              .where((e) => e.name
+                                  .toLowerCase()
+                                  .trim()
+                                  .contains(v.toLowerCase().trim()))
+                              .toList();
+                        } else {
+                          dishList = [];
+                        }
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          hintText: 'Search here.....',
+                          suffixIcon: controller.text.toString().isNotEmpty
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        controller.clear();
+                                        dishList = [];
+                                        setState(() {});
+                                      },
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: Kprimary,
+                                      )),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.only(right: 22.0),
+                                  child: Icon(Icons.search),
+                                ),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 22, vertical: 16),
+                          border: InputBorder.none),
                     ),
-                    Text(
-                      "Your Dish List is Empty",
-                      style: TextStyle(color: grey, fontSize: 18),
-                    )
-                  ],
-                )),
-          ):noNetworkwidget();
+                  ),
+                  ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: dishList.length,
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, i) => PrimarySearchCard(dishList[i]),
+                  )
+                ],
+              )
+            : Center(
+                child: Container(
+                    height: MediaQuery.of(context).size.height * 0.65,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/List.png",
+                          fit: BoxFit.fill,
+                          height: 360,
+                          width: 360,
+                        ),
+                        Text(
+                          "Your Dish List is Empty",
+                          style: TextStyle(color: grey, fontSize: 18),
+                        )
+                      ],
+                    )),
+              )
+        : noNetworkwidget();
   }
 }
