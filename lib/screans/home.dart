@@ -42,10 +42,7 @@ class _HomeState extends State<Home> {
 
   getData() async {
     appData = Provider.of<AppData>(context, listen: false);
-    await API.getAllDishes().then((value) => appData.initDishesList(value));
-    await API
-        .getAllCategories()
-        .then((value) => appData.initCategoryList(value));
+    await API.getHome().then((value) => appData.initHomeModel(value));
   }
 
   @override

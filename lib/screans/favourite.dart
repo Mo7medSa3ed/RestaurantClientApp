@@ -16,16 +16,16 @@ class FavouriteScrean extends StatefulWidget {
 
 class _FavouriteScreanState extends State<FavouriteScrean> {
   bool networktest = true;
-  checkNetwork() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
-    if (connectivityResult == ConnectivityResult.none) {
-      networktest = false;
-    } else {
-      networktest = true;
-    }
-    setState(() {});
-  }
+  // checkNetwork() async {
+  //   var connectivityResult = await (Connectivity().checkConnectivity());
+  //   print(connectivityResult);
+  //   if (connectivityResult == ConnectivityResult.none) {
+  //     networktest = false;
+  //   } else {
+  //     networktest = true;
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {

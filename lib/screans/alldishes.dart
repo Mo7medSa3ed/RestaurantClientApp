@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_dish_card.dart';
 import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
@@ -25,8 +26,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
   bool isLargestRate = false;
   bool isLargestPrice = false;
   bool networktest = true;
-  int page=1;
-  bool isLast=false;
+  int page = 0;
+  bool isLast = false;
   final scrollController = ScrollController();
 
   checkNetwork() async {
@@ -45,31 +46,43 @@ class _AllDishScreanState extends State<AllDishScrean> {
     super.initState();
     checkNetwork();
     appData = Provider.of<AppData>(context, listen: false);
-    if (widget.test == '0') {
-      datalist = appData.dishesList;
-    } else if (widget.test == '1') {
-      datalist = appData.dishesList.where((e) => e.rating < 5).toList();
-    } else {
-      datalist =
-          appData.dishesList.where((e) => e.category == widget.test).toList();
-    }
+    fetchDate(true);
 
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        fetchDate();
+        fetchDate(false);
       }
     });
   }
 
-  fetchDate()async{
-    if (widget.test == '0') {
-      datalist = appData.dishesList;
-    } else if (widget.test == '1') {
-      datalist = appData.dishesList.where((e) => e.rating < 5).toList();
+  fetchDate(init) async {
+    if (init) {
+      page = 1;
+      isLast = false;
+      setState(() {});
     } else {
-      datalist =
-          appData.dishesList.where((e) => e.category == widget.test).toList();
+      page++;
+    }
+    if (isLast == false) {
+      if (widget.test == '0') {
+        await API.getAllDishes(top: true, page: page).then((value) {
+          if (value.length < 6) {
+            isLast = true;
+          }
+          datalist = value;
+        });
+      } else if (widget.test == '1') {
+        await API.getAllDishes(top: false, page: page).then((value) {
+          if (value.length < 6) {
+            isLast = true;
+          }
+          datalist = value;
+        });
+      } else {
+        // await API.getAllDishes().then((value) => appData.initDishesList(value));
+      }
+      setState(() {});
     }
   }
 
@@ -116,36 +129,45 @@ class _AllDishScreanState extends State<AllDishScrean> {
                         ],
                       )),
                   Expanded(
-                    child: GridView.builder(
-                        controller: scrollController,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8),
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: height > width
-                                ? (height / width).round()
-                                : (width / height).round() + 1,
-                            mainAxisExtent:
-                                height > width ? height * 0.35 : height * 0.5,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 8),
-                        itemCount: datalist.length,
-                        itemBuilder: (c, i) => PrimaryDishCard(
-                              test: true,
-                              dish: datalist[i],
-                              width: height > width
-                                  ? width * 0.5 - 26
-                                  : width * 0.45 - 26,
-                              height: height > width
-                                  ? height * 0.24
-                                  : height * 0.32,
-                              isLiked: appData.loginUser.fav
-                                  .contains(datalist[i].id),
-                              ontap: (b) async =>
-                                  await addtoFav(context, datalist[i].id),
-                            )),
+                    child: RefreshIndicator(
+                      onRefresh: () => fetchDate(true),
+                      child: datalist.length > 0
+                          ? GridView.builder(
+                              controller: scrollController,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8),
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: height > width
+                                          ? (height / width).round()
+                                          : (width / height).round() + 1,
+                                      mainAxisExtent: height > width
+                                          ? height * 0.35
+                                          : height * 0.5,
+                                      crossAxisSpacing: 16,
+                                      mainAxisSpacing: 8),
+                              itemCount: datalist.length,
+                              itemBuilder: (c, i) => PrimaryDishCard(
+                                    test: true,
+                                    dish: datalist[i],
+                                    width: height > width
+                                        ? width * 0.5 - 26
+                                        : width * 0.45 - 26,
+                                    height: height > width
+                                        ? height * 0.24
+                                        : height * 0.32,
+                                    isLiked: appData.loginUser.fav
+                                        .contains(datalist[i].id),
+                                    ontap: (b) async =>
+                                        await addtoFav(context, datalist[i].id),
+                                  ))
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                    ),
                   )
                 ],
               )

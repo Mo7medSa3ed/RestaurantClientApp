@@ -52,6 +52,16 @@ class Dish {
                 .toList(),
         numOfPieces: json2['numOfPieces'],
       );
+  factory Dish.fromJsonForHome(Map<String, dynamic> json2) => Dish(
+        id: json2['_id'],
+        img: json2['img'],
+        name: json2['name'],
+        desc: json2['desc'],
+        price: json2['price'],
+        category: json2['category']['name'],
+        rating: json2['rating'],
+        numOfPieces: json2['numOfPieces'],
+      );
 
   factory Dish.fromOneJsontoUser(Map<String, dynamic> json2) => Dish(
         id: json2['_id'],

@@ -34,10 +34,7 @@ class _HomeState extends State<HomePage> {
 
   getData() async {
     AppData appData = Provider.of<AppData>(context, listen: false);
-    await API.getAllDishes().then((value) => appData.initDishesList(value));
-    await API
-        .getAllCategories()
-        .then((value) => appData.initCategoryList(value));
+    await API.getHome().then((value) => appData.initHomeModel(value));
     setState(() {});
   }
 
@@ -58,8 +55,9 @@ class _HomeState extends State<HomePage> {
     final wid = MediaQuery.of(context).size.width;
     return Consumer<AppData>(
       builder: (ctx, value, c) {
-        final dishes = value.dishesList.where((e) => e.rating >= 5).toList();
-        final popular = value.dishesList.where((e) => e.rating < 5).toList();
+        final dishes = value.homeModel.topRate ?? [];
+        final popular = value.homeModel.popular ?? [];
+        final categoryList = value.homeModel.categories ?? [];
         return RefreshIndicator(
           onRefresh: () async => await getData(),
           child: ListView(
@@ -67,11 +65,11 @@ class _HomeState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               physics: const BouncingScrollPhysics(),
               children: [
-                TextRow('Dishes', test: '0', show: dishes.length > 6),
+                TextRow('Dishes', test: '0', show: dishes.length < 6),
                 SizedBox(
                   height: getProportionateScreenHeight(10),
                 ),
-                value.dishesList.length > 0
+                dishes.length > 0
                     ? FadeIn(
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
@@ -83,6 +81,7 @@ class _HomeState extends State<HomePage> {
                               shrinkWrap: true,
                               itemCount: dishes.length,
                               itemBuilder: (_, i) => PrimaryDishCard(
+                                    rightMargin: 20.0,
                                     dish: dishes[i],
                                     width: hei > wid ? wid * 0.85 : wid * 0.47,
                                     height: hei > wid ? hei * 0.24 : hei * 0.30,
@@ -105,7 +104,7 @@ class _HomeState extends State<HomePage> {
                 SizedBox(
                   height: getProportionateScreenHeight(15),
                 ),
-                value.categoryList.length > 0
+                categoryList.length > 0
                     ? FadeIn(
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
@@ -113,7 +112,7 @@ class _HomeState extends State<HomePage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: value.categoryList
+                              children: categoryList
                                   .where((e) => e.numOfDishes > 0)
                                   .map(
                                     (e) => PrimaryCategoryCard(e),
@@ -126,11 +125,11 @@ class _HomeState extends State<HomePage> {
                   height: getProportionateScreenHeight(15),
                 ),
                 TextRow('Our Popular Item',
-                    test: '1', show: popular.length < 6),
+                    test: '1', show: popular.length > 6),
                 SizedBox(
                   height: getProportionateScreenHeight(15),
                 ),
-                value.dishesList.length > 0
+                popular.length > 0
                     ? FadeIn(
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,

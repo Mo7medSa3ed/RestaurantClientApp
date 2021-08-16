@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:resturantapp/models/dish.dart';
+import 'package:resturantapp/models/home.dart';
 import 'package:resturantapp/models/order.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/models/categorys.dart';
@@ -7,11 +8,12 @@ import 'package:resturantapp/models/categorys.dart';
 class AppData extends ChangeNotifier {
   User loginUser;
   List<Dish> dishesList = [];
-  List<Dish> loadeddishesList = [];
+  //List<Dish> loadeddishesList = [];
   List<Categorys> categoryList = [];
   List<dynamic> ordersList = [];
   List<User> usersList = [];
   List<Dish> cartList = [];
+  HomeModel homeModel = HomeModel();
   String address;
   Order order;
 
@@ -30,6 +32,11 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  initHomeModel(homeModel) {
+    this.homeModel = homeModel;
+    notifyListeners();
+  }
+
   initDishesList(List<Dish> list) {
     dishesList = list;
     notifyListeners();
@@ -45,10 +52,10 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  addToloaded(Dish d) {
-    loadeddishesList.add(d);
-    notifyListeners();
-  }
+  // addToloaded(Dish d) {
+  //   loadeddishesList.add(d);
+  //   notifyListeners();
+  // }
 
   addDish(Dish d) {
     dishesList.add(d);

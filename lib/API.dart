@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
+import 'package:resturantapp/models/home.dart';
 import 'package:resturantapp/models/review.dart';
 import 'dart:convert';
 import 'package:resturantapp/models/user.dart';
@@ -69,13 +70,26 @@ class API {
 
   // Function For Dish
 
-  static Future<List<Dish>> getAllDishes() async {
+  static Future<List<Dish>> getAllDishes({top, page}) async {
     final res = await http.get(
-      '$_BaseUrl/dishes/',
+      '$_BaseUrl/dishes/filter/query?${top ? 'topRate=true' : 'popular=true'}&&page=$page',
     );
     final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    return parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList();
+    final parsed = json.decode(body);
+    
+    return parsed['dishes']
+        .map<Dish>((dish) => Dish.fromJsonForHome(dish))
+        .toList();
+  }
+
+  static Future<HomeModel> getHome() async {
+    final res = await http.get(
+      '$_BaseUrl/stats/home',
+    );
+    final body = utf8.decode(res.bodyBytes);
+    final parsed = json.decode(body);
+    print(parsed);
+    return HomeModel.fromJson(parsed);
   }
 
   static Future<Dish> getOneDish(String id) async {
