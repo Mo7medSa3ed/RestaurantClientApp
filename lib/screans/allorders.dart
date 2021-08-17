@@ -19,7 +19,6 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
   bool isLast = false;
   bool status = false;
   final scrollController = ScrollController();
-  var list;
   @override
   void initState() {
     super.initState();
@@ -38,7 +37,6 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
       page = 1;
       isLast = false;
       app.clearAllOrderList();
-      setState(() {});
     } else {
       page++;
     }
@@ -48,12 +46,11 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
         if (value['status']) {
           if (value['data'].length < 6) {
             isLast = true;
+            setState(() {});
           }
           app.initOrderList(value['data']);
         }
       });
-
-      setState(() {});
     }
   }
 
@@ -85,9 +82,9 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 6),
                         itemBuilder: (_, i) => PrimaryOrderCard(
-                              list[i],
-                              onPressed: () async =>
-                                  await cancelOrder(list[i]['_id'], i),
+                              app.ordersList[i],
+                              onPressed: () async => await cancelOrder(
+                                  app.ordersList[i]['_id'], i),
                             ))
                     : (status && app.ordersList.length == 0)
                         ? Center(
@@ -127,7 +124,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
           Navigator.of(context).pop();
           final body = utf8.decode(res.bodyBytes);
           final parsed = json.decode(body);
-          list[index] = parsed;
+          app.ordersList[index] = parsed;
           setState(() {});
           CoolAlert.show(
               context: context,

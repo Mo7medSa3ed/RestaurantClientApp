@@ -10,20 +10,18 @@ import 'package:connectivity/connectivity.dart';
 
 class AllDishScrean extends StatefulWidget {
   final String test;
-  AllDishScrean(this.test);
+  final catId;
+  AllDishScrean(this.test, {this.catId});
   @override
   _AllDishScreanState createState() => _AllDishScreanState();
 }
 
 class _AllDishScreanState extends State<AllDishScrean> {
   AppData appData;
-  bool isOldest = false;
-  bool isSmallestRate = false;
-  bool isSmallestPrice = false;
-  bool islatest = false;
-  bool isLargestRate = false;
-  bool isLargestPrice = false;
-  bool networktest = true;
+
+  int islatest = 0;
+
+  var networktest = true;
   bool status = false;
   int page = 0;
   var list = [];
@@ -32,7 +30,6 @@ class _AllDishScreanState extends State<AllDishScrean> {
 
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
     if (connectivityResult == ConnectivityResult.none) {
       networktest = false;
     } else {
@@ -87,6 +84,15 @@ class _AllDishScreanState extends State<AllDishScrean> {
           }
         });
       } else {
+        await API.getAllDishesByCategory(widget.catId).then((value) {
+          status = value['status'];
+          if (value['status']) {
+            if (value['data'].length < 6) {
+              isLast = true;
+            }
+            appData.initDishesByCategory(value['data']);
+          }
+        });
       }
       setState(() {});
     }
@@ -210,7 +216,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SwitchListTile(
+                    RadioListTile(
+                        groupValue: 0,
                         title: Text(
                           'Latest',
                           style: TextStyle(fontWeight: FontWeight.w600),
@@ -218,86 +225,87 @@ class _AllDishScreanState extends State<AllDishScrean> {
                         value: islatest,
                         onChanged: (v) {
                           s(() {
-                            islatest = !islatest;
+                            islatest = 0;
                           });
                         }),
-                    // SwitchListTile(
-                    //     title: Text(
-                    //       'Oldest',
-                    //       style: TextStyle(fontWeight: FontWeight.w600),
-                    //     ),
-                    //     value: isOldest,
-                    //     onChanged: (v) {
-                    //       s(() {
-                    //         isOldest = !isOldest;
-                    //       });
-                    //     }),
-                    SwitchListTile(
+                    RadioListTile(
+                        groupValue: 1,
+                        title: Text(
+                          'Oldest',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        value: islatest,
+                        onChanged: (v) {
+                          s(() {
+                            islatest = 1;
+                          });
+                        }),
+                    RadioListTile(
+                        groupValue: 2,
                         title: Text(
                           'Largest Rate',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        value: isLargestRate,
+                        value: islatest,
                         onChanged: (v) {
                           s(() {
-                            isLargestRate = !isLargestRate;
+                            islatest = 2;
                           });
                         }),
-                    // SwitchListTile(
-                    //     title: Text(
-                    //       'Smallest Rate',
-                    //       style: TextStyle(fontWeight: FontWeight.w600),
-                    //     ),
-                    //     value: isSmallestRate,
-                    //     onChanged: (v) {
-                    //       s(() {
-                    //         isSmallestRate = !isSmallestRate;
-                    //       });
-                    //     }),
-                    SwitchListTile(
+                    RadioListTile(
+                        groupValue: 3,
+                        title: Text(
+                          'Smallest Rate',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        value: islatest,
+                        onChanged: (v) {
+                          s(() {
+                            islatest = 3;
+                          });
+                        }),
+                    RadioListTile(
+                        groupValue: 4,
                         title: Text(
                           'Largest Price',
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        value: isLargestPrice,
+                        value: islatest,
                         onChanged: (v) {
                           s(() {
-                            isLargestPrice = !isLargestPrice;
+                            islatest = 4;
                           });
                         }),
-                    // SwitchListTile(
-                    //     title: Text(
-                    //       'Smallest Price',
-                    //       style: TextStyle(fontWeight: FontWeight.w600),
-                    //     ),
-                    //     value: isSmallestPrice,
-                    //     onChanged: (v) {
-                    //       s(() {
-                    //         isSmallestPrice = !isSmallestPrice;
-                    //       });
-                    //     }),
+                    RadioListTile(
+                        groupValue: 5,
+                        title: Text(
+                          'Smallest Price',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        value: islatest,
+                        onChanged: (v) {
+                          s(() {
+                            islatest = 5;
+                          });
+                        }),
                     PrimaryFlatButton(
                         text: 'OK',
                         onPressed: () {
                           Navigator.pop(c);
-                          if (!((islatest && isOldest) &&
-                              (isLargestPrice && isSmallestPrice) &&
-                              (isLargestRate && isSmallestRate))) {
-                            if (isOldest) {
-                              list.sort(
-                                  (a, b) => a.updatedAt.compareTo(b.updatedAt));
-                            } else if (!isOldest) {
-                              list.sort(
-                                  (a, b) => b.updatedAt.compareTo(a.updatedAt));
-                            } else if (isLargestPrice) {
-                              list.sort((a, b) => b.price.compareTo(a.price));
-                            } else if (!isLargestPrice) {
-                              list.sort((a, b) => a.price.compareTo(b.price));
-                            } else if (isLargestRate) {
-                              list.sort((a, b) => b.rating.compareTo(a.rating));
-                            } else if (!isLargestRate) {
-                              list.sort((a, b) => a.rating.compareTo(b.rating));
-                            }
+                          if (islatest == 0) {
+                            list.sort(
+                                (a, b) => b.updatedAt.compareTo(a.updatedAt));
+                          } else if (islatest == 1) {
+                            list.sort(
+                                (b, a) => b.updatedAt.compareTo(a.updatedAt));
+                          } else if (islatest == 2) {
+                            list.sort((a, b) => b.rating.compareTo(a.rating));
+                          } else if (islatest == 3) {
+                            list.sort((b, a) => b.rating.compareTo(a.rating));
+                          } else if (islatest == 4) {
+                            list.sort((a, b) => b.price.compareTo(a.price));
+                          } else if (islatest == 5) {
+                            list.sort((b, a) => b.price.compareTo(a.price));
                           }
 
                           setState(() {});

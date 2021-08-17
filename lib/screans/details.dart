@@ -288,10 +288,9 @@ class _DetailsScreanState extends State<DetailsScrean> {
 
       final res = (await API.updateReview(r, dish.id, rev.id));
       if (res.statusCode == 200 || res.statusCode == 201) {
-        //final i = dish.reviews.indexOf(rev);
         rev.msg = msg;
         rev.rate = rating;
-        //dish.reviews[i] = r;
+        appdata.changeRateForHome(id: dish.id, rate: rating);
         controller.clear();
         rating = 0.0;
         test = true;
@@ -332,6 +331,8 @@ class _DetailsScreanState extends State<DetailsScrean> {
         final parsed = json.decode(body);
         parsed['category'] = dish.category;
         dish = Dish.fromOneJson(parsed);
+        appdata.changeRateForHome(id: dish.id, rate: dish.rating);
+
         controller.clear();
         rating = 0.0;
         Navigator.pop(context);
@@ -372,7 +373,11 @@ class _DetailsScreanState extends State<DetailsScrean> {
               barrierDismissible: false);
           final res = (await API.deleteReview(dish.id, rev.id));
           if (res.statusCode == 200 || res.statusCode == 201) {
-            dish.reviews.remove(rev);
+            final body = utf8.decode(res.bodyBytes);
+            final parsed = json.decode(body);
+            parsed['category'] = dish.category;
+            dish = Dish.fromOneJson(parsed);
+            appdata.changeRateForHome(id: dish.id, rate: dish.rating);
             Navigator.pop(context);
             FocusScope.of(context).requestFocus(FocusNode());
             CoolAlert.show(
@@ -407,9 +412,8 @@ class _DetailsScreanState extends State<DetailsScrean> {
               maxRadius: 27,
               minRadius: 27,
               backgroundColor: Kprimary.withOpacity(0.9),
-              backgroundImage: e.user.img != null
-                  ? NetworkImage(e.user.img.replaceAll('http', 'https'))
-                  : null,
+              backgroundImage:
+                  e.user.img != null ? NetworkImage(e.user.img) : null,
               child: e.user.img == null
                   ? Icon(
                       Icons.person,

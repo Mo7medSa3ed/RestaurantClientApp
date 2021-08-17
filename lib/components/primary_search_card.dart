@@ -27,7 +27,7 @@ class PrimarySearchCard extends StatelessWidget {
                     maxRadius: 30,
                     minRadius: 30,
                     backgroundImage:
-                        NetworkImage(dish.img.replaceAll('http', 'https')),
+                        NetworkImage(dish.img),
                   ),
                   SizedBox(
                     width: 15,

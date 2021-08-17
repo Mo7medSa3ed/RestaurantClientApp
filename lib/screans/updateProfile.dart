@@ -104,7 +104,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           v.loginUser.avatar == null
                                               ? img
                                               : v.loginUser.avatar
-                                                  .replaceAll('http', 'https')),
+                                                ),
                                       fit: BoxFit.fill)),
                               child: Stack(
                                 alignment: Alignment(0.9, 0.7),

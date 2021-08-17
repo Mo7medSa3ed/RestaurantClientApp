@@ -24,7 +24,7 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                 lng: widget.order['distLocation'][0],
               ))),
       child: Card(
-        elevation: 2,
+        elevation: 5,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -22,7 +22,6 @@ class _SplashScreanState extends State<SplashScrean> {
   bool networktest = true;
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
     if (connectivityResult == ConnectivityResult.none) {
       networktest = false;
     } else {
@@ -46,7 +45,7 @@ class _SplashScreanState extends State<SplashScrean> {
     if (prfs.getString('user') != null) {
       User user = await getUserFromPrfs();
       User u = (await API.getOneUser(user.id))['data'];
-      
+
       if (u != null || u.updatedAt == user.updatedAt) {
         appData.initLoginUser(u);
         Navigator.of(context)
@@ -57,13 +56,11 @@ class _SplashScreanState extends State<SplashScrean> {
       }
     } else {
       if (prfs.getBool('first') != null) {
-
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) =>  LoginScrean() ));
-      }else{
-
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) =>  PageViewScrean() ));
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => LoginScrean()));
+      } else {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => PageViewScrean()));
       }
     }
   }

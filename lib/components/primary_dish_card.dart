@@ -51,9 +51,7 @@ class PrimaryDishCard extends StatelessWidget {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(radius),
                       child: Image.network(
-                        dish.img != null
-                            ? dish.img.replaceAll('http', 'https')
-                            : img,
+                        dish.img != null ? dish.img : img,
                         fit: BoxFit.cover,
                         loadingBuilder: (_, c, p) {
                           if (p == null) return c;
@@ -108,6 +106,7 @@ class PrimaryDishCard extends StatelessWidget {
           ),
           Text(
             dish.name,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 color: Kprimary, fontSize: 18, fontWeight: FontWeight.w700),
           ),
@@ -135,19 +134,34 @@ class PrimaryDishCard extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                dish.category ?? '',
-                style: TextStyle(
-                    color: Kprimary.withOpacity(0.35),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
-              ),
+              width > wid * 0.5
+                  ? Text(
+                      dish.category ?? '',
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: TextStyle(
+                          color: Kprimary.withOpacity(0.35),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
+                    )
+                  : Expanded(
+                      child: Text(
+                        dish.category ?? '',
+                        overflow: TextOverflow.fade,
+                        softWrap: false,
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.35),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
               SizedBox(
                 width: 20,
               ),
               test
                   ? Text(
                       '\$ ${dish.price}',
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: red,
                           fontSize: 14,

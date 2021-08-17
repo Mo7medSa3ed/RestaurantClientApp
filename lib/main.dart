@@ -8,16 +8,15 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 void main() {
   runApp(MyApp());
-  io();
 }
 
-io() {
-  IO.Socket socket = IO.io('https://resturant-app12.herokuapp.com/',
-      IO.OptionBuilder().setTransports(['websocket']).build());
-  socket.connect();
-  print(socket.connected);
-  //socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
-}
+// io() {
+//   IO.Socket socket = IO.io('https://resturant-app12.herokuapp.com/',
+//       IO.OptionBuilder().setTransports(['websocket']).build());
+//   socket.connect();
+//   print(socket.connected);
+//   //socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
+// }
 
 class MyApp extends StatelessWidget {
   @override

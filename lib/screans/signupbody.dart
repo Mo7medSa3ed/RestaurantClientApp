@@ -147,7 +147,6 @@ class _SignupBodyState extends State<SignupBody>
       User u =
           User(email: email, password: password, name: username,);
       final res = (await API.signupUser(u));
-      print(res.body);
       if (res.statusCode == 200 || res.statusCode == 201) {
         final u = utf8.decode(res.bodyBytes);
         if (remember) {

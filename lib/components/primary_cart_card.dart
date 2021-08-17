@@ -47,7 +47,7 @@ class _PrimaryCartCardState extends State<PrimaryCartCard> {
                 image: DecorationImage(
                     image: NetworkImage(widget.dish.img == null
                         ? null
-                        : widget.dish.img.replaceAll('http', 'https')),
+                        : widget.dish.img),
                     fit: BoxFit.cover)),
           ),
           SizedBox(
@@ -83,7 +83,7 @@ class _PrimaryCartCardState extends State<PrimaryCartCard> {
                     ),
                   ),
                   Text(
-                    '(${widget.test == true ? widget.details ? widget.dish.review.length : widget.dish.reviews.length : widget.dish.reviews.length} review)',
+                    '(${widget.dish.reviews.length} review)',
                     style: TextStyle(
                         color: Kprimary.withOpacity(0.35),
                         fontSize: 14,

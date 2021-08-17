@@ -9,7 +9,7 @@ class PrimaryCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => AllDishScrean(category.name))),
+            MaterialPageRoute(builder: (_) => AllDishScrean(category.name,catId: category.id,))),
         child: Card(
           shadowColor: Kprimary,
           elevation: 2,

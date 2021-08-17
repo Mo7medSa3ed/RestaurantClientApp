@@ -22,6 +22,22 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  changeRateForHome({String id, num rate}) {
+    final idx = (homeModel.popular ?? []).indexWhere((e) => e.id == id);
+    if (idx != -1) {
+      homeModel.popular[idx].rating = rate;
+    }
+    final idx2 = (homeModel.topRate ?? []).indexWhere((e) => e.id == id);
+    if (idx2 != -1) {
+      if (rate == 0) {
+        homeModel.topRate.removeAt(idx2);
+      } else {
+        homeModel.topRate[idx2].rating = rate;
+      }
+    }
+    notifyListeners();
+  }
+
   initOrder(detailsOrder) {
     this.detailsOrder = detailsOrder;
     notifyListeners();
@@ -38,7 +54,7 @@ class AppData extends ChangeNotifier {
   }
 
   initHistoryDishesList(List<Dish> list) {
-    historyDishes= list;
+    historyDishes = list;
     notifyListeners();
   }
 
@@ -61,8 +77,17 @@ class AppData extends ChangeNotifier {
     topDishes.clear();
     notifyListeners();
   }
-  initDishesByCategory (List<Dish> list) {
-    dishesByCategory.addAll(list);
+
+  initDishesByCategory(List<Dish> list) {
+    dishesByCategory = list;
+    notifyListeners();
+  }
+
+  changeOrderState(id) {
+    final idx = ordersList.indexWhere((e) => e['_id'] == id);
+    if (idx != -1) {
+      ordersList[idx]['state'] = 'cancel';
+    }
     notifyListeners();
   }
 

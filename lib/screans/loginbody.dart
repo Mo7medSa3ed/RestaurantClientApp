@@ -139,8 +139,7 @@ class _LoginBodyState extends State<LoginBody>
     if (formKey.currentState.validate()) {
       showDialogWidget(context);
       User u = User(email: email, password: password);
-      final res = (await API.loginUser(u));
-     
+      final res = await API.loginUser(u);
       if (res.statusCode == 200) {
         final u = utf8.decode(res.bodyBytes);
         if (remember) {

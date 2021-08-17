@@ -6,7 +6,6 @@ import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_cart_card.dart';
 import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/updateProfile.dart';
@@ -24,14 +23,14 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
+        AnimationController(duration: Duration(milliseconds: 600), vsync: this);
     _controller.forward();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,7 +62,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               backgroundImage: NetworkImage(
                               v.loginUser.avatar ?? img
                               /*  v.loginUser.avatar
-                                  .replaceAll('http', 'https') */
+                                   */
                               ,
                             )),
                     ),
@@ -116,7 +115,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     ? FadeTransition(
                         opacity: Tween<double>(begin: 0.1, end: 1.0)
                             .animate(_controller),
-                        child: buildListForHistory(v.loginUser.history))
+                        child: buildListForHistory())
                     : FadeTransition(
                         opacity: Tween<double>(begin: 0.1, end: 1.0)
                             .animate(_controller),
@@ -185,7 +184,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     );
   }
 
-  buildListForHistory(List<Dish> list) {
+  buildListForHistory() {
     return FutureBuilder(
         future: API.getFavOrHis(
             fav: false,
@@ -197,12 +196,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   .initHistoryDishesList(s.data['data']);
 
               return Consumer<AppData>(builder: (ctx, app, c) {
-                return ListView.builder(
-                    physics: AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics()),
-                    itemCount: app.historyDishes.length,
-                    itemBuilder: (ctx, i) =>
-                        PrimaryCartCard(app.historyDishes[i], test: true));
+                return Column(
+                    children: List.from(app.historyDishes
+                        .map((e) => PrimaryCartCard(e, test: true))));
               });
             } else {
               return Center(

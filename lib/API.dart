@@ -22,11 +22,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForLogin()));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return {"status": true, "data": response};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return response;
   }
 
   static Future<dynamic> signupUser(User user) async {
@@ -62,6 +58,7 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
+      
       return {"status": true, "data": User.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
@@ -87,10 +84,25 @@ class API {
         '$_BaseUrl/users/details/$id?${fav ? 'detail=fav' : 'detail=history'}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
-      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final parsed = json.decode(body);
       return {
         "status": true,
-        "data": parsed.map<Dish>((dish) => Dish.fromJsonForHome(dish)).toList()
+        "data": parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
+  }
+
+  static Future<dynamic> searchForDish(query) async {
+    final response = await http.get('$_BaseUrl/dishes/filter/name?name=$query');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final body = utf8.decode(response.bodyBytes);
+      final parsed = json.decode(body);
+      return {
+        "status": true,
+        "data":
+            parsed['dishes'].map<Dish>((dish) => Dish.fromJson(dish)).toList()
       };
     } else {
       return {"status": false, "data": null};
@@ -118,6 +130,23 @@ class API {
     }
   }
 
+  static Future<dynamic> getAllDishesByCategory(String id) async {
+    final res = await http.get(
+      '$_BaseUrl/dishes/category/$id',
+    );
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body);
+      return {
+        "status": true,
+        "data": parsed.map<Dish>((dish) => Dish.fromJsonForHome(dish)).toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
+  }
+
   static Future<Map<String, dynamic>> getHome() async {
     final res = await http.get(
       '$_BaseUrl/stats/home',
@@ -125,7 +154,6 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
-      print(parsed['popular'][0]);
       return {"status": true, "data": HomeModel.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
@@ -294,12 +322,12 @@ class API {
 
   static Future<dynamic> getAllOrders({page}) async {
     final res = await http.get(
-      '$_BaseUrl/orders/query?page=$page',
+      '$_BaseUrl/orders?page=$page',
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
-      final parsed = json.decode(body).cast<Map<String, dynamic>>();
-      return {"status": true, "data": parsed};
+      final parsed = json.decode(body);
+      return {"status": true, "data": parsed['orders']};
     } else {
       return {"status": false, "data": null};
     }
@@ -311,7 +339,8 @@ class API {
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
-      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final parsed = json.decode(body);
+
       return {"status": true, "data": parsed};
     } else {
       return {"status": false, "data": null};

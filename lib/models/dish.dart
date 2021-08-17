@@ -9,8 +9,7 @@ class Dish {
   num rating;
   String category;
   num numOfPieces;
-  List<Review> reviews;
-  List<String> review;
+  List<dynamic> reviews;
 
   String updatedAt;
   int amount = 1;
@@ -24,7 +23,6 @@ class Dish {
       this.price,
       this.rating,
       this.category,
-      this.review,
       this.reviews,
       this.updatedAt});
 
@@ -35,45 +33,47 @@ class Dish {
       desc: json['desc'],
       price: json['price'],
       category: json['category'],
+      reviews: json['reviews'],
       rating: json['rating'],
       numOfPieces: json['numOfPieces'],
       updatedAt: json['updatedAt']);
 
   factory Dish.fromOneJson(Map<String, dynamic> json2) => Dish(
-        id: json2['_id'],
-        img: json2['img'],
-        name: json2['name'],
-        desc: json2['desc'],
-        price: json2['price'],
-        category: json2['category'],
-        rating: json2['rating'],
-        reviews:
-            List<Review>.from(json2['reviews'].map((e) => Review.fromJson(e)))
-                .toList(),
-        numOfPieces: json2['numOfPieces'],
-      );
+      id: json2['_id'],
+      img: json2['img'],
+      name: json2['name'],
+      desc: json2['desc'],
+      price: json2['price'],
+      category: json2['category'],
+      rating: json2['rating'],
+      reviews:
+          List<Review>.from(json2['reviews'].map((e) => Review.fromJson(e)))
+              .toList(),
+      numOfPieces: json2['numOfPieces'],
+      updatedAt: json2['updatedAt']);
   factory Dish.fromJsonForHome(Map<String, dynamic> json2) => Dish(
         id: json2['_id'],
         img: json2['img'],
         name: json2['name'],
         desc: json2['desc'],
         price: json2['price'],
-        //category: json2['category']['name'],
+        // category: json2['category']['name'],
         rating: json2['rating'],
         numOfPieces: json2['numOfPieces'],
+        updatedAt: json2['updatedAt'],
       );
 
   factory Dish.fromOneJsontoUser(Map<String, dynamic> json2) => Dish(
-        id: json2['_id'],
-        img: json2['img'],
-        name: json2['name'],
-        desc: json2['desc'],
-        price: json2['price'],
-        category: json2['category'],
-        rating: json2['rating'],
-        review: List<String>.from(json2['reviews']),
-        numOfPieces: json2['numOfPieces'],
-      );
+      id: json2['_id'],
+      img: json2['img'],
+      name: json2['name'],
+      desc: json2['desc'],
+      price: json2['price'],
+      category: json2['category'],
+      rating: json2['rating'],
+      reviews: List<String>.from(json2['reviews']),
+      numOfPieces: json2['numOfPieces'],
+      updatedAt: json2['updatedAt']);
 
   Map<String, dynamic> toJsonForUpdate() => {
         'id': id,

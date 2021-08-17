@@ -81,6 +81,9 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                             physics: AlwaysScrollableScrollPhysics(
                                 parent: BouncingScrollPhysics()),
                             children: [
+                              SizedBox(
+                                height: 8,
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -287,13 +290,16 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                   ],
                 ),
                 Spacer(),
-                app.detailsOrder.state.toLowerCase() == 'deliverd'
-                    ? Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: PrimaryElevatedButton(
-                            text: "RE ORDER",
-                            onpressed: () async => await makeOrder()))
-                    : Container()
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: PrimaryElevatedButton(
+                        text: app.detailsOrder.state.toLowerCase() == 'deliverd'
+                            ? "RE ORDER"
+                            : "CANCEL",
+                        onpressed: () async =>
+                            app.detailsOrder.state.toLowerCase() == 'deliverd'
+                                ? await makeOrder()
+                                : await cancelOrder(widget.id)))
               ],
             ),
           ],
@@ -342,7 +348,6 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   String calctotal() {
     double sum = 0.0;
     app.detailsOrder.items.forEach((e) {
-      print(e.amount);
       sum += (e.dish.price * e.amount);
     });
     return sum.toString();
@@ -367,5 +372,53 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
       ),
       backgroundColor: Kprimary,
     ));
+  }
+
+  cancelOrder(id) async {
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.warning,
+      title: 'Cancel Order',
+      text: "Are you sure to cancel order ?",
+      barrierDismissible: false,
+      confirmBtnColor: red,
+      showCancelBtn: true,
+      onConfirmBtnTap: () async {
+        Navigator.of(context).pop();
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.loading,
+          text: "loading please wait....",
+          barrierDismissible: false,
+        );
+        final reqData = {"state": "cancel"};
+        final res = await API.patchOrder(reqData, id);
+        if (res.statusCode == 200 || res.statusCode == 201) {
+          Navigator.of(context).pop();
+          app.changeOrderState(widget.id);
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,  
+              animType: CoolAlertAnimType.slideInUp,
+              title: 'Cancel Order',
+              text: "Order Canceled Successfully",
+              barrierDismissible: false,
+              confirmBtnColor: Kprimary,
+              onConfirmBtnTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              });
+        } else {
+          Navigator.of(context).pop();
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.loading,
+              title: 'Error',
+              text: "some thing went error !!",
+              barrierDismissible: false,
+              showCancelBtn: true);
+        }
+      },
+    );
   }
 }

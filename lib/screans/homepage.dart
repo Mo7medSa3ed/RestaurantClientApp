@@ -24,7 +24,6 @@ class _HomeState extends State<HomePage> {
   bool status = false;
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
     if (connectivityResult == ConnectivityResult.none) {
       networktest = false;
     } else {
@@ -37,7 +36,6 @@ class _HomeState extends State<HomePage> {
   getData() async {
     AppData appData = Provider.of<AppData>(context, listen: false);
     await API.getHome().then((value) {
-      print(value['status']);
       status = value['status'];
       if (value['status']) appData.initHomeModel(value['data']);
     });
@@ -81,7 +79,7 @@ class _HomeState extends State<HomePage> {
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
                         child: Container(
-                          height: hei > wid ? hei * 0.35 : hei * 0.48,
+                          height: hei > wid ? hei * 0.35 : hei * 0.5,
                           child: ListView.builder(
                               physics: AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),
