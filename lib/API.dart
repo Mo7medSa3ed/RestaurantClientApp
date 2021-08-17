@@ -83,9 +83,8 @@ class API {
   }
 
   static Future<dynamic> getFavOrHis({fav, id}) async {
-    
     final response = await http.get(
-        '$_BaseUrl/users/details/$id?${fav ? 'fav=true' : 'responsehistory=true'}');
+        '$_BaseUrl/users/details/$id?${fav ? 'detail=fav' : 'detail=history'}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body).cast<Map<String, dynamic>>();
