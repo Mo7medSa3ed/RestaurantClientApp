@@ -45,7 +45,7 @@ class _SplashScreanState extends State<SplashScrean> {
     prfs = await SharedPreferences.getInstance();
     if (prfs.getString('user') != null) {
       User user = await getUserFromPrfs();
-      User u = await API.getOneUser(user.id);
+      User u = (await API.getOneUser(user.id))['data'];
       
       if (u != null || u.updatedAt == user.updatedAt) {
         appData.initLoginUser(u);

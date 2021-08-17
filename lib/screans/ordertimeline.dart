@@ -27,10 +27,12 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
 
   getoneOrder() async {
     await API.getOneOrder(widget.id).then((value) {
-      dislocation = value['distLocation'];
-      delivarylocation = value['deliveryLocation'];
-      state = value['state'];
-      setState(() {});
+      if (value['status']) {
+        dislocation = value['data']['distLocation'];
+        delivarylocation = value['data']['deliveryLocation'];
+        state = value['data']['state'];
+        setState(() {});
+      }
     });
   }
 

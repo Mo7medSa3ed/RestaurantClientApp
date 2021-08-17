@@ -15,25 +15,32 @@ class API {
 
   // Functions For User
 
-  static Future<http.Response> loginUser(User user) async {
-    final res = await http.post('$_BaseUrl/users/auth/login',
+  static Future<dynamic> loginUser(User user) async {
+    final response = await http.post('$_BaseUrl/users/auth/login',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForLogin()));
-    return res;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return {"status": true, "data": response};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> signupUser(User user) async {
+  static Future<dynamic> signupUser(User user) async {
     final res = await http.post('$_BaseUrl/users/',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForSignup()));
-
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static updateImage(File image, String id) async {
@@ -44,68 +51,118 @@ class API {
     await dio.post('$_BaseUrl/users/change/avatar/$id', data: form);
   }
 
-  static Future<http.Response> updateUser(User user, id) async {
+  static Future<dynamic> updateUser(User user, id) async {
     final res = await http.patch('$_BaseUrl/users/$id',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForUpdate()));
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<User> getOneUser(String id) async {
+  static Future<dynamic> getOneUser(String id) async {
     final response = await http.get('$_BaseUrl/users/$id');
-    final body = utf8.decode(response.bodyBytes);
-    final parsed = json.decode(body);
-    return User.fromJson(parsed);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final body = utf8.decode(response.bodyBytes);
+      final parsed = json.decode(body);
+      return {"status": true, "data": parsed};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<List<User>> getAllUser() async {
+  static Future<dynamic> getAllUser() async {
     final response = await http.get('$_BaseUrl/users/');
-    final body = utf8.decode(response.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    return parsed.map<User>((dish) => User.fromJson2(dish)).toList();
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final body = utf8.decode(response.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      return {
+        "status": true,
+        "data": parsed.map<User>((dish) => User.fromJson2(dish)).toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
+  }
+
+  static Future<dynamic> getFavOrHis({fav, id}) async {
+    final response = await http.get(
+        '$_BaseUrl/users/details/$id?${fav ? 'fav=true' : 'responsehistory=true'}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final body = utf8.decode(response.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      return {
+        "status": true,
+        "data": parsed.map<Dish>((dish) => Dish.fromJsonForHome(dish)).toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // Function For Dish
 
-  static Future<List<Dish>> getAllDishes({top, page}) async {
+  static Future<dynamic> getAllDishes({top, page}) async {
     final res = await http.get(
       '$_BaseUrl/dishes/filter/query?${top ? 'topRate=true' : 'popular=true'}&&page=$page',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body);
-    
-    return parsed['dishes']
-        .map<Dish>((dish) => Dish.fromJsonForHome(dish))
-        .toList();
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body);
+      return {
+        "status": true,
+        "data": parsed['dishes']
+            .map<Dish>((dish) => Dish.fromJsonForHome(dish))
+            .toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<HomeModel> getHome() async {
+  static Future<dynamic> getHome() async {
     final res = await http.get(
       '$_BaseUrl/stats/home',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body);
-    print(parsed);
-    return HomeModel.fromJson(parsed);
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body);
+      return {"status": true, "data": HomeModel.fromJson(parsed)};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<Dish> getOneDish(String id) async {
+  static Future<dynamic> getOneDish(String id) async {
     final res = await http.get(
       '$_BaseUrl/dishes/$id',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body);
-    return Dish.fromOneJson(parsed);
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body);
+      return {"status": true, "data": Dish.fromOneJson(parsed)};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> deleteDish(String dishId) async {
+  static Future<dynamic> deleteDish(String dishId) async {
     final res = await http.delete(
       '$_BaseUrl/dishes/$dishId',
     );
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static updateImageForDish(PickedFile image, String id) async {
@@ -116,7 +173,7 @@ class API {
     await dio.patch('$_BaseUrl/dishes/change-img/$id', data: form);
   }
 
-  static Future<http.Response> updateDish(
+  static Future<dynamic> updateDish(
       String id, Map<String, dynamic> updatedDish) async {
     final res = await http.patch('$_BaseUrl/dishes/$id',
         encoding: Encoding.getByName("utf-8"),
@@ -124,12 +181,15 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(updatedDish));
-
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // Function For reviews
-  static Future<http.Response> addReview(Review review, String id) async {
+  static Future<dynamic> addReview(Review review, String id) async {
     final res = await http.post('$_BaseUrl/dishes/reviews/add/$id',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
@@ -137,18 +197,25 @@ class API {
         },
         body: json.encode(review.toJson()));
 
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> deleteReview(
-      String dishId, String reviewid) async {
+  static Future<dynamic> deleteReview(String dishId, String reviewid) async {
     final res = await http.delete(
       '$_BaseUrl/reviews?dishId=$dishId&reviewId=$reviewid',
     );
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> updateReview(
+  static Future<dynamic> updateReview(
       Review review, String dishId, String reviewid) async {
     final res = await http.patch(
         '$_BaseUrl/reviews/1?dishId=$dishId&reviewId=$reviewid',
@@ -157,25 +224,32 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(review.toJson()));
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // function For favourite
 
-  static Future<http.Response> addanddelteFav(
-      String userid, String dishid) async {
+  static Future<dynamic> addanddelteFav(String userid, String dishid) async {
     final res = await http.post('$_BaseUrl/users/fav/$userid',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode({"dishId": dishid}));
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // function for orders
 
-  static Future<http.Response> makeOrder(Map<String, dynamic> order) async {
+  static Future<dynamic> makeOrder(Map<String, dynamic> order) async {
     final res = await http.post('$_BaseUrl/orders/',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
@@ -183,39 +257,57 @@ class API {
         },
         body: json.encode(order));
 
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // function for categories
-  static Future<List<Categorys>> getAllCategories() async {
+  static Future<dynamic> getAllCategories() async {
     final res = await http.get(
       '$_BaseUrl/categories',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    return parsed.map<Categorys>((dish) => Categorys.fromJson(dish)).toList();
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      return {
+        "status": true,
+        "data":
+            parsed.map<Categorys>((dish) => Categorys.fromJson(dish)).toList()
+      };
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> deleteCategory(String name) async {
+  static Future<dynamic> deleteCategory(String name) async {
     final res = await http.delete(
       '$_BaseUrl/categories/$name',
     );
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> addCategory(
-      Map<String, dynamic> categories) async {
+  static Future<dynamic> addCategory(Map<String, dynamic> categories) async {
     final res = await http.post('$_BaseUrl/categories/',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(categories));
-
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> updateCategory(
+  static Future<dynamic> updateCategory(
       Map<String, dynamic> categories, id) async {
     final res = await http.patch('$_BaseUrl/categories/$id',
         encoding: Encoding.getByName("utf-8"),
@@ -223,12 +315,14 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(categories));
-
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
-  static Future<http.Response> patchOrder(
-      Map<String, dynamic> order, id) async {
+  static Future<dynamic> patchOrder(Map<String, dynamic> order, id) async {
     final res = await http.patch('$_BaseUrl/orders/$id',
         encoding: Encoding.getByName("utf-8"),
         headers: <String, String>{
@@ -236,7 +330,11 @@ class API {
         },
         body: json.encode(order));
 
-    return res;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return {"status": true, "data": res};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static Future<String> getRouteCoordinates(LatLng l1, LatLng l2) async {
@@ -251,18 +349,25 @@ class API {
     final res = await http.get(
       '$_BaseUrl/orders/query?page=$page',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    
-    return parsed;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      return {"status": true, "data": parsed};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static Future<dynamic> getOneOrder(id) async {
     final res = await http.get(
       '$_BaseUrl/orders/$id',
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body);
-    return parsed;
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      return {"status": true, "data": parsed};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 }

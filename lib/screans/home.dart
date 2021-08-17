@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/allorders.dart';
@@ -37,13 +35,16 @@ class _HomeState extends State<Home> {
     //   vsync: this,
     // );
     //  Tween(begin: 0, end: MediaQuery.of(context).size.width*0.6,).animate(controller);
-    getData();
+    //getData();
   }
 
-  getData() async {
-    appData = Provider.of<AppData>(context, listen: false);
-    await API.getHome().then((value) => appData.initHomeModel(value));
-  }
+  // getData() async {
+  //   appData = Provider.of<AppData>(context, listen: false);
+  //   await API.getHome().then((value) {
+  //    if(value['status'])
+  //     appData.initHomeModel(value['data']);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

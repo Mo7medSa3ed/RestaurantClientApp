@@ -285,8 +285,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
       showDialogWidget(context);
       Review r = Review(user: rev.user, rate: rating, msg: msg);
 
-      final res = await API.updateReview(r, dish.id, rev.id);
-      print(res.body);
+      final res = (await API.updateReview(r, dish.id, rev.id))['data'];
       if (res.statusCode == 200 || res.statusCode == 201) {
         //final i = dish.reviews.indexOf(rev);
         rev.msg = msg;
@@ -326,7 +325,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
           rate: rating,
           msg: msg);
 
-      final res = await API.addReview(rev, dish.id);
+      final res = (await API.addReview(rev, dish.id))['data'];
       if (res.statusCode == 200 || res.statusCode == 201) {
         final body = utf8.decode(res.bodyBytes);
         final parsed = json.decode(body);
@@ -370,7 +369,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
               type: CoolAlertType.loading,
               text: "loading please wait....",
               barrierDismissible: false);
-          final res = await API.deleteReview(dish.id, rev.id);
+          final res = (await API.deleteReview(dish.id, rev.id))['data'];
           if (res.statusCode == 200 || res.statusCode == 201) {
             dish.reviews.remove(rev);
             Navigator.pop(context);

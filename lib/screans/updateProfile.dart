@@ -360,7 +360,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   ? 'Male'
                   : 'Female');
 
-      final res = await API.updateUser(u, user.id);
+      final res = (await API.updateUser(u, user.id))['data'];
       if (res.statusCode == 200 || res.statusCode == 201) {
         final us = utf8.decode(res.bodyBytes);
         saveUsertoAppdata(us, context);

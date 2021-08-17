@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   var l = [1, 2, 3, 4, 5];
   bool networktest = true;
+  bool status = false;
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     print(connectivityResult);
@@ -34,7 +35,10 @@ class _HomeState extends State<HomePage> {
 
   getData() async {
     AppData appData = Provider.of<AppData>(context, listen: false);
-    await API.getHome().then((value) => appData.initHomeModel(value));
+    await API.getHome().then((value) {
+      status = value['status'];
+      if (value['status']) appData.initHomeModel(value['data']);
+    });
     setState(() {});
   }
 
@@ -69,7 +73,7 @@ class _HomeState extends State<HomePage> {
                 SizedBox(
                   height: getProportionateScreenHeight(10),
                 ),
-                dishes.length > 0
+                (dishes.length > 0 && status)
                     ? FadeIn(
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
@@ -92,7 +96,11 @@ class _HomeState extends State<HomePage> {
                                   )),
                         ),
                       )
-                    : shimerForDishes(hei, wid),
+                    : (status && dishes.length == 0)
+                        ? Center(
+                            child: emptyTextWidget,
+                          )
+                        : shimerForDishes(hei, wid),
                 Text(
                   'Food Categories',
                   style: TextStyle(
@@ -104,7 +112,7 @@ class _HomeState extends State<HomePage> {
                 SizedBox(
                   height: getProportionateScreenHeight(15),
                 ),
-                categoryList.length > 0
+                (categoryList.length > 0 && status)
                     ? FadeIn(
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
@@ -120,7 +128,11 @@ class _HomeState extends State<HomePage> {
                                   .toList()),
                         ),
                       )
-                    : shimerForcategory(hei, wid),
+                    : (status && categoryList.length == 0)
+                        ? Center(
+                            child: emptyTextWidget,
+                          )
+                        : shimerForcategory(hei, wid),
                 SizedBox(
                   height: getProportionateScreenHeight(15),
                 ),
@@ -154,7 +166,11 @@ class _HomeState extends State<HomePage> {
                           ),
                         ),
                       )
-                    : shimerForPopular(hei, wid),
+                    : (status && popular.length == 0)
+                        ? Center(
+                            child: emptyTextWidget,
+                          )
+                        : shimerForPopular(hei, wid),
               ]),
         );
       },

@@ -17,6 +17,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
   AppData app;
   int page = 0;
   bool isLast = false;
+  bool status = false;
   final scrollController = ScrollController();
   var list;
   @override
@@ -43,10 +44,13 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
     }
     if (isLast == false) {
       await API.getAllOrders(page: page).then((value) {
-        if (value.length < 6) {
-          isLast = true;
+        status = value['status'];
+        if (value['status']) {
+          if (value.length < 6) {
+            isLast = true;
+          }
+          app.initOrderList(value);
         }
-        app.initOrderList(value);
       });
 
       setState(() {});
@@ -72,7 +76,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                 child: RefreshIndicator(
               onRefresh: () => fetchDate(true),
               child: Consumer<AppData>(
-                builder: (ctx, app, c) => app.ordersList.length > 0
+                builder: (ctx, app, c) => (app.ordersList.length > 0 && status)
                     ? ListView.builder(
                         controller: scrollController,
                         physics: BouncingScrollPhysics(),
@@ -84,9 +88,13 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                               onPressed: () async =>
                                   await cancelOrder(list[i]['_id'], i),
                             ))
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    : (status && app.ordersList.length == 0)
+                        ? Center(
+                            child: emptyTextWidget,
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          ),
               ),
             )),
           ],
@@ -113,7 +121,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
           barrierDismissible: false,
         );
         final reqData = {"state": "cancel"};
-        final res = await API.patchOrder(reqData, id);
+        final res = (await API.patchOrder(reqData, id))['data'];
         if (res.statusCode == 200 || res.statusCode == 201) {
           Navigator.of(context).pop();
           final body = utf8.decode(res.bodyBytes);

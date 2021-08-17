@@ -269,7 +269,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
     };
 
-    final res = await API.makeOrder(reqData);
+    final res = (await API.makeOrder(reqData))['data'];
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();

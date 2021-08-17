@@ -68,7 +68,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
               future: API.getOneOrder(widget.id),
               builder: (ctx, v) {
                 if (v.hasData) {
-                  detailsOrder = Order.fromJson(v.data);
+                  detailsOrder = Order.fromJson(v.data['data']);
                   app.initOrder(detailsOrder);
 
                   return Consumer<AppData>(
@@ -314,7 +314,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
           .toList()
     };
 
-    final res = await API.makeOrder(reqData);
+    final res = (await API.makeOrder(reqData))['data'];
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();

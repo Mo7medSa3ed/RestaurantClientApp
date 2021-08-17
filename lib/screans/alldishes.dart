@@ -5,7 +5,6 @@ import 'package:resturantapp/components/primary_dish_card.dart';
 import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:connectivity/connectivity.dart';
 
@@ -25,6 +24,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
   bool isLargestRate = false;
   bool isLargestPrice = false;
   bool networktest = true;
+  bool status = false;
   int page = 0;
   var list = [];
   bool isLast = false;
@@ -47,7 +47,6 @@ class _AllDishScreanState extends State<AllDishScrean> {
     checkNetwork();
     appData = Provider.of<AppData>(context, listen: false);
     fetchDate(true);
-
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -69,17 +68,23 @@ class _AllDishScreanState extends State<AllDishScrean> {
     if (isLast == false) {
       if (widget.test == '0') {
         await API.getAllDishes(top: true, page: page).then((value) {
-          if (value.length < 6) {
-            isLast = true;
+          status = value['status'];
+          if (value['status']) {
+            if (value['data'].length < 6) {
+              isLast = true;
+            }
+            appData.initTopDishesList(value['data']);
           }
-          appData.initTopDishesList(value);
         });
       } else if (widget.test == '1') {
         await API.getAllDishes(top: false, page: page).then((value) {
-          if (value.length < 6) {
-            isLast = true;
+          status = value['status'];
+          if (value['status']) {
+            if (value['data'].length < 6) {
+              isLast = true;
+            }
+            appData.initpopularDishesList(value['data']);
           }
-          appData.initpopularDishesList(value);
         });
       } else {
         // await API.getAllDishes().then((value) => appData.initDishesList(value));
@@ -140,7 +145,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
                                 ? app.popularDishes
                                 : app.dishesByCategory;
 
-                        return list.length > 0
+                        return (list.length > 0 && status)
                             ? GridView.builder(
                                 controller: scrollController,
                                 padding: const EdgeInsets.symmetric(
@@ -173,9 +178,13 @@ class _AllDishScreanState extends State<AllDishScrean> {
                                       ontap: (b) async =>
                                           await addtoFav(context, list[i].id),
                                     ))
-                            : Center(
-                                child: CircularProgressIndicator(),
-                              );
+                            : (status && list.length == 0)
+                                ? Center(
+                                    child: emptyTextWidget,
+                                  )
+                                : Center(
+                                    child: CircularProgressIndicator(),
+                                  );
                       }),
                     ),
                   )
