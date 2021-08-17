@@ -27,7 +27,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   bool isExist = false;
   Position position;
   List<Address> addresses;
-  
+
   getcurrantLocation() async {
     await Geolocator.isLocationServiceEnabled();
     await Geolocator.requestPermission();
@@ -59,7 +59,8 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                     Expanded(
                       child: ListView(
                         padding: EdgeInsets.symmetric(horizontal: 16),
-                        physics: BouncingScrollPhysics(),
+                        physics: AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,7 +270,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
     };
 
-    final res = (await API.makeOrder(reqData))['data'];
+    final res = (await API.makeOrder(reqData));
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();

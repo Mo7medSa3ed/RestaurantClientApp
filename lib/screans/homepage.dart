@@ -30,12 +30,14 @@ class _HomeState extends State<HomePage> {
     } else {
       networktest = true;
     }
+    getData();
     setState(() {});
   }
 
   getData() async {
     AppData appData = Provider.of<AppData>(context, listen: false);
     await API.getHome().then((value) {
+      print(value['status']);
       status = value['status'];
       if (value['status']) appData.initHomeModel(value['data']);
     });
@@ -67,9 +69,10 @@ class _HomeState extends State<HomePage> {
           child: ListView(
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              physics: const BouncingScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics()),
               children: [
-                TextRow('Dishes', test: '0', show: dishes.length < 6),
+                TextRow('Dishes', test: '0', show: dishes.length > 6),
                 SizedBox(
                   height: getProportionateScreenHeight(10),
                 ),
@@ -80,7 +83,8 @@ class _HomeState extends State<HomePage> {
                         child: Container(
                           height: hei > wid ? hei * 0.35 : hei * 0.48,
                           child: ListView.builder(
-                              physics: BouncingScrollPhysics(),
+                              physics: AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               itemCount: dishes.length,
@@ -97,8 +101,11 @@ class _HomeState extends State<HomePage> {
                         ),
                       )
                     : (status && dishes.length == 0)
-                        ? Center(
-                            child: emptyTextWidget,
+                        ? SizedBox(
+                            height: hei > wid ? hei * 0.24 : hei * 0.30,
+                            child: Center(
+                              child: emptyTextWidget,
+                            ),
                           )
                         : shimerForDishes(hei, wid),
                 Text(
@@ -129,8 +136,11 @@ class _HomeState extends State<HomePage> {
                         ),
                       )
                     : (status && categoryList.length == 0)
-                        ? Center(
-                            child: emptyTextWidget,
+                        ? SizedBox(
+                            height: 100,
+                            child: Center(
+                              child: emptyTextWidget,
+                            ),
                           )
                         : shimerForcategory(hei, wid),
                 SizedBox(
@@ -149,7 +159,8 @@ class _HomeState extends State<HomePage> {
                           height: hei > wid ? hei * 0.36 : hei * 0.55,
                           child: ListView.builder(
                             itemExtent: wid / 2,
-                            physics: BouncingScrollPhysics(),
+                            physics: AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemCount: popular.length,
@@ -167,8 +178,11 @@ class _HomeState extends State<HomePage> {
                         ),
                       )
                     : (status && popular.length == 0)
-                        ? Center(
-                            child: emptyTextWidget,
+                        ? SizedBox(
+                            height: hei > wid ? hei * 0.24 : hei * 0.32,
+                            child: Center(
+                              child: emptyTextWidget,
+                            ),
                           )
                         : shimerForPopular(hei, wid),
               ]),
@@ -184,7 +198,8 @@ class _HomeState extends State<HomePage> {
       child: Container(
         height: hei > wid ? hei * 0.35 : hei * 0.48,
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics:
+              AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemCount: l.length,
@@ -218,7 +233,8 @@ class _HomeState extends State<HomePage> {
         child: Container(
           height: hei > wid ? hei * 0.36 : hei * 0.55,
           child: ListView.builder(
-            physics: BouncingScrollPhysics(),
+            physics:
+                AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemCount: l.length,

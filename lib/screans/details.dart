@@ -62,7 +62,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
         .firstWhere((e) => e.id == widget.id, orElse: () => null); */
     if (dish == null) {
       await API.getOneDish(widget.id).then((value) {
-        dish = value;
+        if (value['status']) dish = value['data'];
         //  appdata.addToloaded(value);
         setState(() {});
       });
@@ -97,7 +97,8 @@ class _DetailsScreanState extends State<DetailsScrean> {
               horizontal: 16.0,
             ),
             child: ListView(
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics()),
               children: [
                 SizedBox(
                   height: 16,
@@ -285,7 +286,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
       showDialogWidget(context);
       Review r = Review(user: rev.user, rate: rating, msg: msg);
 
-      final res = (await API.updateReview(r, dish.id, rev.id))['data'];
+      final res = (await API.updateReview(r, dish.id, rev.id));
       if (res.statusCode == 200 || res.statusCode == 201) {
         //final i = dish.reviews.indexOf(rev);
         rev.msg = msg;
@@ -325,7 +326,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
           rate: rating,
           msg: msg);
 
-      final res = (await API.addReview(rev, dish.id))['data'];
+      final res = (await API.addReview(rev, dish.id));
       if (res.statusCode == 200 || res.statusCode == 201) {
         final body = utf8.decode(res.bodyBytes);
         final parsed = json.decode(body);
@@ -369,7 +370,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
               type: CoolAlertType.loading,
               text: "loading please wait....",
               barrierDismissible: false);
-          final res = (await API.deleteReview(dish.id, rev.id))['data'];
+          final res = (await API.deleteReview(dish.id, rev.id));
           if (res.statusCode == 200 || res.statusCode == 201) {
             dish.reviews.remove(rev);
             Navigator.pop(context);

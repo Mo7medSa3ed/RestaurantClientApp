@@ -19,7 +19,7 @@ const String img =
 const String emptyText = 'No Data Found';
 const emptyTextWidget = Text(
   emptyText,
-  style: TextStyle(fontSize: 18),
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
 );
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");

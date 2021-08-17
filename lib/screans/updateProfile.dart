@@ -71,208 +71,219 @@ class _UpdateProfileState extends State<UpdateProfile> {
         child: Column(
           children: [
             Expanded(
-              child: ListView(physics: BouncingScrollPhysics(), children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 25, right: 25, bottom: 20, top: 20),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: height > width ? width * 0.45 : height * 0.45,
-                          height: height > width ? width * 0.43 : height * 0.43,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Kprimary.withOpacity(0.4),
-                                  spreadRadius: 3,
-                                  blurRadius: 7,
-                                  offset: Offset(1, 10),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(200),
-                              image: DecorationImage(
-                                  image: NetworkImage(v.loginUser.avatar == null
-                                      ? img
-                                      : v.loginUser.avatar
-                                          .replaceAll('http', 'https')),
-                                  fit: BoxFit.fill)),
-                          child: Stack(
-                            alignment: Alignment(0.9, 0.7),
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.camera_alt,
-                                  size: 60,
-                                  color: Kprimary.withOpacity(0.9),
-                                ),
-                                onPressed: () => showdialog(v.loginUser.id),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(30),
-                        ),
-                        CustumTextField(
-                          validator: (String v) =>
-                              v.isEmpty ? 'Please enter your name !!' : null,
-                          hint: 'Full Name',
-                          value: v.loginUser.name,
-                          icon: Icons.person,
-                          obsecure: false,
-                          onchanged: (v) =>
-                              v.toString().isNotEmpty ? name = v : null,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
-                        ),
-                        CustumTextField(
-                          validator: (String v) =>
-                              v.isEmpty ? 'Please enter your email !!' : null,
-                          hint: 'Email',
-                          value: v.loginUser.email,
-                          icon: Icons.email,
-                          obsecure: false,
-                          onchanged: (v) =>
-                              v.toString().isNotEmpty ? email = v : null,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
-                        ),
-                        CustumTextField(
-                          /*  validator: (String v) =>
+              child: ListView(
+                  physics: AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics()),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 25, right: 25, bottom: 20, top: 20),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width:
+                                  height > width ? width * 0.45 : height * 0.45,
+                              height:
+                                  height > width ? width * 0.43 : height * 0.43,
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Kprimary.withOpacity(0.4),
+                                      spreadRadius: 3,
+                                      blurRadius: 7,
+                                      offset: Offset(1, 10),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(200),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          v.loginUser.avatar == null
+                                              ? img
+                                              : v.loginUser.avatar
+                                                  .replaceAll('http', 'https')),
+                                      fit: BoxFit.fill)),
+                              child: Stack(
+                                alignment: Alignment(0.9, 0.7),
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      size: 60,
+                                      color: Kprimary.withOpacity(0.9),
+                                    ),
+                                    onPressed: () => showdialog(v.loginUser.id),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
+                            ),
+                            CustumTextField(
+                              validator: (String v) => v.isEmpty
+                                  ? 'Please enter your name !!'
+                                  : null,
+                              hint: 'Full Name',
+                              value: v.loginUser.name,
+                              icon: Icons.person,
+                              obsecure: false,
+                              onchanged: (v) =>
+                                  v.toString().isNotEmpty ? name = v : null,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            CustumTextField(
+                              validator: (String v) => v.isEmpty
+                                  ? 'Please enter your email !!'
+                                  : null,
+                              hint: 'Email',
+                              value: v.loginUser.email,
+                              icon: Icons.email,
+                              obsecure: false,
+                              onchanged: (v) =>
+                                  v.toString().isNotEmpty ? email = v : null,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            CustumTextField(
+                              /*  validator: (String v) =>
                               v.isEmpty ? 'Please enter your phone !!' : null, */
-                          hint: 'Phone',
-                          value: v.loginUser.phone,
-                          icon: Icons.person,
-                          obsecure: false,
-                          onchanged: (v) =>
-                              v.toString().isNotEmpty ? phone = v : null,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
-                        ),
-                        CustumTextField(
-                          /*  validator: (String v) =>
+                              hint: 'Phone',
+                              value: v.loginUser.phone,
+                              icon: Icons.person,
+                              obsecure: false,
+                              onchanged: (v) =>
+                                  v.toString().isNotEmpty ? phone = v : null,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            CustumTextField(
+                              /*  validator: (String v) =>
                               v.isEmpty ? 'Please enter your address !!' : null, */
-                          hint: 'Address',
-                          value: v.loginUser.address,
-                          icon: Icons.person,
-                          obsecure: false,
-                          onchanged: (v) =>
-                              v.toString().isNotEmpty ? address = v : null,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
-                        ),
-                        CustumTextField(
-                          /* validator: (String v) =>
+                              hint: 'Address',
+                              value: v.loginUser.address,
+                              icon: Icons.person,
+                              obsecure: false,
+                              onchanged: (v) =>
+                                  v.toString().isNotEmpty ? address = v : null,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            CustumTextField(
+                              /* validator: (String v) =>
                               v.isEmpty ? 'Please enter your location !!' : null, */
-                          hint: 'Location',
-                          value: v.loginUser.location,
-                          icon: Icons.person,
-                          obsecure: false,
-                          onchanged: (v) =>
-                              v.toString().isNotEmpty ? location = v : null,
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
-                        ),
-                        Container(
-                            padding: EdgeInsets.all(8),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                boxShadow: shadow
-                                    ? [
-                                        BoxShadow(
-                                          color: white,
-                                          spreadRadius: 1,
-                                          blurRadius: 1,
-                                          offset: Offset(0, 0),
-                                        )
-                                      ]
-                                    : null,
-                                borderRadius: BorderRadius.circular(8),
-                                color: grey.withOpacity(0.05)),
-                            child: ListTile(
-                                onTap: () async {
-                                  setState(() {
-                                    shadow = true;
-                                  });
-                                  await _selectDate(ctx);
-                                },
-                                leading: Icon(Icons.calendar_today),
-                                title: Text(
-                                  v.loginUser.dob != null
-                                      ? DateFormat.yMMMMEEEEd('en_US').format(
-                                          DateTime.parse(v.loginUser.dob))
-                                      : selectedDate != null
+                              hint: 'Location',
+                              value: v.loginUser.location,
+                              icon: Icons.person,
+                              obsecure: false,
+                              onchanged: (v) =>
+                                  v.toString().isNotEmpty ? location = v : null,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            Container(
+                                padding: EdgeInsets.all(8),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    boxShadow: shadow
+                                        ? [
+                                            BoxShadow(
+                                              color: white,
+                                              spreadRadius: 1,
+                                              blurRadius: 1,
+                                              offset: Offset(0, 0),
+                                            )
+                                          ]
+                                        : null,
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: grey.withOpacity(0.05)),
+                                child: ListTile(
+                                    onTap: () async {
+                                      setState(() {
+                                        shadow = true;
+                                      });
+                                      await _selectDate(ctx);
+                                    },
+                                    leading: Icon(Icons.calendar_today),
+                                    title: Text(
+                                      v.loginUser.dob != null
                                           ? DateFormat.yMMMMEEEEd('en_US')
-                                              .format(selectedDate)
-                                          : 'Date Of Birth',
-                                  style: TextStyle(
-                                      color: selectedDate != null
-                                          ? Kprimary
-                                          : Colors.grey),
-                                ),
-                                trailing: selectedDate != null
-                                    ? IconButton(
-                                        icon: Icon(Icons.close),
-                                        onPressed: () {
-                                          setState(() {
-                                            selectedDate = null;
-                                          });
-                                        })
-                                    : null)),
-                        SizedBox(
-                          height: getProportionateScreenHeight(16),
+                                              .format(DateTime.parse(
+                                                  v.loginUser.dob))
+                                          : selectedDate != null
+                                              ? DateFormat.yMMMMEEEEd('en_US')
+                                                  .format(selectedDate)
+                                              : 'Date Of Birth',
+                                      style: TextStyle(
+                                          color: selectedDate != null
+                                              ? Kprimary
+                                              : Colors.grey),
+                                    ),
+                                    trailing: selectedDate != null
+                                        ? IconButton(
+                                            icon: Icon(Icons.close),
+                                            onPressed: () {
+                                              setState(() {
+                                                selectedDate = null;
+                                              });
+                                            })
+                                        : null)),
+                            SizedBox(
+                              height: getProportionateScreenHeight(16),
+                            ),
+                            RadioListTile(
+                              selected: false,
+                              value: true,
+                              title: Text(
+                                'Male',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              groupValue: isMale == null
+                                  ? isMale = (v.loginUser.gender == 'Male')
+                                      ? true
+                                      : null
+                                  : isMale, // v.loginUser.gender!=null?v.loginUser.gender:
+                              onChanged: (v) {
+                                setState(() {
+                                  isMale = v;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              selected: false,
+                              value: false,
+                              title: Text(
+                                'Female',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              groupValue: isMale == null
+                                  ? isMale = (v.loginUser.gender == 'Female')
+                                      ? true
+                                      : null
+                                  : isMale,
+                              onChanged: (v) {
+                                setState(() {
+                                  isMale = v;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(30),
+                            ),
+                          ],
                         ),
-                        RadioListTile(
-                          selected: false,
-                          value: true,
-                          title: Text(
-                            'Male',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          groupValue: isMale == null
-                              ? isMale =
-                                  (v.loginUser.gender == 'Male') ? true : null
-                              : isMale, // v.loginUser.gender!=null?v.loginUser.gender:
-                          onChanged: (v) {
-                            setState(() {
-                              isMale = v;
-                            });
-                          },
-                        ),
-                        RadioListTile(
-                          selected: false,
-                          value: false,
-                          title: Text(
-                            'Female',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          groupValue: isMale == null
-                              ? isMale =
-                                  (v.loginUser.gender == 'Female') ? true : null
-                              : isMale,
-                          onChanged: (v) {
-                            setState(() {
-                              isMale = v;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: getProportionateScreenHeight(30),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ]),
+                  ]),
             ),
             PrimaryFlatButton(
                 text: 'UPDATE PROFILE',
@@ -360,7 +371,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   ? 'Male'
                   : 'Female');
 
-      final res = (await API.updateUser(u, user.id))['data'];
+      final res = (await API.updateUser(u, user.id));
       if (res.statusCode == 200 || res.statusCode == 201) {
         final us = utf8.decode(res.bodyBytes);
         saveUsertoAppdata(us, context);

@@ -58,7 +58,7 @@ class Dish {
         name: json2['name'],
         desc: json2['desc'],
         price: json2['price'],
-        category: json2['category']['name'],
+        //category: json2['category']['name'],
         rating: json2['rating'],
         numOfPieces: json2['numOfPieces'],
       );

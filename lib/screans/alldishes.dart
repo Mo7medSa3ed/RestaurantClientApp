@@ -87,7 +87,6 @@ class _AllDishScreanState extends State<AllDishScrean> {
           }
         });
       } else {
-        // await API.getAllDishes().then((value) => appData.initDishesList(value));
       }
       setState(() {});
     }
@@ -150,7 +149,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
                                 controller: scrollController,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0, vertical: 8),
-                                physics: const BouncingScrollPhysics(),
+                                physics: const AlwaysScrollableScrollPhysics(
+                                    parent: BouncingScrollPhysics()),
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 gridDelegate:

@@ -7,6 +7,7 @@ import 'package:resturantapp/models/user.dart';
 class AppData extends ChangeNotifier {
   User loginUser;
   List<Dish> favDishes = [];
+  List<Dish> historyDishes = [];
   List<Dish> topDishes = [];
   List<Dish> popularDishes = [];
   List<dynamic> ordersList = [];
@@ -31,8 +32,13 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  initDishesList(List<Dish> list) {
+  initFavDishesList(List<Dish> list) {
     favDishes = list;
+    notifyListeners();
+  }
+
+  initHistoryDishesList(List<Dish> list) {
+    historyDishes= list;
     notifyListeners();
   }
 

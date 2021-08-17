@@ -71,14 +71,14 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-               CustumTextField(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your password !' : null,
                 hint: 'password',
                 icon: Icons.lock_outlined,
                 obsecure: true,
                 onchanged: (v) => v.toString().isNotEmpty ? password = v : null,
-              ), 
+              ),
               SizedBox(
                 height: getProportionateScreenHeight(16),
               ),
@@ -105,7 +105,8 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(40),
               ),
-              PrimaryElevatedButton(text:'LOGIN',onpressed:  () async => await loginButton()),
+              PrimaryElevatedButton(
+                  text: 'LOGIN', onpressed: () async => await loginButton()),
               SizedBox(
                 height: getProportionateScreenHeight(23),
               ),
@@ -138,7 +139,8 @@ class _LoginBodyState extends State<LoginBody>
     if (formKey.currentState.validate()) {
       showDialogWidget(context);
       User u = User(email: email, password: password);
-      final res =( await API.loginUser(u))['data'];
+      final res = (await API.loginUser(u));
+     
       if (res.statusCode == 200) {
         final u = utf8.decode(res.bodyBytes);
         if (remember) {

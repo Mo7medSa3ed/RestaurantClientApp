@@ -15,7 +15,8 @@ io() {
   IO.Socket socket = IO.io('https://resturant-app12.herokuapp.com/',
       IO.OptionBuilder().setTransports(['websocket']).build());
   socket.connect();
-  socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
+  print(socket.connected);
+  //socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
 }
 
 class MyApp extends StatelessWidget {

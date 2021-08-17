@@ -41,8 +41,7 @@ class _HomeState extends State<Home> {
   // getData() async {
   //   appData = Provider.of<AppData>(context, listen: false);
   //   await API.getHome().then((value) {
-  //    if(value['status'])
-  //     appData.initHomeModel(value['data']);
+  //     if (value['status']) appData.initHomeModel(value['data']);
   //   });
   // }
 
@@ -93,7 +92,6 @@ class _HomeState extends State<Home> {
                 title: Container())
           ]),
       appBar: AppBar(
-        backgroundColor: index == 0 ? white : null,
         /*  automaticallyImplyLeading: false, */
         /* leading: IconButton(
           icon: Icon(

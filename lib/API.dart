@@ -36,11 +36,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForSignup()));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static updateImage(File image, String id) async {
@@ -58,11 +54,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(user.toJsonForUpdate()));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> getOneUser(String id) async {
@@ -70,7 +62,7 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
-      return {"status": true, "data": parsed};
+      return {"status": true, "data": User.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
     }
@@ -91,6 +83,7 @@ class API {
   }
 
   static Future<dynamic> getFavOrHis({fav, id}) async {
+    
     final response = await http.get(
         '$_BaseUrl/users/details/$id?${fav ? 'fav=true' : 'responsehistory=true'}');
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -126,14 +119,14 @@ class API {
     }
   }
 
-  static Future<dynamic> getHome() async {
+  static Future<Map<String, dynamic>> getHome() async {
     final res = await http.get(
       '$_BaseUrl/stats/home',
     );
-
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
+      print(parsed['popular'][0]);
       return {"status": true, "data": HomeModel.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
@@ -158,11 +151,7 @@ class API {
     final res = await http.delete(
       '$_BaseUrl/dishes/$dishId',
     );
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static updateImageForDish(PickedFile image, String id) async {
@@ -181,11 +170,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(updatedDish));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   // Function For reviews
@@ -196,23 +181,14 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(review.toJson()));
-
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> deleteReview(String dishId, String reviewid) async {
     final res = await http.delete(
       '$_BaseUrl/reviews?dishId=$dishId&reviewId=$reviewid',
     );
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> updateReview(
@@ -224,11 +200,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(review.toJson()));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   // function For favourite
@@ -240,11 +212,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode({"dishId": dishid}));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   // function for orders
@@ -257,11 +225,7 @@ class API {
         },
         body: json.encode(order));
 
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   // function for categories
@@ -286,11 +250,7 @@ class API {
     final res = await http.delete(
       '$_BaseUrl/categories/$name',
     );
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> addCategory(Map<String, dynamic> categories) async {
@@ -300,11 +260,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(categories));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> updateCategory(
@@ -315,11 +271,7 @@ class API {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(categories));
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<dynamic> patchOrder(Map<String, dynamic> order, id) async {
@@ -330,11 +282,7 @@ class API {
         },
         body: json.encode(order));
 
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      return {"status": true, "data": res};
-    } else {
-      return {"status": false, "data": null};
-    }
+    return res;
   }
 
   static Future<String> getRouteCoordinates(LatLng l1, LatLng l2) async {

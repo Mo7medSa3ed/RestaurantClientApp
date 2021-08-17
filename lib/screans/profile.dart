@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_cart_card.dart';
 import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
@@ -41,7 +42,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics()),
               children: [
                 Row(
                   children: [
@@ -184,10 +186,56 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   }
 
   buildListForHistory(List<Dish> list) {
-    return Column(
-        children: list.length > 0
-            ? list.map((e) => PrimaryCartCard(e, test: true)).toList()
-            : []);
+    return FutureBuilder(
+        future: API.getFavOrHis(
+            fav: false,
+            id: Provider.of<AppData>(context, listen: false).loginUser.id),
+        builder: (ctx, s) {
+          if (s.hasData) {
+            if (s.data['status']) {
+              Provider.of<AppData>(context, listen: false)
+                  .initHistoryDishesList(s.data['data']);
+
+              return Consumer<AppData>(builder: (ctx, app, c) {
+                return ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics()),
+                    itemCount: app.historyDishes.length,
+                    itemBuilder: (ctx, i) =>
+                        PrimaryCartCard(app.historyDishes[i], test: true));
+              });
+            } else {
+              return Center(
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/List.png",
+                            fit: BoxFit.fill,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: MediaQuery.of(context).size.width * 0.5,
+                          ),
+                          Text(
+                            "Your History List is Empty",
+                            style: TextStyle(color: grey, fontSize: 18),
+                          )
+                        ],
+                      )));
+            }
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 
   Row buildmovetabs() {
@@ -201,7 +249,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 border: Border(
                     bottom: BorderSide(
                         color: login ? red : greyd, width: login ? 4 : 0.7))),
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {
                 if (login == false) {
                   setState(() {
@@ -228,7 +276,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   border: Border(
                       bottom: BorderSide(
                           color: login ? greyd : red, width: login ? 0.7 : 4))),
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () {
                   if (login) {
                     setState(() {

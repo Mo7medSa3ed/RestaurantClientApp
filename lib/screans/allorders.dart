@@ -24,7 +24,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
   void initState() {
     super.initState();
     app = Provider.of<AppData>(context, listen: false);
-    fetchDate(page);
+    fetchDate(true);
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
@@ -46,10 +46,10 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
       await API.getAllOrders(page: page).then((value) {
         status = value['status'];
         if (value['status']) {
-          if (value.length < 6) {
+          if (value['data'].length < 6) {
             isLast = true;
           }
-          app.initOrderList(value);
+          app.initOrderList(value['data']);
         }
       });
 
@@ -79,7 +79,8 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                 builder: (ctx, app, c) => (app.ordersList.length > 0 && status)
                     ? ListView.builder(
                         controller: scrollController,
-                        physics: BouncingScrollPhysics(),
+                        physics: AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
                         itemCount: app.ordersList.length,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 6),

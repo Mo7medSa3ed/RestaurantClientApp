@@ -39,7 +39,8 @@ class CartScrean extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
+                          physics: AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
                           primary: true,
                           shrinkWrap: true,
                           itemCount: v.cartList.length,

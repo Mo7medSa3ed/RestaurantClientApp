@@ -136,7 +136,7 @@ class PrimaryDishCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                dish.category,
+                dish.category ?? '',
                 style: TextStyle(
                     color: Kprimary.withOpacity(0.35),
                     fontSize: 14,

@@ -78,7 +78,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                         Expanded(
                           child: ListView(
                             padding: EdgeInsets.symmetric(horizontal: 16),
-                            physics: BouncingScrollPhysics(),
+                            physics: AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
                             children: [
                               Row(
                                 mainAxisAlignment:
@@ -173,7 +174,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                                           e.dish,
                                           details: true,
                                           amount: e.amount,
-                                          test: app.detailsOrder.state.toLowerCase() ==
+                                          test: app.detailsOrder.state
+                                                      .toLowerCase() ==
                                                   'deliverd'
                                               ? false
                                               : true,
@@ -314,7 +316,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
           .toList()
     };
 
-    final res = (await API.makeOrder(reqData))['data'];
+    final res = (await API.makeOrder(reqData));
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();
