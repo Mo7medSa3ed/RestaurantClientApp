@@ -84,7 +84,9 @@ class _AllDishScreanState extends State<AllDishScrean> {
           }
         });
       } else {
-        await API.getAllDishesByCategory(widget.catId).then((value) {
+        await API
+            .getAllDishesByCategory(widget.catId, page: page)
+            .then((value) {
           status = value['status'];
           if (value['status']) {
             if (value['data'].length < 6) {
@@ -96,6 +98,12 @@ class _AllDishScreanState extends State<AllDishScrean> {
       }
       setState(() {});
     }
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override

@@ -30,7 +30,6 @@ class _HomeState extends State<HomePage> {
       networktest = true;
     }
     getData();
-    setState(() {});
   }
 
   getData() async {

@@ -61,7 +61,6 @@ class _DetailsScreanState extends State<DetailsScrean> {
 
     await API.getOneDish(widget.id).then((value) {
       if (value['status']) dish = value['data'];
-      print("object");
       setState(() {});
     });
   }

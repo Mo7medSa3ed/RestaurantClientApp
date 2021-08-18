@@ -58,7 +58,7 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
-      
+
       return {"status": true, "data": User.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
@@ -130,9 +130,9 @@ class API {
     }
   }
 
-  static Future<dynamic> getAllDishesByCategory(String id) async {
+  static Future<dynamic> getAllDishesByCategory(String id, {page}) async {
     final res = await http.get(
-      '$_BaseUrl/dishes/category/$id',
+      '$_BaseUrl/dishes/category/$id?page=$page',
     );
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -140,7 +140,9 @@ class API {
       final parsed = json.decode(body);
       return {
         "status": true,
-        "data": parsed.map<Dish>((dish) => Dish.fromJsonForHome(dish)).toList()
+        "data": parsed['dishes']
+            .map<Dish>((dish) => Dish.fromJsonForHome(dish))
+            .toList()
       };
     } else {
       return {"status": false, "data": null};
@@ -262,7 +264,7 @@ class API {
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
-      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final parsed = json.decode(body);
       return {
         "status": true,
         "data":
@@ -320,14 +322,14 @@ class API {
     return values.toString(); //;
   }
 
-  static Future<dynamic> getAllOrders({page}) async {
+  static Future<dynamic> getAllOrders({page, state}) async {
     final res = await http.get(
-      '$_BaseUrl/orders?page=$page',
+      '$_BaseUrl/orders/state/${state.toString().toLowerCase()}',
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
-      return {"status": true, "data": parsed['orders']};
+      return {"status": true, "data": parsed};
     } else {
       return {"status": false, "data": null};
     }

@@ -56,6 +56,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(

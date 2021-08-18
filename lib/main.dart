@@ -13,7 +13,7 @@ void main() {
 
 io() {
   final socket =
-      IO.io('https://resturant-app12.herokuapp.com', <String, dynamic>{
+      IO.io('https://resturant-app12.herokuapp.com/', <String, dynamic>{
     'transports': ['websocket'],
     'autoConnect': true,
   });

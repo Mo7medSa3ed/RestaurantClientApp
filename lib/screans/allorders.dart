@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_order_Card.dart';
+import 'package:resturantapp/components/primary_orders_widget.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
@@ -14,50 +15,16 @@ class AllOrdersScrean extends StatefulWidget {
 }
 
 class _AllOrdersScreanState extends State<AllOrdersScrean> {
-  AppData app;
-  int page = 0;
-  bool isLast = false;
-  bool status = false;
-  final scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    app = Provider.of<AppData>(context, listen: false);
-    fetchDate(true);
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        fetchDate(false);
-      }
-    });
-  }
-
-  fetchDate(init) async {
-    if (init) {
-      page = 1;
-      isLast = false;
-      app.clearAllOrderList();
-    } else {
-      page++;
-    }
-    if (isLast == false) {
-      await API.getAllOrders(page: page).then((value) {
-        status = value['status'];
-        if (value['status']) {
-          if (value['data'].length < 6) {
-            isLast = true;
-            setState(() {});
-          }
-          app.initOrderList(value['data']);
-        }
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
+      initialIndex: 0,
       child: Scaffold(
           appBar: AppBar(
             title: Text(
@@ -66,7 +33,6 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                   fontWeight: FontWeight.w800, color: Kprimary, fontSize: 28),
             ),
             bottom: TabBar(
-              automaticIndicatorColorAdjustment: false,
               unselectedLabelColor: Kprimary.withOpacity(0.6),
               overlayColor: MaterialStateProperty.all(red),
               indicatorColor: Kprimary,
@@ -79,116 +45,28 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                   fontWeight: FontWeight.w800, color: Kprimary, fontSize: 16),
               tabs: [
                 Tab(
-                  text: "Recent Orders",
+                  text: "Recent",
                 ),
                 Tab(
-                  text: "Other Orders",
+                  text: "Confirmed",
+                ),
+                Tab(
+                  text: "Delivered",
+                ),
+                Tab(
+                  text: "Canceled",
                 ),
               ],
             ),
           ),
-          body: TabBarView(children: [
-            Expanded(
-                child: RefreshIndicator(
-              onRefresh: () => fetchDate(true),
-              child: Consumer<AppData>(
-                builder: (ctx, app, c) => (app.ordersList.length > 0 && status)
-                    ? ListView.builder(
-                        controller: scrollController,
-                        physics: AlwaysScrollableScrollPhysics(
-                            parent: BouncingScrollPhysics()),
-                        itemCount: app.ordersList.length,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 6),
-                        itemBuilder: (_, i) => PrimaryOrderCard(
-                              app.ordersList[i],
-                              onPressed: () async => await cancelOrder(
-                                  app.ordersList[i]['_id'], i),
-                            ))
-                    : (status && app.ordersList.length == 0)
-                        ? Center(
-                            child: emptyTextWidget,
-                          )
-                        : Center(
-                            child: CircularProgressIndicator(),
-                          ),
-              ),
-            )),
-            Expanded(
-                child: RefreshIndicator(
-              onRefresh: () => fetchDate(true),
-              child: Consumer<AppData>(
-                builder: (ctx, app, c) => (app.ordersList.length > 0 && status)
-                    ? ListView.builder(
-                        controller: scrollController,
-                        physics: AlwaysScrollableScrollPhysics(
-                            parent: BouncingScrollPhysics()),
-                        itemCount: app.ordersList.length,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 6),
-                        itemBuilder: (_, i) => PrimaryOrderCard(
-                              app.ordersList[i],
-                              onPressed: () async => await cancelOrder(
-                                  app.ordersList[i]['_id'], i),
-                            ))
-                    : (status && app.ordersList.length == 0)
-                        ? Center(
-                            child: emptyTextWidget,
-                          )
-                        : Center(
-                            child: CircularProgressIndicator(),
-                          ),
-              ),
-            )),
-          ])),
-    );
-  }
-
-  cancelOrder(id, index) async {
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.warning,
-      title: 'Cancel Order',
-      text: "Are you sure to cancel order ?",
-      barrierDismissible: false,
-      confirmBtnColor: red,
-      showCancelBtn: true,
-      onConfirmBtnTap: () async {
-        Navigator.of(context).pop();
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.loading,
-          text: "loading please wait....",
-          barrierDismissible: false,
-        );
-        final reqData = {"state": "cancel"};
-        final res = (await API.patchOrder(reqData, id))['data'];
-        if (res.statusCode == 200 || res.statusCode == 201) {
-          Navigator.of(context).pop();
-          final body = utf8.decode(res.bodyBytes);
-          final parsed = json.decode(body);
-          app.ordersList[index] = parsed;
-          setState(() {});
-          CoolAlert.show(
-              context: context,
-              type: CoolAlertType.success,
-              animType: CoolAlertAnimType.scale,
-              title: 'Cancel Order',
-              text: "Order Canceled Successfully",
-              barrierDismissible: false,
-              confirmBtnColor: Kprimary,
-              onConfirmBtnTap: () => Navigator.of(context).pop());
-        } else {
-          Navigator.of(context).pop();
-          CoolAlert.show(
-              context: context,
-              type: CoolAlertType.loading,
-              title: 'Error',
-              text: "some thing went error !!",
-              barrierDismissible: false,
-              showCancelBtn: true);
-        }
-      },
+          body: TabBarView(physics: BouncingScrollPhysics(),
+              //controller: controller,
+              children: [
+                OrdersWidget('Placed'),
+                OrdersWidget('Confirmed'),
+                OrdersWidget('Delivered'),
+                OrdersWidget('Canceled'),
+              ])),
     );
   }
 }

@@ -37,6 +37,12 @@ class _SearchScreanState extends State<SearchScrean> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return networktest
         ? ListView(children: [

@@ -13,6 +13,13 @@ class _PageViewScreanState extends State<PageViewScrean> {
   int index = 0;
   var controller =
       PageController(initialPage: 0, keepPage: true, viewportFraction: 1);
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

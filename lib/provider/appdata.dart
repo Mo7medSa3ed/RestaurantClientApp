@@ -67,7 +67,7 @@ class AppData extends ChangeNotifier {
   }
 
   initOrderList(List<dynamic> list) {
-    ordersList.addAll(list);
+    ordersList = list;
     notifyListeners();
   }
 

@@ -32,7 +32,7 @@ class Dish {
       name: json['name'],
       desc: json['desc'],
       price: json['price'],
-      category: json['category'],
+      category: json['category']['name'],
       reviews: json['reviews'],
       rating: json['rating'],
       numOfPieces: json['numOfPieces'],
@@ -44,7 +44,7 @@ class Dish {
       name: json2['name'],
       desc: json2['desc'],
       price: json2['price'],
-      category: json2['category'],
+      category: json2['category']['name'],
       rating: json2['rating'],
       reviews:
           List<Review>.from(json2['reviews'].map((e) => Review.fromJson(e)))
@@ -57,7 +57,7 @@ class Dish {
         name: json2['name'],
         desc: json2['desc'],
         price: json2['price'],
-        // category: json2['category']['name'],
+        //category: json2['category']['name'],
         rating: json2['rating'],
         numOfPieces: json2['numOfPieces'],
         updatedAt: json2['updatedAt'],
