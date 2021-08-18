@@ -56,19 +56,38 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'All Orders',
-                style: TextStyle(
-                    fontWeight: FontWeight.w800, color: Kprimary, fontSize: 28),
-              ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'All Orders',
+              style: TextStyle(
+                  fontWeight: FontWeight.w800, color: Kprimary, fontSize: 28),
             ),
+            bottom: TabBar(
+              automaticIndicatorColorAdjustment: false,
+              unselectedLabelColor: Kprimary.withOpacity(0.6),
+              overlayColor: MaterialStateProperty.all(red),
+              indicatorColor: Kprimary,
+              unselectedLabelStyle: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Kprimary.withOpacity(0.6),
+                  fontSize: 14),
+              labelColor: Kprimary,
+              labelStyle: TextStyle(
+                  fontWeight: FontWeight.w800, color: Kprimary, fontSize: 16),
+              tabs: [
+                Tab(
+                  text: "Recent Orders",
+                ),
+                Tab(
+                  text: "Other Orders",
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(children: [
             Expanded(
                 child: RefreshIndicator(
               onRefresh: () => fetchDate(true),
@@ -95,9 +114,33 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
                           ),
               ),
             )),
-          ],
-        ),
-      ),
+            Expanded(
+                child: RefreshIndicator(
+              onRefresh: () => fetchDate(true),
+              child: Consumer<AppData>(
+                builder: (ctx, app, c) => (app.ordersList.length > 0 && status)
+                    ? ListView.builder(
+                        controller: scrollController,
+                        physics: AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
+                        itemCount: app.ordersList.length,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 6),
+                        itemBuilder: (_, i) => PrimaryOrderCard(
+                              app.ordersList[i],
+                              onPressed: () async => await cancelOrder(
+                                  app.ordersList[i]['_id'], i),
+                            ))
+                    : (status && app.ordersList.length == 0)
+                        ? Center(
+                            child: emptyTextWidget,
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          ),
+              ),
+            )),
+          ])),
     );
   }
 
@@ -129,7 +172,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
           CoolAlert.show(
               context: context,
               type: CoolAlertType.success,
-              animType: CoolAlertAnimType.slideInUp,
+              animType: CoolAlertAnimType.scale,
               title: 'Cancel Order',
               text: "Order Canceled Successfully",
               barrierDismissible: false,

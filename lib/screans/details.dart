@@ -58,15 +58,12 @@ class _DetailsScreanState extends State<DetailsScrean> {
 
   getData() async {
     appdata = Provider.of<AppData>(context, listen: false);
-    /*  dish = appdata.loadeddishesList
-        .firstWhere((e) => e.id == widget.id, orElse: () => null); */
-    if (dish == null) {
-      await API.getOneDish(widget.id).then((value) {
-        if (value['status']) dish = value['data'];
-        //  appdata.addToloaded(value);
-        setState(() {});
-      });
-    }
+
+    await API.getOneDish(widget.id).then((value) {
+      if (value['status']) dish = value['data'];
+      print("object");
+      setState(() {});
+    });
   }
 
   @override
@@ -96,177 +93,181 @@ class _DetailsScreanState extends State<DetailsScrean> {
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
             ),
-            child: ListView(
-              physics: AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics()),
-              children: [
-                SizedBox(
-                  height: 16,
-                ),
-                PrimaryDishCard(
-                  radius: 25.0,
-                  rightMargin: 0.0,
-                  dish: dish,
-                  width: wid,
-                  height: hei > wid ? hei * 0.24 : hei * 0.4,
-                  isLiked: appdata.loginUser.fav.contains(dish.id),
-                  ontap: (b) async => await addtoFav(context, dish.id),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '${dish.numOfPieces} Pieces',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.3),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Text(
-                      '\$ ${dish.price}',
-                      style: TextStyle(
-                          color: red,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Product Descriptions',
-                  style: TextStyle(
-                      color: Kprimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  dish.desc,
-                  style: TextStyle(
-                      color: Kprimary.withOpacity(0.3),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Reviews',
-                  style: TextStyle(
-                      color: Kprimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Column(
-                    children: dish.reviews.length > 0
-                        ? dish.reviews
-                            .map(
-                              (e) => buildReviewCard(e),
-                            )
-                            .toList()
-                        : [
-                            Container(
-                                width: double.infinity,
-                                height: 50,
-                                child: Center(
-                                  child: Text('No reviews yet.',
-                                      style: TextStyle(
-                                          color: Kprimary.withOpacity(0.3),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600)),
-                                ))
-                          ]),
-                Form(
-                  key: formKey,
-                  child: Container(
-                    margin: EdgeInsets.only(
-                        left: 12, right: 12, top: 12, bottom: 0),
-                    child: TextFormField(
-                      focusNode: _focus,
-                      controller: controller,
-                      onSaved: (String s) => msg = s,
-                      validator: (String s) =>
-                          s.isEmpty ? 'Please enter your message!!' : null,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      maxLength: 300,
-                      maxLines: 3,
-                      decoration: InputDecoration(
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: red),
-                              borderRadius: BorderRadius.circular(20)),
-                          errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: red),
-                              borderRadius: BorderRadius.circular(20)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: grey),
-                              borderRadius: BorderRadius.circular(20)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 2, color: Kprimary),
-                              borderRadius: BorderRadius.circular(20)),
-                          hintText: 'Add New Review....'),
-                    ),
+            child: RefreshIndicator(
+              onRefresh: () => getData(),
+              child: ListView(
+                physics: AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics()),
+                children: [
+                  SizedBox(
+                    height: 16,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 16, right: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  PrimaryDishCard(
+                    radius: 25.0,
+                    rightMargin: 0.0,
+                    dish: dish,
+                    width: wid,
+                    height: hei > wid ? hei * 0.24 : hei * 0.4,
+                    isLiked: appdata.loginUser.fav.contains(dish.id),
+                    ontap: (b) async => await addtoFav(context, dish.id),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
                     children: [
-                      RatingBar.builder(
-                        itemSize: 24,
-                        initialRating: rating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                        itemBuilder: (context, _) => Icon(
-                          Icons.star,
-                          color: Colors.amber[800],
-                        ),
-                        onRatingUpdate: (rate) {
-                          setState(() {
-                            rating = rate;
-                          });
-                        },
+                      Text(
+                        '${dish.numOfPieces} Pieces',
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.3),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
                       ),
-                      /* Text(
-                            '(25 review)',
-                            style: TextStyle(
-                                color: Kprimary.withOpacity(0.35),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),) */
-
-                      IconButton(
-                          icon: Icon(
-                            Icons.send,
-                            size: 35,
-                          ),
-                          onPressed: () async =>
-                              test ? await addreview() : await updatereview())
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        '\$ ${dish.price}',
+                        style: TextStyle(
+                            color: red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800),
+                      ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Product Descriptions',
+                    style: TextStyle(
+                        color: Kprimary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    dish.desc,
+                    style: TextStyle(
+                        color: Kprimary.withOpacity(0.3),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Reviews',
+                    style: TextStyle(
+                        color: Kprimary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.start,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                      children: dish.reviews.length > 0
+                          ? dish.reviews
+                              .map(
+                                (e) => buildReviewCard(e),
+                              )
+                              .toList()
+                          : [
+                              Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text('No reviews yet.',
+                                        style: TextStyle(
+                                            color: Kprimary.withOpacity(0.3),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600)),
+                                  ))
+                            ]),
+                  Form(
+                    key: formKey,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: 12, right: 12, top: 12, bottom: 0),
+                      child: TextFormField(
+                        focusNode: _focus,
+                        controller: controller,
+                        onSaved: (String s) => msg = s,
+                        validator: (String s) =>
+                            s.isEmpty ? 'Please enter your message!!' : null,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        maxLength: 300,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                            focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 1, color: red),
+                                borderRadius: BorderRadius.circular(20)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 1, color: red),
+                                borderRadius: BorderRadius.circular(20)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 1, color: grey),
+                                borderRadius: BorderRadius.circular(20)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(width: 2, color: Kprimary),
+                                borderRadius: BorderRadius.circular(20)),
+                            hintText: 'Add New Review....'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16, right: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RatingBar.builder(
+                          itemSize: 24,
+                          initialRating: rating,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber[800],
+                          ),
+                          onRatingUpdate: (rate) {
+                            setState(() {
+                              rating = rate;
+                            });
+                          },
+                        ),
+                        /* Text(
+                              '(25 review)',
+                              style: TextStyle(
+                                  color: Kprimary.withOpacity(0.35),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),) */
+
+                        IconButton(
+                            icon: Icon(
+                              Icons.send,
+                              size: 35,
+                            ),
+                            onPressed: () async =>
+                                test ? await addreview() : await updatereview())
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -290,9 +291,10 @@ class _DetailsScreanState extends State<DetailsScrean> {
       if (res.statusCode == 200 || res.statusCode == 201) {
         rev.msg = msg;
         rev.rate = rating;
+        dish.rating = rating;
         appdata.changeRateForHome(id: dish.id, rate: rating);
         controller.clear();
-        rating = 0.0;
+        rating = 1.0;
         test = true;
         rev = null;
         Navigator.pop(context);
@@ -300,7 +302,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
         CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            animType: CoolAlertAnimType.slideInUp,
+            animType: CoolAlertAnimType.scale,
             title: 'Update Review',
             text: "Review Updated Successfully",
             barrierDismissible: false,
@@ -334,13 +336,13 @@ class _DetailsScreanState extends State<DetailsScrean> {
         appdata.changeRateForHome(id: dish.id, rate: dish.rating);
 
         controller.clear();
-        rating = 0.0;
+        rating = 1.0;
         Navigator.pop(context);
         FocusScope.of(context).requestFocus(FocusNode());
         CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            animType: CoolAlertAnimType.slideInUp,
+            animType: CoolAlertAnimType.scale,
             title: 'Add Review',
             text: "Review Added Successfully",
             barrierDismissible: false,
@@ -367,6 +369,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
         onConfirmBtnTap: () async {
           Navigator.of(context).pop();
           CoolAlert.show(
+              animType: CoolAlertAnimType.scale,
               context: context,
               type: CoolAlertType.loading,
               text: "loading please wait....",
@@ -383,7 +386,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
             CoolAlert.show(
                 context: context,
                 type: CoolAlertType.success,
-                animType: CoolAlertAnimType.slideInUp,
+                animType: CoolAlertAnimType.scale,
                 title: 'Delete Review',
                 text: "Review Deleted Successfully",
                 barrierDismissible: false,

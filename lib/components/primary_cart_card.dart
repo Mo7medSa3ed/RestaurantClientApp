@@ -45,9 +45,8 @@ class _PrimaryCartCardState extends State<PrimaryCartCard> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                    image: NetworkImage(widget.dish.img == null
-                        ? null
-                        : widget.dish.img),
+                    image: NetworkImage(
+                        widget.dish.img == null ? null : widget.dish.img),
                     fit: BoxFit.cover)),
           ),
           SizedBox(
@@ -207,7 +206,7 @@ class _PrimaryCartCardState extends State<PrimaryCartCard> {
                                     CoolAlert.show(
                                         context: context,
                                         type: CoolAlertType.success,
-                                        animType: CoolAlertAnimType.slideInUp,
+                                        animType: CoolAlertAnimType.scale,
                                         title: 'Delete Dish From Cart',
                                         text: "Deleted Successfully",
                                         barrierDismissible: false,

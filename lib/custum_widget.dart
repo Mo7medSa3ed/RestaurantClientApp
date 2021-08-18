@@ -94,10 +94,6 @@ class _CustumTextFieldState extends State<CustumTextField> {
   }
 }
 
-
-
-
-
 noNetworkwidget() {
   return Container(
     width: double.infinity,
@@ -107,14 +103,10 @@ noNetworkwidget() {
   );
 }
 
-
-
-
-
 showDialogWidget(context) {
   CoolAlert.show(
     context: context,
-    animType: CoolAlertAnimType.slideInUp,
+    animType: CoolAlertAnimType.scale,
     type: CoolAlertType.loading,
     text: "loading please wait....",
     barrierDismissible: false,
@@ -206,5 +198,3 @@ Future<bool> addtoFav(context, dishid) async {
   // if (res.statusCode == 200 || res.statusCode == 201) {
   // }
 }
-
-

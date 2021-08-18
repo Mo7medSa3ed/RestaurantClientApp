@@ -103,8 +103,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       image: NetworkImage(
                                           v.loginUser.avatar == null
                                               ? img
-                                              : v.loginUser.avatar
-                                                ),
+                                              : v.loginUser.avatar),
                                       fit: BoxFit.fill)),
                               child: Stack(
                                 alignment: Alignment(0.9, 0.7),
@@ -380,7 +379,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            animType: CoolAlertAnimType.slideInUp,
+            animType: CoolAlertAnimType.scale,
             title: 'Update Profile',
             text: "Profile Updated Successfully",
             barrierDismissible: false,

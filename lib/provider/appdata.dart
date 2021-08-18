@@ -35,6 +35,14 @@ class AppData extends ChangeNotifier {
         homeModel.topRate[idx2].rating = rate;
       }
     }
+
+    if (favDishes.length > 0) {
+      final idx3 = favDishes.indexWhere((e) => e.id == id);
+      if (idx3 != -1) {
+        favDishes[idx3].rating = rate;
+      }
+    }
+
     notifyListeners();
   }
 

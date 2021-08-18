@@ -24,6 +24,7 @@ class OrderDetailsScrean extends StatefulWidget {
 
 class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   AppData app;
+  bool check;
   final formKey = GlobalKey<FormState>();
   final formKey2 = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -70,7 +71,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                 if (v.hasData) {
                   detailsOrder = Order.fromJson(v.data['data']);
                   app.initOrder(detailsOrder);
-
+                  check = app.detailsOrder.state.toLowerCase() == 'deliverd' ||
+                      app.detailsOrder.state.toLowerCase() == 'cancel';
                   return Consumer<AppData>(
                     builder: (ctx, app, c) => Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,11 +179,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                                           e.dish,
                                           details: true,
                                           amount: e.amount,
-                                          test: app.detailsOrder.state
-                                                      .toLowerCase() ==
-                                                  'deliverd'
-                                              ? false
-                                              : true,
+                                          test: check ? false : true,
                                         ))
                                     .toList(),
                               ),
@@ -214,7 +212,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            app.detailsOrder.state.toLowerCase() == 'deliverd'
+            check
                 ? Column(
                     children: [
                       Form(
@@ -293,13 +291,13 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                 Container(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: PrimaryElevatedButton(
-                        text: app.detailsOrder.state.toLowerCase() == 'deliverd'
-                            ? "RE ORDER"
-                            : "CANCEL",
-                        onpressed: () async =>
-                            app.detailsOrder.state.toLowerCase() == 'deliverd'
-                                ? await makeOrder()
-                                : await cancelOrder(widget.id)))
+                        text: check ? "RE ORDER" : "CANCEL",
+                        onpressed: () async => app.detailsOrder.state
+                                        .toLowerCase() ==
+                                    'deliverd' ||
+                                app.detailsOrder.state.toLowerCase() == 'cancel'
+                            ? await makeOrder()
+                            : await cancelOrder(widget.id)))
               ],
             ),
           ],
@@ -391,15 +389,15 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
           text: "loading please wait....",
           barrierDismissible: false,
         );
-        final reqData = {"state": "cancel"};
+        final reqData = {"state": "canceled"};
         final res = await API.patchOrder(reqData, id);
         if (res.statusCode == 200 || res.statusCode == 201) {
           Navigator.of(context).pop();
           app.changeOrderState(widget.id);
           CoolAlert.show(
               context: context,
-              type: CoolAlertType.success,  
-              animType: CoolAlertAnimType.slideInUp,
+              type: CoolAlertType.success,
+              animType: CoolAlertAnimType.scale,
               title: 'Cancel Order',
               text: "Order Canceled Successfully",
               barrierDismissible: false,
