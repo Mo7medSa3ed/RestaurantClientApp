@@ -101,8 +101,9 @@ class API {
       final parsed = json.decode(body);
       return {
         "status": true,
-        "data":
-            parsed['dishes'].map<Dish>((dish) => Dish.fromJson(dish)).toList()
+        "data": parsed['dishes']
+            .map<Dish>((dish) => Dish.fromJsonForHome(dish))
+            .toList()
       };
     } else {
       return {"status": false, "data": null};

@@ -1,13 +1,6 @@
-import 'dart:convert';
-
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/components/primary_order_Card.dart';
 import 'package:resturantapp/components/primary_orders_widget.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
 
 class AllOrdersScrean extends StatefulWidget {
   @override
@@ -26,6 +19,7 @@ class _AllOrdersScreanState extends State<AllOrdersScrean> {
       length: 4,
       initialIndex: 0,
       child: Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
             title: Text(
               'All Orders',
