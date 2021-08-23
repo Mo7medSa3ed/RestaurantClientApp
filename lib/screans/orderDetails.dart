@@ -71,8 +71,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                 if (v.hasData) {
                   detailsOrder = Order.fromJson(v.data['data']);
                   app.initOrder(detailsOrder);
-                  check = app.detailsOrder.state.toLowerCase() == 'deliverd' ||
-                      app.detailsOrder.state.toLowerCase() == 'cancel';
+                  check = app.detailsOrder.state.toLowerCase() == 'delivered' ||
+                      app.detailsOrder.state.toLowerCase() == 'canceled';
                   return Consumer<AppData>(
                     builder: (ctx, app, c) => Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -292,12 +292,13 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: PrimaryElevatedButton(
                         text: check ? "RE ORDER" : "CANCEL",
-                        onpressed: () async => app.detailsOrder.state
-                                        .toLowerCase() ==
-                                    'deliverd' ||
-                                app.detailsOrder.state.toLowerCase() == 'cancel'
-                            ? await makeOrder()
-                            : await cancelOrder(widget.id)))
+                        onpressed: () async =>
+                            app.detailsOrder.state.toLowerCase() ==
+                                        'delivered' ||
+                                    app.detailsOrder.state.toLowerCase() ==
+                                        'canceled'
+                                ? await makeOrder()
+                                : await cancelOrder(widget.id)))
               ],
             ),
           ],

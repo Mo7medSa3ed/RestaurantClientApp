@@ -142,6 +142,7 @@ class _LoginBodyState extends State<LoginBody>
       final res = await API.loginUser(u);
       if (res.statusCode == 200) {
         final u = utf8.decode(res.bodyBytes);
+
         if (remember) {
           saveUserToshared(u, context);
           saveUsertoAppdata(u, context);

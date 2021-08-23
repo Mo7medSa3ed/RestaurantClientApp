@@ -107,7 +107,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
           text: "loading please wait....",
           barrierDismissible: false,
         );
-        final reqData = {"state": "cancel"};
+        final reqData = {"state": "canceled"};
         final res = (await API.patchOrder(reqData, id))['data'];
         if (res.statusCode == 200 || res.statusCode == 201) {
           Navigator.of(context).pop();

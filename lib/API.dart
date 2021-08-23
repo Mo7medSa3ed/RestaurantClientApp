@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/home.dart';
@@ -18,20 +19,19 @@ class API {
   static Future<dynamic> loginUser(User user) async {
     final response = await http.post('$_BaseUrl/users/auth/login',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
+    saveToken(response.headers['x-auth-token']);
     return response;
   }
 
   static Future<dynamic> signupUser(User user) async {
     final res = await http.post('$_BaseUrl/users/',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(user.toJsonForSignup()));
+    saveToken(res.headers['x-auth-token']);
+
     return res;
   }
 
@@ -40,21 +40,28 @@ class API {
     FormData form = FormData.fromMap(
         {'avatar': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.post('$_BaseUrl/users/change/avatar/$id', data: form);
+    await dio.post('$_BaseUrl/users/change/avatar/$id',
+        options: Options(
+          headers: {
+            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
+          },
+        ),
+        data: form);
   }
 
   static Future<dynamic> updateUser(User user, id) async {
     final res = await http.patch('$_BaseUrl/users/$id',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(user.toJsonForUpdate()));
     return res;
   }
 
   static Future<dynamic> getOneUser(String id) async {
-    final response = await http.get('$_BaseUrl/users/$id');
+    final response = await http.get(
+      '$_BaseUrl/users/$id',
+      headers: await getHeaders(),
+    );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
@@ -66,7 +73,10 @@ class API {
   }
 
   static Future<dynamic> getAllUser() async {
-    final response = await http.get('$_BaseUrl/users/');
+    final response = await http.get(
+      '$_BaseUrl/users/',
+      headers: await getHeaders(),
+    );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body).cast<Map<String, dynamic>>();
@@ -81,7 +91,9 @@ class API {
 
   static Future<dynamic> getFavOrHis({fav, id}) async {
     final response = await http.get(
-        '$_BaseUrl/users/details/$id?${fav ? 'detail=fav' : 'detail=history'}');
+      '$_BaseUrl/users/details/$id?${fav ? 'detail=fav' : 'detail=history'}',
+      headers: await getHeaders(),
+    );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
@@ -95,7 +107,10 @@ class API {
   }
 
   static Future<dynamic> searchForDish(query) async {
-    final response = await http.get('$_BaseUrl/dishes/filter/name?name=$query');
+    final response = await http.get(
+      '$_BaseUrl/dishes/filter/name?name=$query',
+      headers: await getHeaders(),
+    );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
@@ -115,6 +130,7 @@ class API {
   static Future<dynamic> getAllDishes({top, page}) async {
     final res = await http.get(
       '$_BaseUrl/dishes/filter/query?${top ? 'topRate=true' : 'popular=true'}&&page=$page',
+      headers: await getHeaders(),
     );
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -134,6 +150,7 @@ class API {
   static Future<dynamic> getAllDishesByCategory(String id, {page}) async {
     final res = await http.get(
       '$_BaseUrl/dishes/category/$id?page=$page',
+      headers: await getHeaders(),
     );
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -153,6 +170,7 @@ class API {
   static Future<Map<String, dynamic>> getHome() async {
     final res = await http.get(
       '$_BaseUrl/stats/home',
+      headers: await getHeaders(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
@@ -166,6 +184,7 @@ class API {
   static Future<dynamic> getOneDish(String id) async {
     final res = await http.get(
       '$_BaseUrl/dishes/$id',
+      headers: await getHeaders(),
     );
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -180,6 +199,7 @@ class API {
   static Future<dynamic> deleteDish(String dishId) async {
     final res = await http.delete(
       '$_BaseUrl/dishes/$dishId',
+      headers: await getHeaders(),
     );
     return res;
   }
@@ -189,16 +209,20 @@ class API {
     FormData form = FormData.fromMap(
         {'img': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.patch('$_BaseUrl/dishes/change-img/$id', data: form);
+    await dio.patch('$_BaseUrl/dishes/change-img/$id',
+        options: Options(
+          headers: {
+            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
+          },
+        ),
+        data: form);
   }
 
   static Future<dynamic> updateDish(
       String id, Map<String, dynamic> updatedDish) async {
     final res = await http.patch('$_BaseUrl/dishes/$id',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(updatedDish));
     return res;
   }
@@ -207,9 +231,7 @@ class API {
   static Future<dynamic> addReview(Review review, String id) async {
     final res = await http.post('$_BaseUrl/dishes/reviews/add/$id',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(review.toJson()));
     return res;
   }
@@ -217,6 +239,7 @@ class API {
   static Future<dynamic> deleteReview(String dishId, String reviewid) async {
     final res = await http.delete(
       '$_BaseUrl/reviews?dishId=$dishId&reviewId=$reviewid',
+      headers: await getHeaders(),
     );
     return res;
   }
@@ -226,9 +249,7 @@ class API {
     final res = await http.patch(
         '$_BaseUrl/reviews/1?dishId=$dishId&reviewId=$reviewid',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(review.toJson()));
     return res;
   }
@@ -238,9 +259,7 @@ class API {
   static Future<dynamic> addanddelteFav(String userid, String dishid) async {
     final res = await http.post('$_BaseUrl/users/fav/$userid',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode({"dishId": dishid}));
     return res;
   }
@@ -250,9 +269,7 @@ class API {
   static Future<dynamic> makeOrder(Map<String, dynamic> order) async {
     final res = await http.post('$_BaseUrl/orders/',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(order));
 
     return res;
@@ -262,6 +279,7 @@ class API {
   static Future<dynamic> getAllCategories() async {
     final res = await http.get(
       '$_BaseUrl/categories',
+      headers: await getHeaders(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
@@ -279,6 +297,7 @@ class API {
   static Future<dynamic> deleteCategory(String name) async {
     final res = await http.delete(
       '$_BaseUrl/categories/$name',
+      headers: await getHeaders(),
     );
     return res;
   }
@@ -286,9 +305,7 @@ class API {
   static Future<dynamic> addCategory(Map<String, dynamic> categories) async {
     final res = await http.post('$_BaseUrl/categories/',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(categories));
     return res;
   }
@@ -297,9 +314,7 @@ class API {
       Map<String, dynamic> categories, id) async {
     final res = await http.patch('$_BaseUrl/categories/$id',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(categories));
     return res;
   }
@@ -307,9 +322,7 @@ class API {
   static Future<dynamic> patchOrder(Map<String, dynamic> order, id) async {
     final res = await http.patch('$_BaseUrl/orders/$id',
         encoding: Encoding.getByName("utf-8"),
-        headers: <String, String>{
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
+        headers: await getHeaders(),
         body: json.encode(order));
 
     return res;
@@ -326,6 +339,7 @@ class API {
   static Future<dynamic> getAllOrders({page, state}) async {
     final res = await http.get(
       '$_BaseUrl/orders/state/${state.toString().toLowerCase()}',
+      headers: await getHeaders(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
@@ -339,6 +353,7 @@ class API {
   static Future<dynamic> getOneOrder(id) async {
     final res = await http.get(
       '$_BaseUrl/orders/$id',
+      headers: await getHeaders(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);

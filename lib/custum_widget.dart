@@ -6,10 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class CustumTextField extends StatefulWidget {
   final String hint;
@@ -113,17 +110,7 @@ showDialogWidget(context) {
   );
 }
 
-saveUserToshared(user, context) async {
-  final prfs = await SharedPreferences.getInstance();
-  prfs.setString('user', user);
-}
 
-saveUsertoAppdata(user, context) {
-  AppData appdata = Provider.of<AppData>(context, listen: false);
-  final parsed = json.decode(user);
-  User u = User.fromJson(parsed);
-  appdata.initLoginUser(u);
-}
 
 showSnackbarWidget({msg, context, icon}) {
   CoolAlert.show(

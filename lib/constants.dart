@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:resturantapp/models/user.dart';
+import 'package:resturantapp/provider/appdata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Kprimary = Color.fromRGBO(0, 8, 51, 1);
@@ -28,4 +30,36 @@ Future<User> getUserFromPrfs() async {
   SharedPreferences prfs = await SharedPreferences.getInstance();
   final parsed = json.decode(prfs.getString("user"));
   return User.fromJson(parsed);
+}
+
+saveUserToshared(user, context) async {
+  final prfs = await SharedPreferences.getInstance();
+  prfs.setString('user', user);
+}
+
+saveToken(token) async {
+  final prfs = await SharedPreferences.getInstance();
+  prfs.setString('token', token);
+}
+
+Future<String> getToken() async {
+  final prfs = await SharedPreferences.getInstance();
+  final token = prfs.get('token');
+  return token ?? '';
+}
+
+saveUsertoAppdata(user, context) {
+  AppData appdata = Provider.of<AppData>(context, listen: false);
+  final parsed = json.decode(user);
+  User u = User.fromJson(parsed);
+  appdata.initLoginUser(u);
+}
+
+Future<Map<String, String>> getHeaders() async {
+  Map<String, String> headers = {
+    'Content-Type': 'application/json;charset=UTF-8',
+    'x-auth-token': await getToken()
+  };
+
+  return headers;
 }

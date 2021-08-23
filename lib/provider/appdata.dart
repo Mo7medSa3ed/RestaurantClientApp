@@ -94,7 +94,7 @@ class AppData extends ChangeNotifier {
   changeOrderState(id) {
     final idx = ordersList.indexWhere((e) => e['_id'] == id);
     if (idx != -1) {
-      ordersList[idx]['state'] = 'cancel';
+      ordersList[idx]['state'] = 'canceled';
     }
     notifyListeners();
   }
