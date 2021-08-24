@@ -58,7 +58,7 @@ class _AllDishScreanState extends State<AllDishScrean> {
       isLast = false;
       appData.clearTopDishesList();
       appData.clearpopularDishesList();
-      setState(() {});
+      //setState(() {});
     } else {
       page++;
     }
@@ -69,6 +69,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
           if (value['status']) {
             if (value['data'].length < 6) {
               isLast = true;
+      setState(() {});
+
             }
             appData.initTopDishesList(value['data']);
           }
@@ -79,6 +81,8 @@ class _AllDishScreanState extends State<AllDishScrean> {
           if (value['status']) {
             if (value['data'].length < 6) {
               isLast = true;
+      setState(() {});
+
             }
             appData.initpopularDishesList(value['data']);
           }
@@ -91,12 +95,12 @@ class _AllDishScreanState extends State<AllDishScrean> {
           if (value['status']) {
             if (value['data'].length < 6) {
               isLast = true;
+      setState(() {});
             }
             appData.initDishesByCategory(value['data']);
           }
         });
       }
-      setState(() {});
     }
   }
 

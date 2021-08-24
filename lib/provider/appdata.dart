@@ -164,4 +164,20 @@ class AppData extends ChangeNotifier {
     address = null;
     notifyListeners();
   }
+
+  // methodes to sockets 
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
 }

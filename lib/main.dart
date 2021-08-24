@@ -4,65 +4,65 @@ import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
 import 'package:resturantapp/screans/splashScrean.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:resturantapp/socket.dart';
 
 void main() {
-  runApp(MyApp());
-  //io();
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<Specials>(
+      create: (context) => Specials(),
+    ),
+    ChangeNotifierProvider<AppData>(
+      create: (context) => AppData(),
+    ),
+  ], child: MyApp()));
 }
 
-io() {
-  final socket =
-      IO.io('https://resturant-app12.herokuapp.com/', <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': true,
-  });
-  socket.connect();
-  print(socket.connected);
-  //socket.on("newDish", (data) => print("Mohamed Saeed Add dish"));
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    Socket().socket.on('newDish', (data) {
+      final pro = Provider.of<AppData>(context, listen: false);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<Specials>(
-            create: (context) => Specials(),
-          ),
-          ChangeNotifierProvider<AppData>(
-            create: (context) => AppData(),
-          ),
-        ],
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-                  fontFamily: 'Montserrat',
-                  // ignore: deprecated_member_use
-                  accentColor: Kprimary,
-                  primaryColor: Kprimary)
-              .copyWith(
-            dialogBackgroundColor: Colors.white,
-            colorScheme: ThemeData().colorScheme.copyWith(
-                  secondary: Kprimary,
-                  primary: red,
-                ),
-            primaryColor: Kprimary,
-            highlightColor: Colors.grey[400],
-            hintColor: Colors.grey,
-            textSelectionTheme: TextSelectionThemeData(cursorColor: red),
-            scaffoldBackgroundColor: Colors.white.withOpacity(0.97),
-            appBarTheme: AppBarTheme(
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+              fontFamily: 'Montserrat',
               // ignore: deprecated_member_use
-              brightness: Brightness.dark,
-              iconTheme: IconThemeData(color: Kprimary.withOpacity(0.6)),
-              elevation: 0,
-              color: Colors.white.withOpacity(0.4),
+              accentColor: Kprimary,
+              primaryColor: Kprimary)
+          .copyWith(
+        dialogBackgroundColor: Colors.white,
+        colorScheme: ThemeData().colorScheme.copyWith(
+              secondary: Kprimary,
+              primary: red,
             ),
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: SplashScrean(),
-        ));
+        primaryColor: Kprimary,
+        highlightColor: Colors.grey[400],
+        hintColor: Colors.grey,
+        textSelectionTheme: TextSelectionThemeData(cursorColor: red),
+        scaffoldBackgroundColor: Colors.white.withOpacity(0.97),
+        appBarTheme: AppBarTheme(
+          // ignore: deprecated_member_use
+          brightness: Brightness.dark,
+          iconTheme: IconThemeData(color: Kprimary.withOpacity(0.6)),
+          elevation: 0,
+          color: Colors.white.withOpacity(0.4),
+        ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: SplashScrean(),
+    );
   }
 }
