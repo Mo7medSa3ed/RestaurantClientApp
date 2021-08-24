@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/home.dart';
 import 'package:resturantapp/models/order.dart';
@@ -11,7 +12,7 @@ class AppData extends ChangeNotifier {
   List<Dish> topDishes = [];
   List<Dish> popularDishes = [];
   List<dynamic> ordersList = [];
-  List<dynamic> dishesByCategory = [];
+  List<Dish> dishesByCategory = [];
   List<Dish> cartList = [];
   HomeModel homeModel = HomeModel();
   String address;
@@ -165,19 +166,104 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  // methodes to sockets 
+  // methodes to sockets
 
-  
+  addNewDish(Dish dish) {
+    popularDishes.add(dish);
+    homeModel.popular.add(dish);
+    if (dishesByCategory.length > 0) {
+      if (dishesByCategory.first.category.id == dish.category.id) {
+        dishesByCategory.add(dish);
+      }
+    }
+    notifyListeners();
+  }
 
+  updateDish(Dish dish) {
+    if (topDishes.length > 1) {
+      final idx = topDishes.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) topDishes[idx] = dish;
+    }
+    if (popularDishes.length > 1) {
+      final idx = popularDishes.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) popularDishes[idx] = dish;
+    }
+    if (favDishes.length > 1) {
+      final idx = favDishes.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) favDishes[idx] = dish;
+    }
+    if (historyDishes.length > 1) {
+      final idx = historyDishes.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) historyDishes[idx] = dish;
+    }
+    if (dishesByCategory.length > 1) {
+      final idx = dishesByCategory.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) dishesByCategory[idx] = dish;
+    }
+    if (homeModel.popular.length > 1) {
+      final idx = homeModel.popular.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) homeModel.popular[idx] = dish;
+    }
+    if (homeModel.topRate.length > 1) {
+      final idx = homeModel.topRate.indexWhere((e) => e.id == dish.id);
+      if (idx != -1) homeModel.topRate[idx] = dish;
+    }
+    notifyListeners();
+  }
 
+  removeDish(id) {
+    if (topDishes.length > 1) {
+      topDishes.removeWhere((e) => e.id == id);
+    }
+    if (popularDishes.length > 1) {
+      popularDishes.removeWhere((e) => e.id == id);
+    }
+    if (favDishes.length > 1) {
+      favDishes.removeWhere((e) => e.id == id);
+    }
+    if (historyDishes.length > 1) {
+      historyDishes.removeWhere((e) => e.id == id);
+    }
+    if (dishesByCategory.length > 1) {
+      dishesByCategory.removeWhere((e) => e.id == id);
+    }
+    if (homeModel.popular.length > 1) {
+      homeModel.popular.removeWhere((e) => e.id == id);
+    }
+    if (homeModel.topRate.length > 1) {
+      homeModel.topRate.removeWhere((e) => e.id == id);
+    }
+    notifyListeners();
+  }
 
+  addCategory(Categorys category) {
+    homeModel.categories.add(category);
+    notifyListeners();
+  }
 
+  updateCategory(Categorys category) {
+    if (homeModel.categories.length > 1) {
+      final idx = homeModel.categories.indexWhere((e) => e.id == category.id);
+      if (idx != -1) homeModel.categories[idx] = category;
+      notifyListeners();
+    }
+  }
 
+  removeCategory(id) {
+    if (homeModel.categories.length > 1) {
+      homeModel.categories.removeWhere((e) => e.id == id);
+    }
+    notifyListeners();
+  }
 
-
-
-
-
-
-
+  updateOrder(Order order) {
+    if (ordersList.length > 0) {
+      final idx = ordersList.indexWhere((e) => e.id == order.id);
+      if (idx != -1) ordersList[idx] = order;
+      if (detailsOrder.id == order.id) {
+        detailsOrder = order;
+      }
+      notifyListeners();
+    }
+  }
 }

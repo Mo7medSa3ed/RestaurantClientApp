@@ -8,6 +8,10 @@ import 'package:resturantapp/socket.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!(Socket().socket.connected)) {
+    Socket().socket.connect();
+  }
+  print(Socket().socket.connected);
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Specials>(
       create: (context) => Specials(),
@@ -27,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Socket().socket.on('newDish', (data) {
-      final pro = Provider.of<AppData>(context, listen: false);
+      //final pro = Provider.of<AppData>(context, listen: false);
     });
     super.initState();
   }

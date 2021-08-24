@@ -1,3 +1,4 @@
+import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/review.dart';
 
 class Dish {
@@ -7,7 +8,7 @@ class Dish {
   String desc;
   num price;
   num rating;
-  String category;
+  Categorys category;
   num numOfPieces;
   List<dynamic> reviews;
 
@@ -32,7 +33,7 @@ class Dish {
       name: json['name'],
       desc: json['desc'],
       price: json['price'],
-      category: json['category']['name'],
+      category: Categorys.fromJson(json['category']),
       reviews: json['reviews'],
       rating: json['rating'],
       numOfPieces: json['numOfPieces'],

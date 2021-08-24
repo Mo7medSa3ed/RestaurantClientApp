@@ -309,8 +309,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => UpdateProfile())),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => UpdateProfile()));
+                  },
                   title: Text("Edit Profile",
                       style: TextStyle(
                           color: Kprimary,
