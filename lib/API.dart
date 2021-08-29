@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -21,7 +20,8 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
-    saveToken(response.headers['x-auth-token']);
+
+    saveToken(response.headers['x-auth-token'] ?? '');
     return response;
   }
 
@@ -30,7 +30,7 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForSignup()));
-    saveToken(res.headers['x-auth-token']);
+    saveToken(res.headers['x-auth-token'] ?? '');
 
     return res;
   }
@@ -40,13 +40,9 @@ class API {
     FormData form = FormData.fromMap(
         {'avatar': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.post('$_BaseUrl/users/change/avatar/$id',
-        options: Options(
-          headers: {
-            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
-          },
-        ),
-        data: form);
+    dio.options.headers["x-auth-token"] = await getToken();
+    dio.options.headers["x-app-type"] = 'User';
+    await dio.post('$_BaseUrl/users/change/avatar/$id', data: form);
   }
 
   static Future<dynamic> updateUser(User user, id) async {
@@ -65,8 +61,10 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
-
-      return {"status": true, "data": User.fromJson(parsed)};
+      return {
+        "status": true,
+        "data": parsed != null ? User.fromJson(parsed) : null
+      };
     } else {
       return {"status": false, "data": null};
     }
@@ -97,6 +95,7 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
+      print(parsed);
       return {
         "status": true,
         "data": parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList()
@@ -204,18 +203,14 @@ class API {
     return res;
   }
 
-  static updateImageForDish(PickedFile image, String id) async {
+  static updateImageForDish(image, String id) async {
     String name = image.path.split('/').last;
     FormData form = FormData.fromMap(
         {'img': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.patch('$_BaseUrl/dishes/change-img/$id',
-        options: Options(
-          headers: {
-            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
-          },
-        ),
-        data: form);
+    dio.options.headers["x-auth-token"] = await getToken();
+    dio.options.headers["x-app-type"] = 'User';
+    await dio.patch('$_BaseUrl/dishes/change-img/$id', data: form);
   }
 
   static Future<dynamic> updateDish(

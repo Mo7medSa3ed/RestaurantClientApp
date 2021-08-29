@@ -8,7 +8,9 @@ import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
+import 'package:resturantapp/screans/loginScrean.dart';
 import 'package:resturantapp/screans/updateProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -128,12 +130,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             child: PrimaryFlatButton(
                 text: 'LOGOUT',
                 onPressed: () async {
-                  /*      SharedPreferences prfs =
+                  SharedPreferences prfs =
                       await SharedPreferences.getInstance();
                   prfs.clear();
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => LoginScrean()),
-                      (Route<dynamic> route) => false); */
+                      (Route<dynamic> route) => false);
                 }),
           )
         ],
@@ -191,6 +193,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             id: Provider.of<AppData>(context, listen: false).loginUser.id),
         builder: (ctx, s) {
           if (s.hasData) {
+            print(s.data);
             if (s.data['status'] && s.data['data'].length > 0) {
               Provider.of<AppData>(context, listen: false)
                   .initHistoryDishesList(s.data['data']);

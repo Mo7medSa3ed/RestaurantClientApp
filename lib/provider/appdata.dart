@@ -72,6 +72,10 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  getCategoryById(id) {
+    return homeModel.categories.firstWhere((e) => e.id == id);
+  }
+
   clearAllOrderList() {
     ordersList.clear();
     notifyListeners();
@@ -84,11 +88,11 @@ class AppData extends ChangeNotifier {
 
   clearTopDishesList() {
     topDishes.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   initDishesByCategory(List<Dish> list) {
-    dishesByCategory = list;
+    dishesByCategory.addAll(list);
     notifyListeners();
   }
 
@@ -102,7 +106,7 @@ class AppData extends ChangeNotifier {
 
   clearDishesByCategory() {
     dishesByCategory.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   initpopularDishesList(List<Dish> list) {
@@ -112,7 +116,7 @@ class AppData extends ChangeNotifier {
 
   clearpopularDishesList() {
     popularDishes.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   addDish(Dish d) {
@@ -169,8 +173,8 @@ class AppData extends ChangeNotifier {
   // methodes to sockets
 
   addNewDish(Dish dish) {
-    popularDishes.add(dish);
-    homeModel.popular.add(dish);
+    // popularDishes.add(dish);
+    // homeModel.popular.add(dish);
     if (dishesByCategory.length > 0) {
       if (dishesByCategory.first.category.id == dish.category.id) {
         dishesByCategory.add(dish);

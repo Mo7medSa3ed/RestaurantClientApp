@@ -31,8 +31,39 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     Socket().socket.on('newDish', (data) {
-      //final pro = Provider.of<AppData>(context, listen: false);
+      final pro = Provider.of<AppData>(context, listen: false);
+      print(data);
+      data['category'] = pro.getCategoryById(data['category']);
+      pro.addNewDish(data);
     });
+    Socket().socket.on('updateDish', (data) {
+      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      data['category'] = pro.getCategoryById(data['category']);
+      pro.updateDish(data);
+    });
+    Socket().socket.on('deleteDish', (data) {
+      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      pro.removeDish(data['_id']);
+    });
+    Socket().socket.on('newCategory', (data) {
+      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      pro.addCategory(data);
+    });
+    Socket().socket.on('updateCategory', (data) {
+      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      pro.updateCategory(data);
+    });
+    Socket().socket.on('deleteCategory', (data) {
+      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      pro.removeCategory(data['_id']);
+    });
+      
+
     super.initState();
   }
 

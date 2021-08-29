@@ -49,7 +49,9 @@ dependencies:
   simple_autocomplete_formfield: 
   socket_io_client: ^2.0.0-beta.3
   connectivity: 
-  flutter_fadein: 
+  flutter_fadein:
+  rxdart:
+  flutter_local_notifications: ^8.0.0 
 dev_dependencies:
   flutter_test:
     sdk: flutter
