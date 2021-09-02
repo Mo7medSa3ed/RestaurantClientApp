@@ -59,10 +59,7 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                           color: Kprimary, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
                     ))),
-            widget.order['state'].toString().toLowerCase().trim() ==
-                        'confirmed' ||
-                    widget.order['state'].toString().toLowerCase().trim() ==
-                        'onway'
+            widget.order['state'].toString().toLowerCase().trim() == 'confirmed'
                 ? TextButton(
                     onPressed: () =>
                         Navigator.of(context).push(MaterialPageRoute(
@@ -83,7 +80,7 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                     ),
                   )
                 : widget.order['state'].toString().toLowerCase().trim() !=
-                        "cancel"
+                        "canceled"
                     ? TextButton(
                         onPressed: widget.onPressed,
                         style: ButtonStyle(

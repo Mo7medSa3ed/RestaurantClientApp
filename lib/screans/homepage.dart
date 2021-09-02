@@ -61,6 +61,7 @@ class _HomeState extends State<HomePage> {
         final dishes = value.homeModel.topRate ?? [];
         final popular = value.homeModel.popular ?? [];
         final categoryList = value.homeModel.categories ?? [];
+
         return RefreshIndicator(
           onRefresh: () async => await getData(),
           child: ListView(
@@ -121,6 +122,7 @@ class _HomeState extends State<HomePage> {
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeIn,
                         child: SingleChildScrollView(
+                          physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           child: Row(
                               mainAxisSize: MainAxisSize.min,

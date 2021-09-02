@@ -73,7 +73,7 @@ class AppData extends ChangeNotifier {
   }
 
   getCategoryById(id) {
-    return homeModel.categories.firstWhere((e) => e.id == id);
+    return homeModel.categories.firstWhere((e) => e.id == id).toJson();
   }
 
   clearAllOrderList() {

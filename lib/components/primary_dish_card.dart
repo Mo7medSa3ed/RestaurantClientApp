@@ -136,7 +136,7 @@ class PrimaryDishCard extends StatelessWidget {
             children: [
               width > wid * 0.5
                   ? Text(
-                      dish.category['name'] ?? '',
+                      dish.category.name ?? '',
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       style: TextStyle(
@@ -146,7 +146,7 @@ class PrimaryDishCard extends StatelessWidget {
                     )
                   : Expanded(
                       child: Text(
-                        dish.category['name'] ?? '',
+                        dish.category.name ?? '',
                         overflow: TextOverflow.fade,
                         softWrap: false,
                         style: TextStyle(

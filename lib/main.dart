@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
+import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
 import 'package:resturantapp/screans/splashScrean.dart';
@@ -33,8 +34,10 @@ class _MyAppState extends State<MyApp> {
     Socket().socket.on('newDish', (data) {
       final pro = Provider.of<AppData>(context, listen: false);
       print(data);
+      print(pro.getCategoryById(data['category']));
       data['category'] = pro.getCategoryById(data['category']);
-      pro.addNewDish(data);
+      print(data);
+      pro.addNewDish(Dish.fromJson(data));
     });
     Socket().socket.on('updateDish', (data) {
       print(data);
@@ -45,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     Socket().socket.on('deleteDish', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeDish(data['_id']);
+      pro.removeDish(data);
     });
     Socket().socket.on('newCategory', (data) {
       print(data);
@@ -60,9 +63,17 @@ class _MyAppState extends State<MyApp> {
     Socket().socket.on('deleteCategory', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeCategory(data['_id']);
+      pro.removeCategory(data);
     });
-      
+    Socket().socket.on('newOrder', (data) {
+      print(data);
+    });
+    Socket().socket.on('updateOrder', (data) {
+      print(data);
+    });
+    Socket().socket.on('deleteOrder', (data) {
+      print(data);
+    });
 
     super.initState();
   }

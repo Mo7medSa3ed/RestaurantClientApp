@@ -53,7 +53,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                       itemBuilder: (_, i) => PrimaryOrderCard(
                             s.data['data'][i],
                             onPressed: () async => await cancelOrder(
-                                s.data['data']['_id'], i, ctx),
+                                s.data['data'][i]['_id'], i, ctx),
                           )));
             } else {
               return Center(
@@ -108,7 +108,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
           barrierDismissible: false,
         );
         final reqData = {"state": "canceled"};
-        final res = (await API.patchOrder(reqData, id))['data'];
+        final res = (await API.patchOrder(reqData, id));
         if (res.statusCode == 200 || res.statusCode == 201) {
           Navigator.of(context).pop();
           final body = utf8.decode(res.bodyBytes);

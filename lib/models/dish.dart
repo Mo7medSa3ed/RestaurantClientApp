@@ -8,7 +8,7 @@ class Dish {
   String desc;
   num price;
   num rating;
-  dynamic category;
+  Categorys category;
   num numOfPieces;
   List<dynamic> reviews;
 
@@ -45,7 +45,7 @@ class Dish {
       name: json2['name'],
       desc: json2['desc'],
       price: json2['price'],
-      category: json2['category'],
+      category: Categorys.fromJson(json2['category']),
       rating: json2['rating'],
       reviews:
           List<Review>.from(json2['reviews'].map((e) => Review.fromJson(e)))
@@ -58,7 +58,7 @@ class Dish {
         name: json2['name'],
         desc: json2['desc'],
         price: json2['price'],
-        category: json2['category'],
+        category: Categorys.fromJson(json2['category']),
         rating: json2['rating'],
         numOfPieces: json2['numOfPieces'],
         updatedAt: json2['updatedAt'],
