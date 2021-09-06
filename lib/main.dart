@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
+import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
@@ -33,46 +34,39 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     Socket().socket.on('newDish', (data) {
       final pro = Provider.of<AppData>(context, listen: false);
-      print(data);
-      print(pro.getCategoryById(data['category']));
       data['category'] = pro.getCategoryById(data['category']);
       print(data);
       pro.addNewDish(Dish.fromJson(data));
     });
     Socket().socket.on('updateDish', (data) {
-      print(data);
       final pro = Provider.of<AppData>(context, listen: false);
       data['category'] = pro.getCategoryById(data['category']);
-      pro.updateDish(data);
+      pro.updateDish(Dish.fromJson(data));
     });
     Socket().socket.on('deleteDish', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeDish(data);
+      pro.removeDish(data['_id']);
     });
     Socket().socket.on('newCategory', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.addCategory(data);
+      pro.addCategory(Categorys.fromJson(data));
     });
     Socket().socket.on('updateCategory', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.updateCategory(data);
+      pro.updateCategory(Categorys.fromJson(data));
     });
     Socket().socket.on('deleteCategory', (data) {
       print(data);
       final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeCategory(data);
+      pro.removeCategory(data['_id']);
     });
-    Socket().socket.on('newOrder', (data) {
+    Socket().socket.on('orderConfirmedByDelivery', (data) {
       print(data);
-    });
-    Socket().socket.on('updateOrder', (data) {
-      print(data);
-    });
-    Socket().socket.on('deleteOrder', (data) {
-      print(data);
+      final pro = Provider.of<AppData>(context, listen: false);
+      pro.updateOrder(data['updatedOrder']);
     });
 
     super.initState();

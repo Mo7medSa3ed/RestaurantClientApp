@@ -42,19 +42,26 @@ class _OrdersWidgetState extends State<OrdersWidget> {
         builder: (ctx, s) {
           if (s.hasData) {
             if (s.data['status'] && s.data['data'].length > 0) {
+              app.initOrderList(s.data['data']);
+
               return RefreshIndicator(
                   onRefresh: () => fetchDate(true, widget.state, ctx),
-                  child: ListView.builder(
-                      physics: AlwaysScrollableScrollPhysics(
-                          parent: BouncingScrollPhysics()),
-                      itemCount: s.data['data'].length,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 6),
-                      itemBuilder: (_, i) => PrimaryOrderCard(
-                            s.data['data'][i],
-                            onPressed: () async => await cancelOrder(
-                                s.data['data'][i]['_id'], i, ctx),
-                          )));
+                  child: Consumer<AppData>(
+                    builder: (ctx2, orders, c) => ListView.builder(
+                        physics: AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics()),
+                        itemCount: orders.ordersList.length,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 6),
+                        itemBuilder: (_, i) => PrimaryOrderCard(
+                              orders.ordersList[i],
+                              onPressedForOrderDelivery: () async =>
+                                  await deliveryOrder(
+                                      orders.ordersList[i]['_id'], i, ctx2),
+                              onPressed: () async => await cancelOrder(
+                                  orders.ordersList[i]['_id'], i, ctx2),
+                            )),
+                  ));
             } else {
               return Center(
                   child: Container(
@@ -89,6 +96,56 @@ class _OrdersWidgetState extends State<OrdersWidget> {
         });
   }
 
+  deliveryOrder(id, index, context) async {
+    final app = Provider.of<AppData>(context, listen: false);
+
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.warning,
+      title: 'Order Delivery',
+      text: "Are you sure order is delivered ?",
+      barrierDismissible: false,
+      confirmBtnColor: red,
+      showCancelBtn: true,
+      onConfirmBtnTap: () async {
+        Navigator.of(context).pop();
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.loading,
+          text: "loading please wait....",
+          barrierDismissible: false,
+        );
+        final reqData = {"state": "delivered"};
+        final res = (await API.patchOrder(reqData, id));
+        if (res.statusCode == 200 || res.statusCode == 201) {
+          Navigator.of(context).pop();
+          final body = utf8.decode(res.bodyBytes);
+          final parsed = json.decode(body);
+          app.clearOrder(parsed['_id']);
+          if (app.ordersList.length == 0) setState(() {});
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              animType: CoolAlertAnimType.scale,
+              title: 'Order Delivery',
+              text: "Order Delivered Successfully",
+              barrierDismissible: false,
+              confirmBtnColor: Kprimary,
+              onConfirmBtnTap: () => Navigator.of(context).pop());
+        } else {
+          Navigator.of(context).pop();
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.loading,
+              title: 'Error',
+              text: "some thing went error !!",
+              barrierDismissible: false,
+              showCancelBtn: true);
+        }
+      },
+    );
+  }
+
   cancelOrder(id, index, context) async {
     final app = Provider.of<AppData>(context, listen: false);
     CoolAlert.show(
@@ -113,8 +170,8 @@ class _OrdersWidgetState extends State<OrdersWidget> {
           Navigator.of(context).pop();
           final body = utf8.decode(res.bodyBytes);
           final parsed = json.decode(body);
-          app.ordersList[index] = parsed;
-          setState(() {});
+          app.changeOrderState(parsed['_id'], "canceled");
+          if (app.ordersList.length == 0) setState(() {});
           CoolAlert.show(
               context: context,
               type: CoolAlertType.success,

@@ -8,7 +8,7 @@ class Dish {
   String desc;
   num price;
   num rating;
-  Categorys category;
+  dynamic category;
   num numOfPieces;
   List<dynamic> reviews;
 

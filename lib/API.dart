@@ -22,6 +22,7 @@ class API {
         body: json.encode(user.toJsonForLogin()));
     print(response.headers['x-auth-token']);
     saveToken(response.headers['x-auth-token'] ?? '');
+
     return response;
   }
 
@@ -340,6 +341,7 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
+
       return {"status": true, "data": parsed};
     } else {
       return {"status": false, "data": null};

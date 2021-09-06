@@ -127,7 +127,7 @@ class _HomeState extends State<HomePage> {
                           child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: categoryList
-                                  .where((e) => e.numOfDishes > 0)
+                                  .where((e) => e.numOfDishes >= 0)
                                   .map(
                                     (e) => PrimaryCategoryCard(e),
                                   )

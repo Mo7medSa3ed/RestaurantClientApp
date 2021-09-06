@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:resturantapp/constants.dart';
@@ -7,8 +10,10 @@ import 'package:resturantapp/screans/ordertimeline.dart';
 class PrimaryOrderCard extends StatefulWidget {
   final order;
   final onPressed;
+  final onPressedForOrderDelivery;
 
-  PrimaryOrderCard(this.order, {this.onPressed});
+  PrimaryOrderCard(this.order,
+      {this.onPressed, this.onPressedForOrderDelivery});
   @override
   _PrimaryOrderCardState createState() => _PrimaryOrderCardState();
 }
@@ -60,27 +65,56 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                       textAlign: TextAlign.center,
                     ))),
             widget.order['state'].toString().toLowerCase().trim() == 'confirmed'
-                ? TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => OrderTimeLine(
-                                  id: widget.order['_id'],
-                                  state: widget.order['state'],
-                                  delivarylocation:
-                                      widget.order['deliveryLocation'],
-                                  dislocation: widget.order['distLocation'],
-                                ))),
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(red),
-                        padding: MaterialStateProperty.all(EdgeInsets.all(12))),
-                    child: Text(
-                      'Track Your Order',
-                      style:
-                          TextStyle(color: white, fontWeight: FontWeight.w500),
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => OrderTimeLine(
+                                          id: widget.order['_id'],
+                                          state: widget.order['state'],
+                                          delivarylocation:
+                                              widget.order['deliveryLocation'],
+                                          dislocation:
+                                              widget.order['distLocation'],
+                                        ))),
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(red),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.all(12))),
+                            child: Text(
+                              'Track Your Order',
+                              style: TextStyle(
+                                  color: white, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: widget.onPressedForOrderDelivery,
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Kprimary.withOpacity(0.95)),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.all(12))),
+                            child: Text(
+                              'Order Delivered',
+                              style: TextStyle(
+                                  color: white, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   )
-                : widget.order['state'].toString().toLowerCase().trim() !=
-                        "canceled"
+                : widget.order['state'].toString().toLowerCase().trim() ==
+                        "placed"
                     ? TextButton(
                         onPressed: widget.onPressed,
                         style: ButtonStyle(

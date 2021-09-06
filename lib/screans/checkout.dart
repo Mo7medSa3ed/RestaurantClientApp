@@ -35,6 +35,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final coordinates = new Coordinates(position.latitude, position.longitude);
+
     addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     setState(() {});
   }
@@ -282,7 +283,6 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
         title: 'ORDER',
         text: "Order completed successfully!",
         barrierDismissible: false,
-        //flareAnimationName: "static",
         confirmBtnColor: Kprimary,
         onConfirmBtnTap: () => Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => Home()),

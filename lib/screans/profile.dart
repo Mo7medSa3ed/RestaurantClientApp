@@ -10,7 +10,6 @@ import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/loginScrean.dart';
 import 'package:resturantapp/screans/updateProfile.dart';
-import 'package:resturantapp/socket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
