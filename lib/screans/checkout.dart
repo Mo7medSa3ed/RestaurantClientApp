@@ -103,7 +103,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  Icons.edit,
+                                  Icons.refresh,
                                   color: Kprimary.withOpacity(0.35),
                                   size: 30,
                                 ),
@@ -320,14 +320,14 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     final reqData = {
       "userId": app.loginUser.id,
       "state": "placed",
-      "coupon": promo,
+      // "coupon": promo,
       "distLocation": [position.longitude, position.latitude],
       "items":
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
     };
 
     final res = (await API.makeOrder(reqData));
-
+    print(res.body);
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();
       Navigator.of(context).pop();

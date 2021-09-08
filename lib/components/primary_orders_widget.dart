@@ -96,11 +96,11 @@ class _OrdersWidgetState extends State<OrdersWidget> {
         });
   }
 
-  deliveryOrder(id, index, context) async {
-    final app = Provider.of<AppData>(context, listen: false);
+  deliveryOrder(id, index, ctx) async {
+    final app = Provider.of<AppData>(ctx, listen: false);
 
     CoolAlert.show(
-      context: context,
+      context: ctx,
       type: CoolAlertType.warning,
       title: 'Order Delivery',
       text: "Are you sure order is delivered ?",
@@ -108,48 +108,51 @@ class _OrdersWidgetState extends State<OrdersWidget> {
       confirmBtnColor: red,
       showCancelBtn: true,
       onConfirmBtnTap: () async {
-        Navigator.of(context).pop();
+        Navigator.of(ctx).pop();
         CoolAlert.show(
-          context: context,
+          context: ctx,
           type: CoolAlertType.loading,
           text: "loading please wait....",
+          loopAnimation: true,
           barrierDismissible: false,
         );
         final reqData = {"state": "delivered"};
         final res = (await API.patchOrder(reqData, id));
         if (res.statusCode == 200 || res.statusCode == 201) {
-          Navigator.of(context).pop();
+          Navigator.of(ctx).pop();
           final body = utf8.decode(res.bodyBytes);
           final parsed = json.decode(body);
           app.clearOrder(parsed['_id']);
           if (app.ordersList.length == 0) setState(() {});
           CoolAlert.show(
-              context: context,
+              context: ctx,
               type: CoolAlertType.success,
               animType: CoolAlertAnimType.scale,
               title: 'Order Delivery',
               text: "Order Delivered Successfully",
               barrierDismissible: false,
+              loopAnimation: true,
               confirmBtnColor: Kprimary,
               onConfirmBtnTap: () => Navigator.of(context).pop());
         } else {
-          Navigator.of(context).pop();
+          Navigator.of(ctx).pop();
           CoolAlert.show(
-              context: context,
+              context: ctx,
               type: CoolAlertType.loading,
               title: 'Error',
               text: "some thing went error !!",
               barrierDismissible: false,
+              loopAnimation: true,
               showCancelBtn: true);
         }
       },
     );
   }
 
-  cancelOrder(id, index, context) async {
-    final app = Provider.of<AppData>(context, listen: false);
+  cancelOrder(id, index, ctx) async {
+    final app = Provider.of<AppData>(ctx, listen: false);
     CoolAlert.show(
-      context: context,
+      context: ctx,
       type: CoolAlertType.warning,
       title: 'Cancel Order',
       text: "Are you sure to cancel order ?",
@@ -157,37 +160,40 @@ class _OrdersWidgetState extends State<OrdersWidget> {
       confirmBtnColor: red,
       showCancelBtn: true,
       onConfirmBtnTap: () async {
-        Navigator.of(context).pop();
+        Navigator.of(ctx).pop();
         CoolAlert.show(
-          context: context,
+          context: ctx,
           type: CoolAlertType.loading,
+          loopAnimation: true,
           text: "loading please wait....",
           barrierDismissible: false,
         );
         final reqData = {"state": "canceled"};
         final res = (await API.patchOrder(reqData, id));
         if (res.statusCode == 200 || res.statusCode == 201) {
-          Navigator.of(context).pop();
+          Navigator.of(ctx).pop();
           final body = utf8.decode(res.bodyBytes);
           final parsed = json.decode(body);
           app.changeOrderState(parsed['_id'], "canceled");
           if (app.ordersList.length == 0) setState(() {});
           CoolAlert.show(
-              context: context,
+              context: ctx,
               type: CoolAlertType.success,
               animType: CoolAlertAnimType.scale,
               title: 'Cancel Order',
               text: "Order Canceled Successfully",
               barrierDismissible: false,
+              loopAnimation: true,
               confirmBtnColor: Kprimary,
-              onConfirmBtnTap: () => Navigator.of(context).pop());
+              onConfirmBtnTap: () => Navigator.of(ctx).pop());
         } else {
-          Navigator.of(context).pop();
+          Navigator.of(ctx).pop();
           CoolAlert.show(
-              context: context,
+              context: ctx,
               type: CoolAlertType.loading,
               title: 'Error',
               text: "some thing went error !!",
+              loopAnimation: true,
               barrierDismissible: false,
               showCancelBtn: true);
         }
