@@ -362,4 +362,20 @@ class API {
       return {"status": false, "data": null};
     }
   }
+
+  static Future<dynamic> verfiyCoupoun(text) async {
+    final res = await http.get(
+      '$_BaseUrl/coupons/$text',
+      headers: await getHeaders(),
+    );
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body);
+      print(parsed);
+
+      return {"status": true, "data": parsed};
+    } else {
+      return {"status": false, "data": null};
+    }
+  }
 }

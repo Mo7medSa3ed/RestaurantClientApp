@@ -64,7 +64,6 @@ class _MyAppState extends State<MyApp> {
       pro.removeCategory(data['_id']);
     });
     Socket().socket.on('orderConfirmedByDelivery', (data) {
-      print(data);
       final pro = Provider.of<AppData>(context, listen: false);
       pro.updateOrder(data['updatedOrder']);
     });

@@ -270,10 +270,6 @@ class AppData extends ChangeNotifier {
   updateOrder(order) {
     if (ordersList.length > 0) {
       ordersList.removeWhere((e) => e['_id'] == order['_id']);
-      // if (idx != -1) ordersList[idx] = order;
-      // if (detailsOrder.id == order['_id']) {
-      //   detailsOrder = order;
-      // }
       notifyListeners();
     }
   }
