@@ -42,11 +42,9 @@ dependencies:
   timeline_tile: 
   cool_alert: ^1.1.0
   geolocator:
-  geocoder:
+  geocoder: ^0.2.1
   google_maps_flutter:
   google_map_polyline:
-  permission:
-  simple_autocomplete_formfield: 
   socket_io_client: ^2.0.0-beta.3
   flutter_local_notifications: ^8.0.0 
   connectivity: 
