@@ -30,9 +30,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    Socket().socket.on('newDish', (data) {
-      //final pro = Provider.of<AppData>(context, listen: false);
-    });
+    // Socket().socket.on('newDish', (data) {
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    // });
     super.initState();
   }
 
