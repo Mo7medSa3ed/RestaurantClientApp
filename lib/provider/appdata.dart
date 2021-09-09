@@ -69,7 +69,16 @@ class AppData extends ChangeNotifier {
 
   initOrderList(List<dynamic> list) {
     ordersList = list;
+  }
+  
+
+  clearOrder(id) {
+    ordersList.removeWhere((e) => e['_id'] == id);
     notifyListeners();
+  }
+
+  getCategoryById(id) {
+    return homeModel.categories.firstWhere((e) => e.id == id).toJson();
   }
 
   clearAllOrderList() {
@@ -84,25 +93,25 @@ class AppData extends ChangeNotifier {
 
   clearTopDishesList() {
     topDishes.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   initDishesByCategory(List<Dish> list) {
-    dishesByCategory = list;
+    dishesByCategory.addAll(list);
     notifyListeners();
   }
 
-  changeOrderState(id) {
+  changeOrderState(id , state) {
     final idx = ordersList.indexWhere((e) => e['_id'] == id);
     if (idx != -1) {
-      ordersList[idx]['state'] = 'canceled';
+      ordersList[idx]['state'] = state;
     }
     notifyListeners();
   }
 
   clearDishesByCategory() {
     dishesByCategory.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   initpopularDishesList(List<Dish> list) {
@@ -112,7 +121,7 @@ class AppData extends ChangeNotifier {
 
   clearpopularDishesList() {
     popularDishes.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   addDish(Dish d) {
@@ -169,8 +178,8 @@ class AppData extends ChangeNotifier {
   // methodes to sockets
 
   addNewDish(Dish dish) {
-    popularDishes.add(dish);
-    homeModel.popular.add(dish);
+    // popularDishes.add(dish);
+    // homeModel.popular.add(dish);
     if (dishesByCategory.length > 0) {
       if (dishesByCategory.first.category.id == dish.category.id) {
         dishesByCategory.add(dish);
@@ -180,31 +189,33 @@ class AppData extends ChangeNotifier {
   }
 
   updateDish(Dish dish) {
-    if (topDishes.length > 1) {
+    print("object");
+
+    if (topDishes.length > 0) {
       final idx = topDishes.indexWhere((e) => e.id == dish.id);
       if (idx != -1) topDishes[idx] = dish;
     }
-    if (popularDishes.length > 1) {
+    if (popularDishes.length > 0) {
       final idx = popularDishes.indexWhere((e) => e.id == dish.id);
       if (idx != -1) popularDishes[idx] = dish;
     }
-    if (favDishes.length > 1) {
+    if (favDishes.length > 0) {
       final idx = favDishes.indexWhere((e) => e.id == dish.id);
       if (idx != -1) favDishes[idx] = dish;
     }
-    if (historyDishes.length > 1) {
+    if (historyDishes.length > 0) {
       final idx = historyDishes.indexWhere((e) => e.id == dish.id);
       if (idx != -1) historyDishes[idx] = dish;
     }
-    if (dishesByCategory.length > 1) {
+    if (dishesByCategory.length > 0) {
       final idx = dishesByCategory.indexWhere((e) => e.id == dish.id);
       if (idx != -1) dishesByCategory[idx] = dish;
     }
-    if (homeModel.popular.length > 1) {
+    if (homeModel.popular.length > 0) {
       final idx = homeModel.popular.indexWhere((e) => e.id == dish.id);
       if (idx != -1) homeModel.popular[idx] = dish;
     }
-    if (homeModel.topRate.length > 1) {
+    if (homeModel.topRate.length > 0) {
       final idx = homeModel.topRate.indexWhere((e) => e.id == dish.id);
       if (idx != -1) homeModel.topRate[idx] = dish;
     }
@@ -212,25 +223,25 @@ class AppData extends ChangeNotifier {
   }
 
   removeDish(id) {
-    if (topDishes.length > 1) {
+    if (topDishes.length > 0) {
       topDishes.removeWhere((e) => e.id == id);
     }
-    if (popularDishes.length > 1) {
+    if (popularDishes.length > 0) {
       popularDishes.removeWhere((e) => e.id == id);
     }
-    if (favDishes.length > 1) {
+    if (favDishes.length > 0) {
       favDishes.removeWhere((e) => e.id == id);
     }
-    if (historyDishes.length > 1) {
+    if (historyDishes.length > 0) {
       historyDishes.removeWhere((e) => e.id == id);
     }
-    if (dishesByCategory.length > 1) {
+    if (dishesByCategory.length > 0) {
       dishesByCategory.removeWhere((e) => e.id == id);
     }
-    if (homeModel.popular.length > 1) {
+    if (homeModel.popular.length > 0) {
       homeModel.popular.removeWhere((e) => e.id == id);
     }
-    if (homeModel.topRate.length > 1) {
+    if (homeModel.topRate.length > 0) {
       homeModel.topRate.removeWhere((e) => e.id == id);
     }
     notifyListeners();
@@ -242,7 +253,7 @@ class AppData extends ChangeNotifier {
   }
 
   updateCategory(Categorys category) {
-    if (homeModel.categories.length > 1) {
+    if (homeModel.categories.length > 0) {
       final idx = homeModel.categories.indexWhere((e) => e.id == category.id);
       if (idx != -1) homeModel.categories[idx] = category;
       notifyListeners();
@@ -250,19 +261,15 @@ class AppData extends ChangeNotifier {
   }
 
   removeCategory(id) {
-    if (homeModel.categories.length > 1) {
+    if (homeModel.categories.length > 0) {
       homeModel.categories.removeWhere((e) => e.id == id);
     }
     notifyListeners();
   }
 
-  updateOrder(Order order) {
+  updateOrder(order) {
     if (ordersList.length > 0) {
-      final idx = ordersList.indexWhere((e) => e.id == order.id);
-      if (idx != -1) ordersList[idx] = order;
-      if (detailsOrder.id == order.id) {
-        detailsOrder = order;
-      }
+      ordersList.removeWhere((e) => e['_id'] == order['_id']);
       notifyListeners();
     }
   }

@@ -58,8 +58,11 @@ saveUsertoAppdata(user, context) {
 Future<Map<String, String>> getHeaders() async {
   Map<String, String> headers = {
     'Content-Type': 'application/json;charset=UTF-8',
-    'x-auth-token': await getToken()
+    'x-auth-token': await getToken(),
+    'x-app-type': "User",
   };
 
   return headers;
 }
+
+

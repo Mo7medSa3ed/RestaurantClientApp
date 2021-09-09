@@ -25,6 +25,8 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   String address;
   String promo;
   bool isExist = false;
+  bool readOnly = false;
+  bool validCoupon = false;
   Position position;
   List<Address> addresses;
 
@@ -35,6 +37,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final coordinates = new Coordinates(position.latitude, position.longitude);
+
     addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     setState(() {});
   }
@@ -100,7 +103,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  Icons.edit,
+                                  Icons.refresh,
                                   color: Kprimary.withOpacity(0.35),
                                   size: 30,
                                 ),
@@ -180,10 +183,24 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
               child: TextFormField(
                 onSaved: (String v) => v.isNotEmpty ? promo = v : null,
                 keyboardType: TextInputType.text,
+                readOnly: readOnly,
+                validator: (String v) {
+                  if (v == null || v.isEmpty) {
+                    return 'please enter coupon !!';
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(20),
                     border: InputBorder.none,
                     fillColor: greyw,
+                    suffixIcon: TextButton(
+                        onPressed: validCoupon
+                            ? null
+                            : () async {
+                                await checkCoupon();
+                              },
+                        child: Text(validCoupon ? "Done" : "Check Coupon")),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(
                           right: 16.0, left: 12.0, bottom: 2),
@@ -255,6 +272,44 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
         ));
   }
 
+  checkCoupon() async {
+    FocusScope.of(context).unfocus();
+
+    formKey2.currentState.save();
+    if (formKey2.currentState.validate()) {
+      setState(() {
+        readOnly = true;
+      });
+      showDialogWidget(context);
+      final res = await API.verfiyCoupoun(promo.trim());
+      Navigator.of(context).pop();
+      setState(() {
+        readOnly = false;
+        FocusScope.of(context).unfocus();
+      });
+      if (res['status'] && res['data']['valid']) {
+        validCoupon = true;
+        return CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            title: 'Check Coupon',
+            text: "Coupon is valid",
+            barrierDismissible: false,
+            confirmBtnColor: Kprimary,
+            onConfirmBtnTap: () => Navigator.of(context).pop());
+      } else {
+        return CoolAlert.show(
+            context: context,
+            type: CoolAlertType.error,
+            title: 'Check Coupon',
+            text: "Coupon is not valid",
+            barrierDismissible: false,
+            confirmBtnColor: Kprimary,
+            onConfirmBtnTap: () => Navigator.of(context).pop());
+      }
+    }
+  }
+
   makeOrder() async {
     if (position == null) {
       await getcurrantLocation();
@@ -265,13 +320,14 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     final reqData = {
       "userId": app.loginUser.id,
       "state": "placed",
+      // "coupon": promo,
       "distLocation": [position.longitude, position.latitude],
       "items":
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
     };
 
     final res = (await API.makeOrder(reqData));
-
+    print(res.body);
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();
       Navigator.of(context).pop();
@@ -282,7 +338,6 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
         title: 'ORDER',
         text: "Order completed successfully!",
         barrierDismissible: false,
-        //flareAnimationName: "static",
         confirmBtnColor: Kprimary,
         onConfirmBtnTap: () => Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => Home()),

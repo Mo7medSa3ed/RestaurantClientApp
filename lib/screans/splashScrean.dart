@@ -46,7 +46,7 @@ class _SplashScreanState extends State<SplashScrean> {
       User user = await getUserFromPrfs();
       User u = (await API.getOneUser(user.id))['data'];
 
-      if (u != null || u.updatedAt == user.updatedAt) {
+      if (u != null && u.updatedAt == user.updatedAt) {
         appData.initLoginUser(u);
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (_) => Home()));

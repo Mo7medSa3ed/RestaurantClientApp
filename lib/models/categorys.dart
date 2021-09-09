@@ -22,8 +22,14 @@ class Categorys {
       img: json['img'],
       numOfDishes: json['numOfDishes']);
 
-  Map<String, dynamic> toJson() =>
-      {'name': name, 'img': img, 'numOfDishes': numOfDishes};
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'img': img,
+        'numOfDishes': numOfDishes,
+        "_id": id,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt
+      };
 
   Map<String, dynamic> toJsonForUpdate() =>
       {'name': name, 'img': img, 'numOfDishes': numOfDishes, '_id': id};
