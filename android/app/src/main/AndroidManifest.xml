@@ -22,7 +22,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="resturantapp"
         android:requestLegacyExternalStorage="true">
-       
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

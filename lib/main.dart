@@ -10,9 +10,9 @@ import 'package:resturantapp/socket.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  if (!(Socket().socket.connected)) {
-    Socket().socket.connect();
-  }
+  // if (!(Socket().socket.connected)) {
+  //   Socket().socket.connect();
+  // }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Specials>(
       create: (context) => Specials(),
