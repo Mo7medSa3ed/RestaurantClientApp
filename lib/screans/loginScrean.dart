@@ -76,7 +76,7 @@ class _LoginScreanState extends State<LoginScrean> {
     return Row(
       children: [
         Expanded(
-          flex: 1,
+    
           child: Container(
             padding: EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
@@ -86,13 +86,13 @@ class _LoginScreanState extends State<LoginScrean> {
             child: Text(
               'Sign In',
               style: TextStyle(
-                  fontSize: 32, fontWeight: FontWeight.w900, color: Kprimary),
+                  fontSize: 28, fontWeight: FontWeight.w900, color: Kprimary),
               textAlign: TextAlign.start,
             ),
           ),
         ),
         Expanded(
-            flex: 1,
+    
             child: Container(
               padding: EdgeInsets.only(bottom: 15),
               decoration: BoxDecoration(
@@ -102,7 +102,7 @@ class _LoginScreanState extends State<LoginScrean> {
               child: Text(
                 ' Register',
                 style: TextStyle(
-                    fontSize: 32, fontWeight: FontWeight.w900, color: Kprimary),
+                    fontSize: 28, fontWeight: FontWeight.w900, color: Kprimary),
                 textAlign: TextAlign.end,
               ),
             ))

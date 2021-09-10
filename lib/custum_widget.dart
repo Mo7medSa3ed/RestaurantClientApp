@@ -38,7 +38,7 @@ class _CustumTextFieldState extends State<CustumTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      // padding: EdgeInsets.all(8),
       alignment: Alignment.center,
       decoration: BoxDecoration(
           boxShadow: shadow
@@ -110,8 +110,6 @@ showDialogWidget(context) {
   );
 }
 
-
-
 showSnackbarWidget({msg, context, icon}) {
   CoolAlert.show(
     context: context,
@@ -175,6 +173,21 @@ cCardForDishes(width, double c, context, m, height) {
 Future<bool> addtoFav(context, dishid) async {
   AppData appdata = Provider.of<AppData>(context, listen: false);
   API.addanddelteFav(appdata.loginUser.id, dishid);
+  if (appdata.loginUser.fav.contains(dishid)) {
+    appdata.removeFromFavWithId(dishid);
+    return false;
+  } else {
+    appdata.addToFav(dishid);
+    return true;
+  }
+  // if (res.statusCode == 200 || res.statusCode == 201) {
+  // }
+}
+
+Future<bool> removetoFav(context, dishid) async {
+  AppData appdata = Provider.of<AppData>(context, listen: false);
+  API.addanddelteFav(appdata.loginUser.id, dishid);
+  appdata.removeFromFavWithDish(dishid);
   if (appdata.loginUser.fav.contains(dishid)) {
     appdata.removeFromFavWithId(dishid);
     return false;

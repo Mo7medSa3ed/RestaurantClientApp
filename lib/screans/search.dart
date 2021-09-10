@@ -60,6 +60,7 @@ class _SearchScreanState extends State<SearchScrean> {
                     });
 
                     final res = await API.searchForDish(v.trim());
+                    print(res['data']);
                     status = res['status'];
                     dishList = res['data'];
                   } else {
@@ -104,7 +105,6 @@ class _SearchScreanState extends State<SearchScrean> {
                 : (dishList.length == 0 && status)
                     ? Center(
                         child: Container(
-                            height: MediaQuery.of(context).size.height * 0.65,
                             width: double.infinity,
                             alignment: Alignment.center,
                             child: Column(
@@ -114,8 +114,9 @@ class _SearchScreanState extends State<SearchScrean> {
                                 Image.asset(
                                   "assets/images/List.png",
                                   fit: BoxFit.fill,
-                                  height: 360,
-                                  width: 360,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.5,
+                                  width: double.infinity,
                                 ),
                                 Text(
                                   "Your Dish List is Empty",

@@ -28,12 +28,13 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
   bool readOnly = false;
   bool validCoupon = false;
   Position position;
+  double discount = 0.0;
   List<Address> addresses;
 
   getcurrantLocation() async {
-    await Geolocator.isLocationServiceEnabled();
-    await Geolocator.requestPermission();
-    await Geolocator.checkPermission();
+    if (await Geolocator.isLocationServiceEnabled()) {
+      await Geolocator.requestPermission();
+    }
     position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     final coordinates = new Coordinates(position.latitude, position.longitude);
@@ -191,7 +192,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                   return null;
                 },
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(20),
+                    contentPadding: EdgeInsets.all(12),
                     border: InputBorder.none,
                     fillColor: greyw,
                     suffixIcon: TextButton(
@@ -200,18 +201,20 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                             : () async {
                                 await checkCoupon();
                               },
-                        child: Text(validCoupon ? "Done" : "Check Coupon")),
+                        child: Text(validCoupon ? "Done" : "Check Coupon",
+                            style: TextStyle(fontSize: 12))),
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(
                           right: 16.0, left: 12.0, bottom: 2),
                       child: Icon(
                         Icons.local_offer_rounded,
-                        size: 35,
+                        size: 30,
                         color: red,
                       ),
                     ),
                     hintText: 'Add Promo Code',
                     hintStyle: TextStyle(
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: Kprimary.withOpacity(0.35)),
                     filled: true),
@@ -222,45 +225,46 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
             ),
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'TOTAL',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.20),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '\$ ${calctotal()} ',
-                      style: TextStyle(
-                          color: red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Delivary charge included',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.35),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'TOTAL',
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.20),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '\$ ${calctotal(discount)} ',
+                        style: TextStyle(
+                            color: red,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Delivary charge included',
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.35),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
                 ),
-                Spacer(),
                 Container(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: PrimaryElevatedButton(
@@ -283,12 +287,14 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
       showDialogWidget(context);
       final res = await API.verfiyCoupoun(promo.trim());
       Navigator.of(context).pop();
-      setState(() {
-        readOnly = false;
-        FocusScope.of(context).unfocus();
-      });
+
       if (res['status'] && res['data']['valid']) {
-        validCoupon = true;
+        setState(() {
+          readOnly = true;
+          validCoupon = true;
+          discount = 0.1;
+          FocusScope.of(context).unfocus();
+        });
         return CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
@@ -298,6 +304,11 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
             confirmBtnColor: Kprimary,
             onConfirmBtnTap: () => Navigator.of(context).pop());
       } else {
+        setState(() {
+          readOnly = false;
+          validCoupon = false;
+          FocusScope.of(context).unfocus();
+        });
         return CoolAlert.show(
             context: context,
             type: CoolAlertType.error,
@@ -320,7 +331,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     final reqData = {
       "userId": app.loginUser.id,
       "state": "placed",
-      // "coupon": promo,
+      "promo": promo,
       "distLocation": [position.longitude, position.latitude],
       "items":
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
@@ -349,12 +360,12 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     }
   }
 
-  String calctotal() {
+  String calctotal(double discount) {
     double sum = 0.0;
     app.cartList.forEach((e) {
       sum += (e.price * e.amount);
     });
-    return sum.toString();
+    return (sum - (discount * sum)).toString();
   }
 
   showSnackbar({msg, context, icon}) {

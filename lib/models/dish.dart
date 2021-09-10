@@ -63,6 +63,17 @@ class Dish {
         numOfPieces: json2['numOfPieces'],
         updatedAt: json2['updatedAt'],
       );
+  factory Dish.fromJsonSearch(Map<String, dynamic> json2) => Dish(
+        id: json2['_id'],
+        img: json2['img'],
+        name: json2['name'],
+        desc: json2['desc'],
+        price: json2['price'],
+        category: json2['category'],
+        rating: json2['rating'],
+        numOfPieces: json2['numOfPieces'],
+        updatedAt: json2['updatedAt'],
+      );
 
   factory Dish.fromOneJsontoUser(Map<String, dynamic> json2) => Dish(
       id: json2['_id'],

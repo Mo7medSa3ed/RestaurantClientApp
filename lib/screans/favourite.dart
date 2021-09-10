@@ -86,6 +86,16 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
                 ),
                 (status && app.favDishes.length > 0)
                     ? Consumer<AppData>(builder: (ctx, app, c) {
+                        if (app.favDishes.length == 0) {
+                          return Container(
+                              width: double.infinity,
+                              height: hei - (hei * 0.4),
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                "assets/images/fav.png",
+                                fit: BoxFit.cover,
+                              ));
+                        }
                         return FadeIn(
                           duration: Duration(milliseconds: 500),
                           curve: Curves.easeIn,
@@ -109,10 +119,9 @@ class _FavouriteScreanState extends State<FavouriteScrean> {
                                         ? wid * 0.5 - 26
                                         : wid * 0.45 - 26,
                                     height: hei > wid ? hei * 0.24 : hei * 0.32,
-                                    isLiked: app.loginUser.fav
-                                        .contains(app.favDishes[i].id),
-                                    ontap: (b) async =>
-                                        await addtoFav(c, app.favDishes[i].id),
+                                    isLiked: true,
+                                    ontap: (b) async => await removetoFav(
+                                        c, app.favDishes[i].id),
                                   )
 
                               // return GestureDetector(

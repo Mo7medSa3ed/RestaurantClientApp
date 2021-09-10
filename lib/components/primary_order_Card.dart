@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
+import 'package:resturantapp/models/order.dart';
+import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/screans/orderDetails.dart';
 import 'package:resturantapp/screans/ordertimeline.dart';
 
@@ -69,16 +71,12 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                       children: [
                         Expanded(
                           child: TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => OrderTimeLine(
-                                          id: widget.order['_id'],
-                                          state: widget.order['state'],
-                                          delivarylocation:
-                                              widget.order['deliveryLocation'],
-                                          dislocation:
-                                              widget.order['distLocation'],
-                                        ))),
+                            onPressed: () {
+                              Provider.of<AppData>(context, listen: false)
+                                  .initTrackOrder(Order.fromJson(widget.order));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => OrderTimeLine()));
+                            },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(red),
                                 padding: MaterialStateProperty.all(

@@ -36,7 +36,7 @@ class _PageViewScreanState extends State<PageViewScrean> {
             itemBuilder: (c, i) => buildpvBody(i),
           ),
           Positioned(
-            bottom: 40,
+            bottom: 20,
             right: 40,
             left: 40,
             child: Container(

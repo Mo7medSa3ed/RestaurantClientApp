@@ -17,6 +17,13 @@ class AppData extends ChangeNotifier {
   HomeModel homeModel = HomeModel();
   String address;
   Order detailsOrder;
+  Order trackOrder;
+  
+  initTrackOrder(order){
+    trackOrder = order;
+    notifyListeners();
+  }
+  
 
   initLoginUser(User user) {
     loginUser = user;
@@ -161,6 +168,10 @@ class AppData extends ChangeNotifier {
 
   removeFromFavWithId(id) {
     loginUser.fav.remove(id);
+    notifyListeners();
+  }
+  removeFromFavWithDish(id) {
+    favDishes.removeWhere((e)=>e.id==id);
     notifyListeners();
   }
 

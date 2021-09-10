@@ -117,7 +117,7 @@ class API {
       return {
         "status": true,
         "data": parsed['dishes']
-            .map<Dish>((dish) => Dish.fromJsonForHome(dish))
+            .map<Dish>((dish) => Dish.fromJsonSearch(dish))
             .toList()
       };
     } else {

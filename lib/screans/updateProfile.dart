@@ -182,21 +182,21 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             SizedBox(
                               height: getProportionateScreenHeight(16),
                             ),
-                            CustumTextField(
-                              /* validator: (String v) =>
-                              v.isEmpty ? 'Please enter your location !!' : null, */
-                              hint: 'Location',
-                              value: v.loginUser.location,
-                              icon: Icons.person,
-                              obsecure: false,
-                              onchanged: (v) =>
-                                  v.toString().isNotEmpty ? location = v : null,
-                            ),
-                            SizedBox(
-                              height: getProportionateScreenHeight(16),
-                            ),
+                            // CustumTextField(
+                            //   /* validator: (String v) =>
+                            //   v.isEmpty ? 'Please enter your location !!' : null, */
+                            //   hint: 'Location',
+                            //   value: v.loginUser.location,
+                            //   icon: Icons.person,
+                            //   obsecure: false,
+                            //   onchanged: (v) =>
+                            //       v.toString().isNotEmpty ? location = v : null,
+                            // ),
+                            // SizedBox(
+                            //   height: getProportionateScreenHeight(16),
+                            // ),
                             Container(
-                                padding: EdgeInsets.all(8),
+                           
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     boxShadow: shadow

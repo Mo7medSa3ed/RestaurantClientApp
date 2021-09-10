@@ -49,9 +49,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 Row(
                   children: [
                     Container(
-                      width: 75,
-                      height: 70,
-                      child: v.loginUser.avatar != null
+                      width: 60,
+                      height: 60,
+                      child: v.loginUser.avatar == null
                           ? CircleAvatar(
                               backgroundColor: Kprimary.withOpacity(0.9),
                               child: Icon(
@@ -69,7 +69,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                             )),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: 16,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
