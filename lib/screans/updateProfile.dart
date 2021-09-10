@@ -161,7 +161,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               v.isEmpty ? 'Please enter your phone !!' : null, */
                               hint: 'Phone',
                               value: v.loginUser.phone,
-                              icon: Icons.person,
+                              icon: Icons.call,
                               obsecure: false,
                               onchanged: (v) =>
                                   v.toString().isNotEmpty ? phone = v : null,
@@ -174,7 +174,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                               v.isEmpty ? 'Please enter your address !!' : null, */
                               hint: 'Address',
                               value: v.loginUser.address,
-                              icon: Icons.person,
+                              icon: Icons.location_city,
                               obsecure: false,
                               onchanged: (v) =>
                                   v.toString().isNotEmpty ? address = v : null,
