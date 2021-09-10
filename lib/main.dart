@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp> {
         highlightColor: Colors.grey[400],
         hintColor: Colors.grey,
         textSelectionTheme: TextSelectionThemeData(cursorColor: red),
-        scaffoldBackgroundColor: Colors.white.withOpacity(0.97),
+        scaffoldBackgroundColor: white.withOpacity(0.97),
         appBarTheme: AppBarTheme(
           // ignore: deprecated_member_use
           brightness: Brightness.dark,

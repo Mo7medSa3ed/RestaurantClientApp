@@ -18,12 +18,11 @@ class AppData extends ChangeNotifier {
   String address;
   Order detailsOrder;
   Order trackOrder;
-  
-  initTrackOrder(order){
+
+  initTrackOrder(order) {
     trackOrder = order;
     notifyListeners();
   }
-  
 
   initLoginUser(User user) {
     loginUser = user;
@@ -77,7 +76,6 @@ class AppData extends ChangeNotifier {
   initOrderList(List<dynamic> list) {
     ordersList = list;
   }
-  
 
   clearOrder(id) {
     ordersList.removeWhere((e) => e['_id'] == id);
@@ -108,7 +106,7 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeOrderState(id , state) {
+  changeOrderState(id, state) {
     final idx = ordersList.indexWhere((e) => e['_id'] == id);
     if (idx != -1) {
       ordersList[idx]['state'] = state;
@@ -170,8 +168,9 @@ class AppData extends ChangeNotifier {
     loginUser.fav.remove(id);
     notifyListeners();
   }
+
   removeFromFavWithDish(id) {
-    favDishes.removeWhere((e)=>e.id==id);
+    favDishes.removeWhere((e) => e.id == id);
     notifyListeners();
   }
 
@@ -279,6 +278,10 @@ class AppData extends ChangeNotifier {
   }
 
   updateOrder(order) {
+    if (trackOrder.id == order['_id']) {
+      trackOrder = Order.fromJson(order);
+      notifyListeners();
+    }
     if (ordersList.length > 0) {
       ordersList.removeWhere((e) => e['_id'] == order['_id']);
       notifyListeners();

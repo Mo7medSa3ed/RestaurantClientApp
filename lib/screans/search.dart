@@ -114,9 +114,8 @@ class _SearchScreanState extends State<SearchScrean> {
                                 Image.asset(
                                   "assets/images/List.png",
                                   fit: BoxFit.fill,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  width: double.infinity,
+                                    width: MediaQuery.of(context).size.width * 0.5,
+                          height: MediaQuery.of(context).size.width * 0.5,
                                 ),
                                 Text(
                                   "Your Dish List is Empty",
