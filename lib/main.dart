@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
@@ -29,49 +31,57 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const channel = MethodChannel("notification");
+
+  void getNotificationDataIfExist() async {
+    final notificationData = await channel.invokeMethod("getNotification");
+    print(notificationData);
+  }
+
   @override
   void initState() {
-    Socket().socket.on('newDish', (data) {
-      final pro = Provider.of<AppData>(context, listen: false);
-      data['category'] = pro.getCategoryById(data['category']);
-      print(data);
-      pro.addNewDish(Dish.fromJson(data));
-    });
+    getNotificationDataIfExist();
+    // Socket().socket.on('newDish', (data) {
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   data['category'] = pro.getCategoryById(data['category']);
+    //   print(data);
+    //   pro.addNewDish(Dish.fromJson(data));
+    // });
 
-    Socket().socket.on('updateDish', (data) {
-      final pro = Provider.of<AppData>(context, listen: false);
-      data['category'] = pro.getCategoryById(data['category']);
-      pro.updateDish(Dish.fromJson(data));
-    });
-    
-    Socket().socket.on('deleteDish', (data) {
-      print(data);
-      final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeDish(data['_id']);
-    });
-    
-    Socket().socket.on('newCategory', (data) {
-      print(data);
-      final pro = Provider.of<AppData>(context, listen: false);
-      pro.addCategory(Categorys.fromJson(data));
-    });
-    
-    Socket().socket.on('updateCategory', (data) {
-      print(data);
-      final pro = Provider.of<AppData>(context, listen: false);
-      pro.updateCategory(Categorys.fromJson(data));
-    });
-    
-    Socket().socket.on('deleteCategory', (data) {
-      print(data);
-      final pro = Provider.of<AppData>(context, listen: false);
-      pro.removeCategory(data['_id']);
-    });
-    
-    Socket().socket.on('orderConfirmedByDelivery', (data) {
-      final pro = Provider.of<AppData>(context, listen: false);
-      pro.updateOrder(data['updatedOrder']);
-    });
+    // Socket().socket.on('updateDish', (data) {
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   data['category'] = pro.getCategoryById(data['category']);
+    //   pro.updateDish(Dish.fromJson(data));
+    // });
+
+    // Socket().socket.on('deleteDish', (data) {
+    //   print(data);
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   pro.removeDish(data['_id']);
+    // });
+
+    // Socket().socket.on('newCategory', (data) {
+    //   print(data);
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   pro.addCategory(Categorys.fromJson(data));
+    // });
+
+    // Socket().socket.on('updateCategory', (data) {
+    //   print(data);
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   pro.updateCategory(Categorys.fromJson(data));
+    // });
+
+    // Socket().socket.on('deleteCategory', (data) {
+    //   print(data);
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   pro.removeCategory(data['_id']);
+    // });
+
+    // Socket().socket.on('orderConfirmedByDelivery', (data) {
+    //   final pro = Provider.of<AppData>(context, listen: false);
+    //   pro.updateOrder(data['updatedOrder']);
+    // });
 
     super.initState();
   }

@@ -22,9 +22,18 @@
         android:icon="@mipmap/ic_launcher"
         android:label="resturantapp"
         android:requestLegacyExternalStorage="true">
+        <receiver
+            android:name="Restarter"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="restartservice" />
+            </intent-filter>
+        </receiver>
         <service
             android:name=".MyService"
             android:enabled="true"
+            android:stopWithTask="false"
             android:exported="true"></service>
 
         <meta-data
