@@ -63,7 +63,7 @@ class NotificationPlugin {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  Future<void> showNotification(id, title, body, payload) async {
+  Future<void> showNotification(id, title, body, payload,type) async {
     var androidChannel = AndroidNotificationDetails(
       'CHANNEL_ID',
       'CHANNEL_NAME',
@@ -72,6 +72,7 @@ class NotificationPlugin {
       priority: Priority.high,
       enableLights: true,
       enableVibration: true,
+      autoCancel: true,
       playSound: true,
     );
 
@@ -81,7 +82,7 @@ class NotificationPlugin {
         NotificationDetails(android: androidChannel, iOS: iosChannel);
 
     await flutterLocalNotificationsPlugin.show(id, title, body, platformChannel,
-        payload: payload + '/' + id.toString());
+        payload: type+'/'+payload.toString());
   }
 }
 

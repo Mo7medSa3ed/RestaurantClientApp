@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:resturantapp/constants.dart';
+import 'package:resturantapp/notification.dart';
 import 'package:resturantapp/provider/appdata.dart';
+import 'package:resturantapp/screans/alldishes.dart';
 import 'package:resturantapp/screans/allorders.dart';
 import 'package:resturantapp/screans/cart.dart';
+import 'package:resturantapp/screans/details.dart';
 import 'package:resturantapp/screans/favourite.dart';
 import 'package:resturantapp/screans/homepage.dart';
+import 'package:resturantapp/screans/ordertimeline.dart';
 import 'package:resturantapp/screans/profile.dart';
 import 'package:resturantapp/screans/search.dart';
 
@@ -29,21 +33,32 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    notificationPlugin
+        .setListnerForLowerVersions(onNotificationInlowerVersions);
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
     super.initState();
-    // controller = AnimationController(
-    //   duration: const Duration(milliseconds: 2000),
-    //   vsync: this,
-    // );
-    //  Tween(begin: 0, end: MediaQuery.of(context).size.width*0.6,).animate(controller);
-    //getData();
   }
 
-  // getData() async {
-  //   appData = Provider.of<AppData>(context, listen: false);
-  //   await API.getHome().then((value) {
-  //     if (value['status']) appData.initHomeModel(value['data']);
-  //   });
-  // }
+  onNotificationInlowerVersions(ReceivedNotification receivedNotification) {}
+
+  Future onNotificationClick(String payload) async {
+    final type = payload.split('/')[0];
+    final id = payload.split('/')[1];
+    switch (type) {
+      case 'dish':
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => DetailsScrean(id)));
+        break;
+      case 'category':
+      Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => AllDishScrean(type,catId: id,)));
+        break;
+      case 'orderConfirmed':
+      Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => OrderTimeLine()));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

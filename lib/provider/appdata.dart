@@ -287,4 +287,12 @@ class AppData extends ChangeNotifier {
       notifyListeners();
     }
   }
+  updateOrderLocation(order) {
+    if (trackOrder.id == order['_id']) {
+      trackOrder = Order.fromJson(order);
+      notifyListeners();
+    }
+  }
+
+
 }

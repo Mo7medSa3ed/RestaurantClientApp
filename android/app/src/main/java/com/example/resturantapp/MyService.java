@@ -35,14 +35,15 @@ public class MyService extends Service {
         }
     }
 
-    private void showNotification(String title, String data) {
+    private void showNotification(String title,String desc,String id,String type) {
         NotificationManager notificationManager;
         NotificationChannel notificationChannel;
         Notification.Builder builder;
         String channelId = "i.apps.notifications";
         String description = "Test notification";
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.putExtra("data", data);
+        notificationIntent.putExtra("id", id);
+        notificationIntent.putExtra("type", type);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -56,9 +57,8 @@ public class MyService extends Service {
 
             builder = new Notification.Builder(this, channelId)
                     .setAutoCancel(true)
-                    .setTicker("mmmmmm")
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setContentText("Hi mohamed Saeed")
+                    .setContentText(desc)
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setPriority(Notification.PRIORITY_MAX)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -71,8 +71,7 @@ public class MyService extends Service {
                     .setPriority(Notification.PRIORITY_MAX)
                     .setSmallIcon(R.drawable.ic_launcher)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
-                    .setContentText("Hi mohamed Saeed")
-                    .setTicker("mmmmmm")
+                    .setContentText(desc)
                     .setContentIntent(contentIntent)
                     .setContentTitle(title);
         }
@@ -97,21 +96,102 @@ public class MyService extends Service {
         if (!mSocket.connected()) {
             mSocket.connect();
         }
+        mSocket.on("newDish", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString());
+                    showNotification("admin add new Dish",data.getString("name"), data.getString("_id"),"dish");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mSocket.on("updateDish", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString());
+                    showNotification("admin update Dish",data.getString("name"), data.getString("_id"),"dish");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mSocket.on("deleteDish", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString());
+                    showNotification("admin delete "+data.getString("name"),"", data.getString("_id"),"delete");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         mSocket.on("newCategory", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-
                 try {
                     JSONObject data = new JSONObject(args[0].toString());
-                    showNotification(data.getString("name"), args[0].toString());
+                    showNotification("admin add new category",data.getString("name"), data.getString("_id"),"category");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
+        
+        mSocket.on("updateCategory", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString());
+                    showNotification("admin update category",data.getString("name"), data.getString("_id"),"category");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        
+        mSocket.on("deleteCategory", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString());
+                    showNotification("admin removed "+data.getString("name"),"", data.getString("_id"),"delete");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        mSocket.on("orderConfirmedByDelivery", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                try {
+                    JSONObject data = new JSONObject(args[0].toString()).getJSONObject("updatedOrder");
+                    if(data.getString("state").equals("confirmed")){
+
+                    showNotification("Delivery Confirmed your Order","you can now track your order", data.getString("_id"),"orderConfirmed");
+                    }else{
+
+                    
+                    showNotification("your order is canceled","", data.getString("_id"),"order");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
 
         return START_STICKY;
 

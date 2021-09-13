@@ -24,15 +24,13 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "notification").setMethodCallHandler(
                 ((call, result) -> {
                     String data = null;
-
                     if (call.method.equals("getNotification")) {
                         if (getIntent().getExtras().getString("data") != null) {
-                            data = getIntent().getExtras().getString("data");
+                            data = getIntent().getExtras().getString("id");
+                            type = getIntent().getExtras().getString("type");
                         }
                     }
-
-                    result.success(data);
-
+                    result.success(type+'/'+data);
                 })
         );
     }
@@ -43,12 +41,12 @@ public class MainActivity extends FlutterActivity {
 //        getIntent().getExtras().getString("data")!=null
 
 
-        Intent intent = new Intent(this, MyService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
+        // Intent intent = new Intent(this, MyService.class);
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //     startForegroundService(intent);
+        // } else {
+        //     startService(intent);
+        // }
     }
 
     @Override
