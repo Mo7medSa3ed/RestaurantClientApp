@@ -24,6 +24,7 @@ import io.socket.emitter.Emitter;
 public class MyService extends Service {
     private String url = "https://resturant-app12.herokuapp.com";
     private Socket mSocket;
+    int notificationId=1; 
 
 
     {
@@ -75,11 +76,13 @@ public class MyService extends Service {
                     .setContentIntent(contentIntent)
                     .setContentTitle(title);
         }
-        notificationManager.notify(new Random().nextInt(), builder.build());
+        notificationId=notificationId+1;
+        notificationManager.notify(notificationId, builder.build());
     }
 
     @Override
     public void onCreate() {
+        // startForeground();
         super.onCreate();
         if (!mSocket.connected()) {
             mSocket.connect();
@@ -89,7 +92,11 @@ public class MyService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
-    }
+    } // Intent intent = new Intent(this, MyService.class);
+        // Intent broadcastIntent = new Intent();
+        // broadcastIntent.setAction("restartservice");
+        // broadcastIntent.setClass(this, Restarter.class);
+        // this.sendBroadcast(broadcastIntent);
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -207,9 +214,5 @@ public class MyService extends Service {
         super.onTaskRemoved(rootIntent);
     }
 
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-    }
+    
 }

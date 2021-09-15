@@ -62,7 +62,8 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
                   children: [
                     Expanded(
                       child: ListView(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         physics: AlwaysScrollableScrollPhysics(
                             parent: BouncingScrollPhysics()),
                         children: [
@@ -289,10 +290,11 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
       Navigator.of(context).pop();
 
       if (res['status'] && res['data']['valid']) {
+        print(res);
         setState(() {
           readOnly = true;
           validCoupon = true;
-          discount = 0.1;
+          discount = double.parse(res['data']['discount'].toString());
           FocusScope.of(context).unfocus();
         });
         return CoolAlert.show(
@@ -365,7 +367,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     app.cartList.forEach((e) {
       sum += (e.price * e.amount);
     });
-    return (sum - (discount * sum)).toString();
+    return (sum - ((discount/100) * sum)).toString();
   }
 
   showSnackbar({msg, context, icon}) {

@@ -30,7 +30,7 @@ class NotificationPlugin {
   }
 
   void initializePlatformSpecifics() {
-    var initializeSettingAndroid = AndroidInitializationSettings('icon');
+    var initializeSettingAndroid = AndroidInitializationSettings('ic_launcher');
     var initializeSettingIOS = IOSInitializationSettings(
         requestSoundPermission: true,
         requestBadgePermission: true,
@@ -63,7 +63,7 @@ class NotificationPlugin {
     flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  Future<void> showNotification(id, title, body, payload,type) async {
+  Future<void> showNotification(id, title, body, payload, type) async {
     var androidChannel = AndroidNotificationDetails(
       'CHANNEL_ID',
       'CHANNEL_NAME',
@@ -82,7 +82,7 @@ class NotificationPlugin {
         NotificationDetails(android: androidChannel, iOS: iosChannel);
 
     await flutterLocalNotificationsPlugin.show(id, title, body, platformChannel,
-        payload: type+'/'+payload.toString());
+        payload: type + '/' + payload.toString());
   }
 }
 

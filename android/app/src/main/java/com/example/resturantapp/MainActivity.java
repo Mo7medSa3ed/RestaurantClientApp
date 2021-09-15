@@ -24,11 +24,14 @@ public class MainActivity extends FlutterActivity {
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "notification").setMethodCallHandler(
                 ((call, result) -> {
                     String data = null;
+                    String type = null;
                     if (call.method.equals("getNotification")) {
-                        if (getIntent().getExtras().getString("data") != null) {
+                        
                             data = getIntent().getExtras().getString("id");
                             type = getIntent().getExtras().getString("type");
-                        }
+                            getIntent().removeExtra("id"); 
+                            getIntent().removeExtra("type"); 
+                        
                     }
                     result.success(type+'/'+data);
                 })
@@ -41,20 +44,23 @@ public class MainActivity extends FlutterActivity {
 //        getIntent().getExtras().getString("data")!=null
 
 
-        // Intent intent = new Intent(this, MyService.class);
         // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         //     startForegroundService(intent);
         // } else {
-        //     startService(intent);
         // }
     }
 
     @Override
     protected void onDestroy() {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction("restartservice");
-        broadcastIntent.setClass(this, Restarter.class);
-        this.sendBroadcast(broadcastIntent);
+        Intent intent = new Intent(this, MyService.class);
+        startService(intent);
+
+        // Intent intent = new Intent(this, MyService.class);
+        // Intent broadcastIntent = new Intent();
+        // broadcastIntent.setAction("restartservice");
+        // broadcastIntent.setClass(this, Restarter.class);
+        // this.sendBroadcast(broadcastIntent);
+
         super.onDestroy();
     }
 }

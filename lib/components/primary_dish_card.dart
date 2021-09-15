@@ -13,11 +13,13 @@ class PrimaryDishCard extends StatelessWidget {
   final dish;
   final test;
   final radius;
+  final enableTap;
 
   PrimaryDishCard(
       {this.dish,
       this.height,
       this.isLiked,
+      this.enableTap = true,
       this.ontap,
       this.rightMargin = 0.0,
       this.test = false,
@@ -29,10 +31,12 @@ class PrimaryDishCard extends StatelessWidget {
     final hei = MediaQuery.of(context).size.height;
     final wid = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => DetailsScrean(
-                dish.id,
-              ))),
+      onTap: !enableTap
+          ? null
+          : () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => DetailsScrean(
+                    dish.id,
+                  ))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

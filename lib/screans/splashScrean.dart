@@ -20,6 +20,7 @@ class _SplashScreanState extends State<SplashScrean> {
   AppData appData;
   SharedPreferences prfs;
   bool networktest = true;
+
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
@@ -29,6 +30,8 @@ class _SplashScreanState extends State<SplashScrean> {
     }
     setState(() {});
   }
+
+ 
 
   @override
   void initState() {

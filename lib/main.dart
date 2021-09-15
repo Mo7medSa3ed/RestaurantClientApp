@@ -9,9 +9,6 @@ import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/notification.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
-import 'package:resturantapp/screans/alldishes.dart';
-import 'package:resturantapp/screans/details.dart';
-import 'package:resturantapp/screans/ordertimeline.dart';
 import 'package:resturantapp/screans/splashScrean.dart';
 import 'package:resturantapp/socket.dart';
 
@@ -36,31 +33,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const channel = MethodChannel("notification");
 
-  void getNotificationDataIfExist() async {
-    final notificationData = await channel.invokeMethod("getNotification");
-     final type = notificationData.split('/')[0];
-    final id = notificationData.split('/')[1];
-      switch (type) {
-      case 'dish':
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => DetailsScrean(id)));
-        break;
-      case 'category':
-      Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => AllDishScrean(type,catId: id,)));
-        break;
-      case 'orderConfirmed':
-      Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => OrderTimeLine()));
-        break;
-    }
-  }
+  
 
   @override
   void initState() {
-    getNotificationDataIfExist();
     Socket().socket.on('newDish', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       data['category'] = pro.getCategoryById(data['category']);

@@ -104,6 +104,7 @@ class _DetailsScreanState extends State<DetailsScrean> {
                   PrimaryDishCard(
                     radius: 25.0,
                     rightMargin: 0.0,
+                    enableTap: false,
                     dish: dish,
                     width: wid,
                     height: hei > wid ? hei * 0.24 : hei * 0.4,

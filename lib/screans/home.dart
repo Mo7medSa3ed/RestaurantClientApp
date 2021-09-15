@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/notification.dart';
 import 'package:resturantapp/provider/appdata.dart';
@@ -19,8 +20,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   AppData appData;
-  // Animation animation;
-  // AnimationController controller;
+   static const channel = MethodChannel("notification");
+
   List<Widget> pages = [
     HomePage(),
     FavouriteScrean(),
@@ -31,8 +32,34 @@ class _HomeState extends State<Home> {
   ];
   int index = 0;
 
+  void getNotificationDataIfExist() async {
+    final notificationData = await channel.invokeMethod("getNotification");
+    print(notificationData);
+    final type = notificationData.split('/')[0];
+    final id = notificationData.split('/')[1];
+    if (type == null || id == null) return;
+    switch (type) {
+      case 'dish':
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => DetailsScrean(id)));
+        break;
+      case 'category':
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => AllDishScrean(
+                  type,
+                  catId: id,
+                )));
+        break;
+      case 'orderConfirmed':
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => OrderTimeLine()));
+        break;
+    }
+  }
+
   @override
   void initState() {
+    getNotificationDataIfExist();
     notificationPlugin
         .setListnerForLowerVersions(onNotificationInlowerVersions);
     notificationPlugin.setOnNotificationClick(onNotificationClick);
@@ -50,11 +77,14 @@ class _HomeState extends State<Home> {
             .push(MaterialPageRoute(builder: (_) => DetailsScrean(id)));
         break;
       case 'category':
-      Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => AllDishScrean(type,catId: id,)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => AllDishScrean(
+                  type,
+                  catId: id,
+                )));
         break;
       case 'orderConfirmed':
-      Navigator.of(context)
+        Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => OrderTimeLine()));
         break;
     }
