@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primart_elevatedButtom.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/provider/special.dart';
 import 'package:resturantapp/screans/home.dart';
@@ -73,7 +73,6 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-            
               CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your email !' : null,
@@ -112,7 +111,9 @@ class _SignupBodyState extends State<SignupBody>
               SizedBox(
                 height: getProportionateScreenHeight(40),
               ),
-              PrimaryElevatedButton(text: 'REGISTER',onpressed:  () async => await signupbutton()),
+              PrimaryElevatedButton(
+                  text: 'REGISTER',
+                  onpressed: () async => await signupbutton()),
               SizedBox(
                 height: getProportionateScreenHeight(23),
               ),
@@ -144,8 +145,11 @@ class _SignupBodyState extends State<SignupBody>
   signupbutton() async {
     if (formKey.currentState.validate()) {
       showDialogWidget(context);
-      User u =
-          User(email: email, password: password, name: username,);
+      User u = User(
+        email: email,
+        password: password,
+        name: username,
+      );
       final res = (await API.signupUser(u));
       if (res.statusCode == 200 || res.statusCode == 201) {
         final u = utf8.decode(res.bodyBytes);

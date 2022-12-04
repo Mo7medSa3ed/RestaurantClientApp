@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
 class PrimaryCartCard extends StatefulWidget {

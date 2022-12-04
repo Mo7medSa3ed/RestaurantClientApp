@@ -10,7 +10,7 @@ import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_dish_card.dart';
 import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/review.dart';
 import 'package:resturantapp/models/user.dart';

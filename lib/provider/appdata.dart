@@ -187,8 +187,6 @@ class AppData extends ChangeNotifier {
   // methodes to sockets
 
   addNewDish(Dish dish) {
-    // popularDishes.add(dish);
-    // homeModel.popular.add(dish);
     if (dishesByCategory.length > 0) {
       if (dishesByCategory.first.category.id == dish.category.id) {
         dishesByCategory.add(dish);

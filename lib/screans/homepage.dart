@@ -5,7 +5,7 @@ import 'package:resturantapp/components/primary_category_card.dart';
 import 'package:resturantapp/components/primary_dish_card.dart';
 import 'package:resturantapp/components/primary_text_row.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:shimmer/shimmer.dart';

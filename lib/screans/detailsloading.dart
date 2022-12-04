@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DetailsLoading extends StatelessWidget {

@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:resturantapp/models/user.dart';
 
 class API {
-  static const String _BaseUrl = 'https://a074-104-28-213-2.eu.ngrok.io';
+  static const String _BaseUrl = 'https://restaurant-api-xj7i.onrender.com';
 
   // Functions For User
 

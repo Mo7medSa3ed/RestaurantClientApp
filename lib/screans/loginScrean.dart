@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
+import 'package:resturantapp/custum_widgets.dart';
 import 'package:resturantapp/provider/special.dart';
 import 'package:resturantapp/screans/loginbody.dart';
 import 'package:resturantapp/screans/signupbody.dart';
