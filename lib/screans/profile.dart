@@ -193,7 +193,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             id: Provider.of<AppData>(context, listen: false).loginUser.id),
         builder: (ctx, s) {
           if (s.hasData) {
-            print(s.data);
             if (s.data['status'] && s.data['data'].length > 0) {
               Provider.of<AppData>(context, listen: false)
                   .initHistoryDishesList(s.data['data']);

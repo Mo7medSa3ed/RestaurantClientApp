@@ -196,7 +196,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             //   height: getProportionateScreenHeight(16),
                             // ),
                             Container(
-                           
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     boxShadow: shadow

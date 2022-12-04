@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +54,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   @override
   void initState() {
     app = Provider.of<AppData>(context, listen: false);
+    // ignore: missing_required_param
     position = Position(latitude: widget.lat, longitude: widget.lng);
     getAddress(position);
     super.initState();
@@ -249,56 +249,57 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                 : Container(),
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'TOTAL',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.20),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '\$ ${calctotal()} ',
-                      style: TextStyle(
-                          color: red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Delivary charge included',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.35),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1),
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'TOTAL',
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.20),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '\$ ${calctotal()} ',
+                        style: TextStyle(
+                            color: red,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Delivary charge included',
+                        style: TextStyle(
+                            color: Kprimary.withOpacity(0.35),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1),
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
                 ),
-                Spacer(),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: PrimaryElevatedButton(
-                        text: check ? "RE ORDER" : "CANCEL",
-                        onpressed: () async =>
-                            app.detailsOrder.state.toLowerCase() ==
-                                        'delivered' ||
-                                    app.detailsOrder.state.toLowerCase() ==
-                                        'canceled'
-                                ? await makeOrder()
-                                : await cancelOrder(widget.id)))
+                Expanded(
+                  child: PrimaryElevatedButton(
+                      text: check ? "RE ORDER" : "CANCEL",
+                      onpressed: () async =>
+                          app.detailsOrder.state.toLowerCase() == 'delivered' ||
+                                  app.detailsOrder.state.toLowerCase() ==
+                                      'canceled'
+                              ? await makeOrder()
+                              : await cancelOrder(widget.id)),
+                )
               ],
             ),
           ],
@@ -353,8 +354,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   }
 
   showSnackbar({msg, context, icon}) {
-    // ignore: deprecated_member_use
-    scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 2,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -394,7 +394,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
         final res = await API.patchOrder(reqData, id);
         if (res.statusCode == 200 || res.statusCode == 201) {
           Navigator.of(context).pop();
-          app.changeOrderState(widget.id,"canceled");
+          app.changeOrderState(widget.id, "canceled");
           CoolAlert.show(
               context: context,
               type: CoolAlertType.success,

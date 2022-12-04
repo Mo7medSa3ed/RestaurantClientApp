@@ -55,7 +55,6 @@ class AppData extends ChangeNotifier {
 
   initOrder(detailsOrder) {
     this.detailsOrder = detailsOrder;
-    notifyListeners();
   }
 
   initHomeModel(homeModel) {
@@ -199,8 +198,6 @@ class AppData extends ChangeNotifier {
   }
 
   updateDish(Dish dish) {
-    print("object");
-
     if (topDishes.length > 0) {
       final idx = topDishes.indexWhere((e) => e.id == dish.id);
       if (idx != -1) topDishes[idx] = dish;
@@ -287,12 +284,11 @@ class AppData extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   updateOrderLocation(order) {
     if (trackOrder.id == order['_id']) {
       trackOrder = Order.fromJson(order);
       notifyListeners();
     }
   }
-
-
 }

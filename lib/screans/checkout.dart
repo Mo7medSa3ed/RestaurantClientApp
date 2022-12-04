@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -290,7 +289,6 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
       Navigator.of(context).pop();
 
       if (res['status'] && res['data']['valid']) {
-        print(res);
         setState(() {
           readOnly = true;
           validCoupon = true;
@@ -340,7 +338,6 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     };
 
     final res = (await API.makeOrder(reqData));
-    print(res.body);
     if (res.statusCode == 200 || res.statusCode == 201) {
       app.reset();
       Navigator.of(context).pop();
@@ -367,12 +364,11 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     app.cartList.forEach((e) {
       sum += (e.price * e.amount);
     });
-    return (sum - ((discount/100) * sum)).toString();
+    return (sum - ((discount / 100) * sum)).toString();
   }
 
   showSnackbar({msg, context, icon}) {
-    // ignore: deprecated_member_use
-    scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 2,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

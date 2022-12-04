@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
@@ -19,7 +18,6 @@ class _LoginScreanState extends State<LoginScrean> {
   bool networktest = true;
   checkNetwork() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    print(connectivityResult);
     if (connectivityResult == ConnectivityResult.none) {
       networktest = false;
     } else {
@@ -76,7 +74,6 @@ class _LoginScreanState extends State<LoginScrean> {
     return Row(
       children: [
         Expanded(
-    
           child: Container(
             padding: EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
@@ -92,20 +89,19 @@ class _LoginScreanState extends State<LoginScrean> {
           ),
         ),
         Expanded(
-    
             child: Container(
-              padding: EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          color: v ? greyd : red, width: v ? 0.7 : 4))),
-              child: Text(
-                ' Register',
-                style: TextStyle(
-                    fontSize: 28, fontWeight: FontWeight.w900, color: Kprimary),
-                textAlign: TextAlign.end,
-              ),
-            ))
+          padding: EdgeInsets.only(bottom: 15),
+          decoration: BoxDecoration(
+              border: Border(
+                  bottom:
+                      BorderSide(color: v ? greyd : red, width: v ? 0.7 : 4))),
+          child: Text(
+            ' Register',
+            style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.w900, color: Kprimary),
+            textAlign: TextAlign.end,
+          ),
+        ))
       ],
     );
   }

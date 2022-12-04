@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
@@ -14,8 +13,8 @@ import 'package:resturantapp/socket.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  if (!(Socket().socket.connected)) {
-    Socket().socket.connect();
+  if (!(Socket.socket.connected)) {
+    Socket.socket.connect();
   }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<Specials>(
@@ -33,12 +32,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  
-
   @override
   void initState() {
-    Socket().socket.on('newDish', (data) async {
+    Socket.socket.on('newDish', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       data['category'] = pro.getCategoryById(data['category']);
       final dish = Dish.fromJson(data);
@@ -47,7 +43,7 @@ class _MyAppState extends State<MyApp> {
           'admin add new Dish', '${dish.name}\n${dish.desc}', dish.id, 'dish');
     });
 
-    Socket().socket.on('updateDish', (data) async {
+    Socket.socket.on('updateDish', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       data['category'] = pro.getCategoryById(data['category']);
       final dish = Dish.fromJson(data);
@@ -56,8 +52,7 @@ class _MyAppState extends State<MyApp> {
           'admin update Dish', '${dish.name}\n${dish.desc}', dish.id, 'dish');
     });
 
-    Socket().socket.on('deleteDish', (data) async {
-      print(data);
+    Socket.socket.on('deleteDish', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.removeDish(data['_id']);
       await notificationPlugin.showNotification(
@@ -68,31 +63,28 @@ class _MyAppState extends State<MyApp> {
           'delete');
     });
 
-    Socket().socket.on('newCategory', (data) async {
-      print(data);
+    Socket.socket.on('newCategory', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.addCategory(Categorys.fromJson(data));
       await notificationPlugin.showNotification(Random().nextInt(1000),
           'admin add new category', '${data['name']}', data['_id'], 'category');
     });
 
-    Socket().socket.on('updateCategory', (data) async {
-      print(data);
+    Socket.socket.on('updateCategory', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.updateCategory(Categorys.fromJson(data));
       await notificationPlugin.showNotification(Random().nextInt(1000),
           'admin update category', '${data['name']}', data['_id'], 'category');
     });
 
-    Socket().socket.on('deleteCategory', (data) async {
-      print(data);
+    Socket.socket.on('deleteCategory', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.removeCategory(data['_id']);
       await notificationPlugin.showNotification(Random().nextInt(1000),
           'admin removed ${data['name']}', '', data['_id'], 'delete');
     });
 
-    Socket().socket.on('orderConfirmedByDelivery', (data) async {
+    Socket.socket.on('orderConfirmedByDelivery', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.updateOrder(data['updatedOrder']);
       if (data['updatedOrder']['state'] == 'confirmed') {
@@ -113,7 +105,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    Socket().socket.on('deliveryLocationChanged', (data) async {
+    Socket.socket.on('deliveryLocationChanged', (data) async {
       final pro = Provider.of<AppData>(context, listen: false);
       pro.updateOrderLocation(data['updatedOrder']);
     });

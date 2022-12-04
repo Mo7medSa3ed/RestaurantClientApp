@@ -22,7 +22,7 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class MyService extends Service {
-    private String url = "https://resturant-app12.herokuapp.com";
+    private String url = "https://a074-104-28-213-2.eu.ngrok.io";
     private Socket mSocket;
     int notificationId=1; 
 

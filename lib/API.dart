@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'package:resturantapp/models/user.dart';
 
 class API {
-  static const String _BaseUrl = 'https://resturant-app12.herokuapp.com';
+  static const String _BaseUrl = 'https://a074-104-28-213-2.eu.ngrok.io';
 
   // Functions For User
 
@@ -20,7 +20,6 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
-    print(response.headers['x-auth-token']);
     saveToken(response.headers['x-auth-token'] ?? '');
 
     return response;
@@ -96,7 +95,6 @@ class API {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final body = utf8.decode(response.bodyBytes);
       final parsed = json.decode(body);
-      print(parsed);
       return {
         "status": true,
         "data": parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList()
@@ -152,7 +150,6 @@ class API {
       '$_BaseUrl/dishes/category/$id?page=$page',
       headers: await getHeaders(),
     );
-    print(res.body);
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
@@ -175,7 +172,6 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
-      print(parsed);
       return {"status": true, "data": HomeModel.fromJson(parsed)};
     } else {
       return {"status": false, "data": null};
@@ -371,7 +367,6 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
-      print(parsed);
 
       return {"status": true, "data": parsed};
     } else {

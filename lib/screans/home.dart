@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   AppData appData;
-   static const channel = MethodChannel("notification");
+  static const channel = MethodChannel("notification");
 
   List<Widget> pages = [
     HomePage(),
@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
 
   void getNotificationDataIfExist() async {
     final notificationData = await channel.invokeMethod("getNotification");
-    print(notificationData);
     final type = notificationData.split('/')[0];
     final id = notificationData.split('/')[1];
     if (type == null || id == null) return;
@@ -106,35 +105,13 @@ class _HomeState extends State<Home> {
             });
           },
           items: [
+            BottomNavigationBarItem(icon: Icon(Icons.store), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
             BottomNavigationBarItem(
-                icon: Icon(Icons.store),
-                // ignore: deprecated_member_use
-                title: Container()),
-            BottomNavigationBarItem(
-                // ignore: deprecated_member_use
-                icon: Icon(Icons.favorite),
-                // ignore: deprecated_member_use
-                title: Container()),
-            BottomNavigationBarItem(
-                // ignore: deprecated_member_use
-                icon: Icon(Icons.search),
-                // ignore: deprecated_member_use
-                title: Container()),
-            BottomNavigationBarItem(
-                // ignore: deprecated_member_use
-                icon: Icon(Icons.shopping_basket),
-                // ignore: deprecated_member_use
-                title: Container()),
-            BottomNavigationBarItem(
-                // ignore: deprecated_member_use
-                icon: Icon(Icons.list_alt),
-                // ignore: deprecated_member_use
-                title: Container()),
-            BottomNavigationBarItem(
-                // ignore: deprecated_member_use
-                icon: Icon(Icons.person),
-                // ignore: deprecated_member_use
-                title: Container())
+                icon: Icon(Icons.shopping_basket), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "")
           ]),
       appBar: AppBar(
         /*  automaticallyImplyLeading: false, */

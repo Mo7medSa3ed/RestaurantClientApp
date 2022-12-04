@@ -6,7 +6,7 @@ class Order {
   User user;
   List<DishOrder> items;
   num sum;
-  num promo;
+  dynamic promo;
   String createdAt;
   String updatedAt;
   String address;

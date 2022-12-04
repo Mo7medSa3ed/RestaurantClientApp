@@ -8,7 +8,6 @@ import 'package:resturantapp/provider/appdata.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class OrderTimeLine extends StatefulWidget {
-
   @override
   _OrderTimeLineState createState() => _OrderTimeLineState();
 }
@@ -43,8 +42,6 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
 
     return polylineList.toSet();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +239,6 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
 /*   void makeLines() async {
     https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=AIzaSyBMD6TqYt-Y0dc4grEFzBmCkHOqsKncgAo"
  final l =await API.getRouteCoordinates(LatLng(30.5144865, 31.3542081),LatLng(30.51884163622735, 31.35213116299317));
-  print('ddd $l');
  /*    GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: APIKEY);
     final List<LatLng> l = await googleMapPolyline
         .getCoordinatesWithLocation(
@@ -250,7 +246,6 @@ class _OrderTimeLineState extends State<OrderTimeLine> {
             destination: LatLng(40.698432, -73.924038),
             mode: RouteMode.driving)
         .then((value) {
-      print('ddd $value');
     });
-      print('ddd $l'); */
+       */
   } */
