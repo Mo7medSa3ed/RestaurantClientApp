@@ -105,5 +105,6 @@ class User {
         'name': name,
         'email': email,
         'password': password,
+        "adminId": "638dd6e8641ccc00342d54de"
       };
 }

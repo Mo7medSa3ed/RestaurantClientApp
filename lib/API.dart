@@ -130,7 +130,6 @@ class API {
       '$_BaseUrl/dishes/filter/query?${top ? 'topRate=true' : 'popular=true'}&&page=$page',
       headers: await getHeaders(),
     );
-
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
@@ -150,6 +149,7 @@ class API {
       '$_BaseUrl/dishes/category/$id?page=$page',
       headers: await getHeaders(),
     );
+
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body);
@@ -264,7 +264,6 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(order));
-
     return res;
   }
 

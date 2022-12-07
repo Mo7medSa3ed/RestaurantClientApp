@@ -331,7 +331,7 @@ class _CheckoutScreanState extends State<CheckoutScrean> {
     final reqData = {
       "userId": app.loginUser.id,
       "state": "placed",
-      "promo": promo,
+      if (promo != null) "promo": promo,
       "distLocation": [position.longitude, position.latitude],
       "items":
           app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()

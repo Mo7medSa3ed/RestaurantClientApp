@@ -64,5 +64,3 @@ Future<Map<String, String>> getHeaders() async {
 
   return headers;
 }
-
-
